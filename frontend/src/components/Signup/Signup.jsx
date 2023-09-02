@@ -2,21 +2,53 @@ import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-function Login() {
+import { RxAvatar } from "react-icons/rx";
+
+function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+  const [name, setName] = useState("");
+  const [avatar, setAvatar] = useState(null);
 
+  const handleSubmit = () => {
+    console.log("Submitted");
+  };
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    setAvatar(file);
+    console.log("Avatar uploaded");
+  };
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Login to your account
+          Create your account
         </h2>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" action="">
+            <div>
+              {" "}
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Full Name
+              </label>
+              <div className="mt-1">
+                <input
+                  type="text"
+                  name="name"
+                  autoComplete="name"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="block w-full appearance-none px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm "
+                />
+              </div>
+            </div>
             <div>
               {" "}
               <label
@@ -69,28 +101,37 @@ function Login() {
                 )}
               </div>
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  name="remember-me"
-                  id="remember-me"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
+            <div>
+              <label
+                htmlFor="avatar"
+                className="block text-sm font-medium text-gray-700"
+              ></label>
+              <div className="mt-2 flex items-center">
+                <span className="inline-block h-8 w-8 rounded-ull overflow-hidden">
+                  {avatar ? (
+                    <img
+                      src={URL.createObjectURL(avatar)}
+                      alt="avatar"
+                      className="h-full w-full object-cover rounded-full"
+                    ></img>
+                  ) : (
+                    <RxAvatar className="h-8 w-8"></RxAvatar>
+                  )}
+                </span>
                 <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
+                  htmlFor="file-input"
+                  className="ml-5 flex items-end justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                 >
-                  Remember Me
+                  <span>Upload a file</span>{" "}
+                  <input
+                    type="file"
+                    name="avatar"
+                    id="file-input"
+                    accept=".jpg,.jpeg,.png"
+                    onChange={handleFileInputChange}
+                    className="sr-only"
+                  />
                 </label>
-              </div>
-              <div className="text-sm">
-                <a
-                  href=".forgot-password"
-                  className="font-medium text-blue-600 hover:text-blue-500"
-                >
-                  Forgot your password?
-                </a>
               </div>
             </div>
             <div>
@@ -101,10 +142,11 @@ function Login() {
                 Submit
               </button>
             </div>
+
             <div className="flex items-center w-full">
-              <h4>Need an account?</h4>
-              <Link to="/sign-up" className="text-blue-600 pl-2">
-                Sign-up
+              <h4>Have an account?</h4>
+              <Link to="/login" className="text-blue-600 pl-2">
+                Login
               </Link>
             </div>
           </form>
@@ -114,4 +156,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
