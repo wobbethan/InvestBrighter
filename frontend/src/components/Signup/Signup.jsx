@@ -32,7 +32,7 @@ function Signup() {
       .post(`${server}/user/create-user`, newForm, config)
       .then((res) => {
         if (res.data.success === true) {
-          navigate("/");
+          navigate("/login");
         }
       })
       .catch((err) => {
