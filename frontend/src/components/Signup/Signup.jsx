@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
 import { server } from "../../Server";
@@ -12,6 +12,7 @@ function Signup() {
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState(null);
+  const navigate = useNavigate();
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
@@ -30,7 +31,9 @@ function Signup() {
     axios
       .post(`${server}/user/create-user`, newForm, config)
       .then((res) => {
-        console.log(res.response.data);
+        if (res.data.success === true) {
+          navigate("/");
+        }
       })
       .catch((err) => {
         console.log(err.response.data);
