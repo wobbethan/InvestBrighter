@@ -4,20 +4,13 @@ import { LoginPage, SignupPage, ActivationPage } from "./Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
-import axios from "axios";
-import { server } from "./Server";
 import { toast } from "react-toastify";
+import { loadUser } from "./redux/actions/user";
+import Store from "./redux/store";
 
 function App() {
   useEffect(() => {
-    axios
-      .get(`${server}/user/getuser`, { withCredentials: true })
-      .then((res) => {
-        toast.success(res.data.message);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+    Store.dispatch(loadUser);
   }, []);
   return (
     <BrowserRouter>
