@@ -31,9 +31,7 @@ function Signup() {
     axios
       .post(`${server}/user/create-user`, newForm, config)
       .then((res) => {
-        if (res.data.success === true) {
-          navigate("/login");
-        }
+        alert(res.message);
       })
       .catch((err) => {
         console.log(err.response.data);
