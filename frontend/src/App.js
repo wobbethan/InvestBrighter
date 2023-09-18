@@ -1,6 +1,6 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import "./App.css";
-import { LoginPage, SignupPage, ActivationPage } from "./Routes.js";
+import { LoginPage, SignupPage, ActivationPage, HomePage } from "./Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
@@ -16,6 +16,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" Component={LoginPage} />
+        <Route path="/" Component={HomePage} />
         <Route path="/sign-up" Component={SignupPage} />
         <Route
           path="/activation/:activation_token"
