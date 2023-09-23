@@ -111,7 +111,12 @@ function Header() {
               className="absolute top-4 right-2 cursor-pointer"
               onClick={() => setDropDown(!dropDown)}
             ></IoIosArrowDown>
-            {dropDown ? <DropDown categoriesData={categoriesData} /> : null}
+            {dropDown ? (
+              <DropDown
+                categoriesData={categoriesData}
+                setDropDown={setDropDown}
+              />
+            ) : null}
           </div>
         </div>
       </div>
