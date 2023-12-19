@@ -4,7 +4,6 @@ import { LoginPage, SignupPage, ActivationPage, HomePage } from "./Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
 import { loadUser } from "./redux/actions/user";
 import Store from "./redux/store";
 
