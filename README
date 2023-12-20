@@ -1,0 +1,11 @@
+Created by Ethan Wobb 12/19/2023:
+
+Open two split terminals:
+
+In first terminal:
+cd backend
+npm run dev
+
+In second terminal:
+cd frontend
+npm start
