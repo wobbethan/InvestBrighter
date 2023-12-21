@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import styles from "../../../styles/styles";
+import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard.jsx";
 import {
   AiFillStar,
   AiOutlineStar,
@@ -10,6 +11,7 @@ import {
   AiOutlineEye,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+
 function ProductCard({ data }) {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
@@ -112,6 +114,12 @@ function ProductCard({ data }) {
             color={"#444"}
             title="Add to cart"
           />
+          {open ? (
+            <ProductDetailsCard
+              setOpen={setOpen}
+              data={data}
+            ></ProductDetailsCard>
+          ) : null}
         </div>
       </div>
     </>

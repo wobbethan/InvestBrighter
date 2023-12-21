@@ -68,7 +68,7 @@ function Header({ activeHeading }) {
               className="absolute right-2 top-1.5 cursor-pointer"
             ></AiOutlineSearch>
             {searchData && searchData.length && searchTerm.length !== 0 ? (
-              <div className="absolute bg-slate-50 shadow-sm-2 z-[9] p-96 w-full">
+              <div className="absolute bg-slate-50 shadow-sm-2 z-[9] p-4 w-full">
                 {searchData &&
                   searchData.map((i, index) => {
                     const d = i.name;

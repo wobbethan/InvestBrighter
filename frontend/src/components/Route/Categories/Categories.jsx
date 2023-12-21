@@ -1,8 +1,9 @@
 import React from "react";
 import styles from "../../../styles/styles";
 import { brandingData, categoriesData } from "../../../static/data";
-import { Navigate } from "react-router";
+import { useNavigate } from "react-router";
 function Categories() {
+  const navigate = useNavigate();
   return (
     <>
       <div className={`${styles.section} hidden sm:block`}>
@@ -28,8 +29,22 @@ function Categories() {
           {categoriesData &&
             categoriesData.map((i) => {
               const handleSubmit = (i) => {
-                Navigate(`/products?category=${i.title}`);
+                navigate(`/products?category=${i.title}`);
               };
+              return (
+                <div
+                  className="w-full h-[100px] flex items-center justify-between cursor-pointer overflow-hidden"
+                  key={i.id}
+                  onClick={() => handleSubmit(i)}
+                >
+                  <h5 className={`text-[18px] leading-[1.3]`}>{i.title}</h5>
+                  <img
+                    src={i.image_Url}
+                    alt=""
+                    className="w-[120px] object-cover"
+                  />
+                </div>
+              );
             })}
         </div>
       </div>
