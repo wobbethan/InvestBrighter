@@ -12,8 +12,11 @@ import { BiMenuAltLeft } from "react-icons/bi";
 import DropDown from "./DropDown.jsx";
 import Navbar from "./Navbar.jsx";
 import { CgProfile } from "react-icons/cg";
+import { useSelector } from "react-redux";
+import { backend_url } from "../../Server.js";
 
 function Header({ activeHeading }) {
+  const { isAuthenticated, user, loading } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
@@ -169,10 +172,22 @@ function Header({ activeHeading }) {
           {/* Profile Pic */}
           <div className={`${styles.normalFlex}`}>
             <div className="relative cursor-pointer mr-[15px]">
-              <Link to="/login">
-                {" "}
-                <CgProfile size={30} color="rgb(255 255 255 / 83%)"></CgProfile>
-              </Link>
+              {isAuthenticated ? (
+                <Link to="/profile">
+                  <img
+                    src={`${backend_url}${user.avatar}`}
+                    alt=""
+                    className="w-[35px] h-[35px] rounded-full"
+                  />
+                </Link>
+              ) : (
+                <Link to="/login">
+                  <CgProfile
+                    size={30}
+                    color="rgb(255 255 255 / 83%)"
+                  ></CgProfile>
+                </Link>
+              )}
             </div>
           </div>
         </div>

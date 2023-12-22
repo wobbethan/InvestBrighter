@@ -1,6 +1,15 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import "./App.css";
-import { LoginPage, SignupPage, ActivationPage, HomePage } from "./Routes.js";
+import {
+  LoginPage,
+  SignupPage,
+  ActivationPage,
+  HomePage,
+  ProductPage,
+  BestSellingPage,
+  EventsPage,
+  FaqPage,
+} from "./Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
@@ -21,6 +30,10 @@ function App() {
           path="/activation/:activation_token"
           Component={ActivationPage}
         />
+        <Route path="/products" Component={ProductPage} />
+        <Route path="/best-selling" Component={BestSellingPage} />
+        <Route path="/events" Component={EventsPage} />
+        <Route path="/faq" Component={FaqPage} />
       </Routes>
       <ToastContainer
         position="bottom-center"

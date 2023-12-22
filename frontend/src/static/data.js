@@ -599,7 +599,7 @@ export const footerProductLinks = [
   },
   {
     name: "Careers",
-    link: "/carrers",
+    link: "/careers",
   },
   {
     name: "Store Locations",
