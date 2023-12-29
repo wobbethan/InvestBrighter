@@ -14,6 +14,8 @@ import Navbar from "./Navbar.jsx";
 import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
 import { backend_url } from "../../Server.js";
+import Cart from "../cart/Cart.jsx";
+import Wishlist from "../wishlist/Wishlist.jsx";
 
 function Header({ activeHeading }) {
   const { isAuthenticated, user, loading } = useSelector((state) => state.user);
@@ -21,6 +23,9 @@ function Header({ activeHeading }) {
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const [openCart, setOpenCart] = useState(false);
+  const [openWishlist, setOpenWishlist] = useState(false);
+
   const searchInput = React.useRef(null);
 
   const handleSearchChange = (e) => {
@@ -143,7 +148,10 @@ function Header({ activeHeading }) {
         <div className="flex">
           {/* Heart */}
           <div className={`${styles.normalFlex}`}>
-            <div className="relative cursor-pointer mr-[15px]">
+            <div
+              className="relative cursor-pointer mr-[15px]"
+              onClick={() => setOpenWishlist(true)}
+            >
               <AiOutlineHeart
                 size={30}
                 color="rgb(255 255 255 / 83%)"
@@ -157,7 +165,10 @@ function Header({ activeHeading }) {
 
           {/* Shopping Cart */}
           <div className={`${styles.normalFlex}`}>
-            <div className="relative cursor-pointer mr-[15px]">
+            <div
+              className="relative cursor-pointer mr-[15px]"
+              onClick={() => setOpenCart(true)}
+            >
               <AiOutlineShoppingCart
                 size={30}
                 color="rgb(255 255 255 / 83%)"
@@ -190,6 +201,12 @@ function Header({ activeHeading }) {
               )}
             </div>
           </div>
+          {/* Cart */}
+          {openCart ? <Cart setOpenCart={setOpenCart}></Cart> : null}
+          {/* wishlist */}
+          {openWishlist ? (
+            <Wishlist setOpenWishlist={setOpenWishlist}></Wishlist>
+          ) : null}
         </div>
       </div>
     </>

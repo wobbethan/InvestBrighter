@@ -9,6 +9,8 @@ import {
   BestSellingPage,
   EventsPage,
   FaqPage,
+  ProductDetailsPage,
+  OrderSuccessPage,
 } from "./Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,6 +33,7 @@ function App() {
           Component={ActivationPage}
         />
         <Route path="/products" Component={ProductPage} />
+        <Route path="/product/:name" Component={ProductDetailsPage} />
         <Route path="/best-selling" Component={BestSellingPage} />
         <Route path="/events" Component={EventsPage} />
         <Route path="/faq" Component={FaqPage} />
