@@ -11,6 +11,7 @@ import {
   FaqPage,
   ProductDetailsPage,
   OrderSuccessPage,
+  ProfilePage,
 } from "./Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,7 +21,7 @@ import Store from "./redux/store";
 
 function App() {
   useEffect(() => {
-    Store.dispatch(loadUser);
+    Store.dispatch(loadUser());
   }, []);
   return (
     <BrowserRouter>
@@ -37,6 +38,8 @@ function App() {
         <Route path="/best-selling" Component={BestSellingPage} />
         <Route path="/events" Component={EventsPage} />
         <Route path="/faq" Component={FaqPage} />
+        <Route path="/order/success/:id" Component={OrderSuccessPage} />
+        <Route path="/profile" Component={ProfilePage} />
       </Routes>
       <ToastContainer
         position="bottom-center"
