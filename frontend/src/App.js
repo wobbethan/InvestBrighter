@@ -15,11 +15,13 @@ import {
 } from "./Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { loadUser } from "./redux/actions/user";
 import Store from "./redux/store";
-
+import ProtectedRoute from "./ProtectedRoute.js";
+import { useSelector } from "react-redux";
 function App() {
+  const { loading, isAuthenticated } = useSelector((state) => state.user);
   useEffect(() => {
     Store.dispatch(loadUser());
   }, []);
@@ -39,7 +41,14 @@ function App() {
         <Route path="/events" Component={EventsPage} />
         <Route path="/faq" Component={FaqPage} />
         <Route path="/order/success/:id" Component={OrderSuccessPage} />
-        <Route path="/profile" Component={ProfilePage} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <ToastContainer
         position="bottom-center"

@@ -6,7 +6,7 @@ import ProfileSideBar from "../components/profile/ProfileSideBar.jsx";
 import ProfileContent from "../components/profile/ProfileContent.jsx";
 
 const ProfilePage = () => {
-  const [active, setActive] = useState();
+  const [active, setActive] = useState(1);
   return (
     <div>
       <Header />
