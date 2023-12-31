@@ -12,6 +12,9 @@ import {
   ProductDetailsPage,
   OrderSuccessPage,
   ProfilePage,
+  CheckoutPage,
+  ShopCreatePage,
+  SellerActivationPage,
 } from "./Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,7 +38,12 @@ function App() {
           path="/activation/:activation_token"
           Component={ActivationPage}
         />
+        <Route
+          path="/seller/activation/:activation_token"
+          Component={SellerActivationPage}
+        />
         <Route path="/products" Component={ProductPage} />
+        <Route path="/shop-create" Component={ShopCreatePage} />
         <Route path="/product/:name" Component={ProductDetailsPage} />
         <Route path="/best-selling" Component={BestSellingPage} />
         <Route path="/events" Component={EventsPage} />
@@ -46,6 +54,14 @@ function App() {
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <CheckoutPage></CheckoutPage>
             </ProtectedRoute>
           }
         />

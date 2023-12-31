@@ -9,7 +9,9 @@ import FaqPage from "./pages/FaqPage.jsx";
 import ProductDetailsPage from "./pages/ProductDetailsPage.jsx";
 import OrderSuccessPage from "./pages/OrderSuccessPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
-
+import CheckoutPage from "./pages/CheckoutPage.jsx";
+import ShopCreatePage from "./pages/ShopCreatePage.jsx";
+import SellerActivationPage from "./pages/SellerActivationPage.jsx";
 export {
   LoginPage,
   SignupPage,
@@ -19,7 +21,10 @@ export {
   BestSellingPage,
   EventsPage,
   FaqPage,
+  CheckoutPage,
   ProfilePage,
   ProductDetailsPage,
   OrderSuccessPage,
+  ShopCreatePage,
+  SellerActivationPage,
 };
