@@ -99,7 +99,7 @@ router.post(
         password,
       });
 
-      sendToken(user, 201, res, "token");
+      sendToken(user, 201, res);
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
@@ -123,7 +123,7 @@ router.post(
       if (!isPasswordValid) {
         return next(new ErrorHandler("Incorrect password", 400));
       }
-      sendToken(user, 201, res, "token");
+      sendToken(user, 201, res);
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

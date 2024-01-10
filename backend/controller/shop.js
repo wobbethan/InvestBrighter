@@ -3,7 +3,7 @@ const router = express.Router();
 const path = require("path");
 const fs = require("fs");
 const sendMail = require("../utils/sendMail");
-const sendToken = require("../utils/jwtToken");
+const sendShopToken = require("../utils/shopToken");
 const { isAuthenticated, isSeller } = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
 const Shop = require("../model/shop");
@@ -13,7 +13,6 @@ const ErrorHandler = require("../utils/ErrorHandler.js");
 
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
-    console.log(req.body);
     const { email } = req.body;
     const sellerEmail = await Shop.findOne({ email });
 
@@ -47,7 +46,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
     try {
       await sendMail({
         email: seller.email,
-        subject: "Account Activation",
+        subject: "Shop Account Activation",
         message: `Hello ${seller.name}, please click the link to activate your shop account \n${activationUrl}`,
       });
       res.status(201).json({
@@ -55,7 +54,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
         message: `please check your email: ${seller.email} to activate your shop account`,
       });
     } catch (error) {
-      return next(new ErrorHandler(error.message, 502));
+      return next(new ErrorHandler(error.message, 500));
     }
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
@@ -71,7 +70,7 @@ const createActivationToken = (seller) => {
 
 //activate shop
 router.post(
-  "/activation",
+  "/shop/activation",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { activation_token } = req.body;
@@ -103,7 +102,7 @@ router.post(
         phoneNumber,
       });
 
-      sendToken(seller, 201, res, "seller_token");
+      sendShopToken(seller, 201, res);
     } catch (error) {
       return next(new ErrorHandler(error.message, 501));
     }
@@ -128,7 +127,7 @@ router.post(
       if (!isPasswordValid) {
         return next(new ErrorHandler("Incorrect password", 400));
       }
-      sendToken(seller, 201, res, "seller_token");
+      sendShopToken(seller, 201, res);
     } catch (error) {
       return next(new ErrorHandler(error.message, 503));
     }
