@@ -1,4 +1,4 @@
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter, useNavigate } from "react-router-dom";
 import "./App.css";
 import {
   LoginPage,
@@ -15,18 +15,26 @@ import {
   CheckoutPage,
   ShopCreatePage,
   SellerActivationPage,
+  ShopLoginPage,
 } from "./Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect, useState } from "react";
-import { loadUser } from "./redux/actions/user";
+import { useEffect } from "react";
+import { loadSeller, loadUser } from "./redux/actions/user";
 import Store from "./redux/store";
 import ProtectedRoute from "./ProtectedRoute.js";
 import { useSelector } from "react-redux";
+
 function App() {
+  const { isSeller, seller } = useSelector((state) => state.user);
+  //const navigate = useNavigate();
   const { loading, isAuthenticated } = useSelector((state) => state.user);
   useEffect(() => {
     Store.dispatch(loadUser());
+    Store.dispatch(loadSeller());
+    if (isSeller) {
+      //navigate(`/shop/${seller._id}`);
+    }
   }, []);
   return (
     <BrowserRouter>
@@ -44,6 +52,7 @@ function App() {
         />
         <Route path="/products" Component={ProductPage} />
         <Route path="/shop-create" Component={ShopCreatePage} />
+        <Route path="/shop-login" Component={ShopLoginPage} />
         <Route path="/product/:name" Component={ProductDetailsPage} />
         <Route path="/best-selling" Component={BestSellingPage} />
         <Route path="/events" Component={EventsPage} />
