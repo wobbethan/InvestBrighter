@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
 
 const shopSchema = new mongoose.Schema({
   name: {
@@ -18,19 +17,20 @@ const shopSchema = new mongoose.Schema({
     minLength: [6, "Password should be greater than 6 characters"],
     select: false,
   },
+  description: {
+    type: String,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
   phoneNumber: {
     type: Number,
     required: true,
   },
-  address: [
-    {
-      type: String,
-      required: true,
-    },
-  ],
   role: {
     type: String,
-    default: "seller",
+    default: "Seller",
   },
   avatar: {
     public_id: {
@@ -46,10 +46,6 @@ const shopSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  description: {
-    type: String,
-    required: false,
-  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -58,12 +54,11 @@ const shopSchema = new mongoose.Schema({
   resetPasswordTime: Date,
 });
 
-//  Hash password
+// Hash password
 shopSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
   }
-
   this.password = await bcrypt.hash(this.password, 10);
 });
 

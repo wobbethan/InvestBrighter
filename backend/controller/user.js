@@ -52,7 +52,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
       await sendMail({
         email: user.email,
         subject: "Account Activation",
-        message: `Hello ${user.name}, please click the link to activate your account ${activationUrl}`,
+        message: `Hello ${user.name}, please click the link to activate your account \n${activationUrl}`,
       });
       res.status(201).json({
         success: true,
@@ -99,7 +99,7 @@ router.post(
         password,
       });
 
-      sendToken(user, 201, res);
+      sendToken(user, 201, res, "token");
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
@@ -123,7 +123,7 @@ router.post(
       if (!isPasswordValid) {
         return next(new ErrorHandler("Incorrect password", 400));
       }
-      sendToken(user, 201, res);
+      sendToken(user, 201, res, "token");
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
