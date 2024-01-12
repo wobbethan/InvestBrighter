@@ -1,9 +1,12 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
+import Loader from "../components/Layout/Loader";
 
 const SellerProtectedRoute = ({ children }) => {
   const { isLoading, isSeller } = useSelector((state) => state.seller);
-  if (isLoading === false) {
+  if (isLoading === true) {
+    return <Loader></Loader>;
+  } else {
     if (!isSeller) {
       return <Navigate to={`/shop-login`} replace />;
     }
