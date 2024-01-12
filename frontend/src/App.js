@@ -23,92 +23,94 @@ import {
   SellerActivationPage,
   ShopLoginPage,
   ShopHomePage,
-} from "./Routes.js";
+  ShopDashboardPage,
+} from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { loadSeller, loadUser } from "./redux/actions/user";
 import Store from "./redux/store";
-import ProtectedRoute from "./ProtectedRoute.js";
+import ProtectedRoute from "./routes/ProtectedRoute.js";
 import { useSelector } from "react-redux";
-import SellerProtectedRoute from "./SellerProtectedRoute.js";
+import SellerProtectedRoute from "./routes/SellerProtectedRoute.js";
 
 function App() {
-  const { isLoading, isSeller, seller } = useSelector((state) => state.seller);
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
-
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
   }, []);
   return (
-    <>
-      {loading || isLoading ? null : (
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" Component={HomePage} />
-            <Route path="/login" Component={LoginPage} />
-            <Route path="/sign-up" Component={SignupPage} />
-            <Route
-              path="/activation/:activation_token"
-              Component={ActivationPage}
-            />
-            <Route
-              path="/seller/activation/:activation_token"
-              Component={SellerActivationPage}
-            />
-            <Route path="/products" Component={ProductPage} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" Component={HomePage} />
+        <Route path="/login" Component={LoginPage} />
+        <Route path="/sign-up" Component={SignupPage} />
+        <Route
+          path="/activation/:activation_token"
+          Component={ActivationPage}
+        />
+        <Route
+          path="/seller/activation/:activation_token"
+          Component={SellerActivationPage}
+        />
+        <Route path="/products" Component={ProductPage} />
 
-            {/* Shop Routes */}
-            <Route path="/shop-create" Component={ShopCreatePage} />
-            <Route path="/shop-login" Component={ShopLoginPage} />
-            <Route
-              path="/shop/:id"
-              element={
-                <SellerProtectedRoute isSeller={isSeller}>
-                  <ShopHomePage />
-                </SellerProtectedRoute>
-              }
-            />
+        {/* Shop Routes */}
+        <Route path="/shop-create" Component={ShopCreatePage} />
+        <Route path="/shop-login" Component={ShopLoginPage} />
+        <Route
+          path="/shop/:id"
+          element={
+            <SellerProtectedRoute>
+              <ShopHomePage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <SellerProtectedRoute>
+              <ShopDashboardPage />
+            </SellerProtectedRoute>
+          }
+        />
 
-            <Route path="/product/:name" Component={ProductDetailsPage} />
-            <Route path="/best-selling" Component={BestSellingPage} />
-            <Route path="/events" Component={EventsPage} />
-            <Route path="/faq" Component={FaqPage} />
-            <Route path="/order/success/:id" Component={OrderSuccessPage} />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/checkout"
-              element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                  <CheckoutPage></CheckoutPage>
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-          <ToastContainer
-            position="bottom-center"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-            transition={Flip}
-          />
-        </BrowserRouter>
-      )}
-    </>
+        <Route path="/product/:name" Component={ProductDetailsPage} />
+        <Route path="/best-selling" Component={BestSellingPage} />
+        <Route path="/events" Component={EventsPage} />
+        <Route path="/faq" Component={FaqPage} />
+        <Route path="/order/success/:id" Component={OrderSuccessPage} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <CheckoutPage></CheckoutPage>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Flip}
+      />
+    </BrowserRouter>
   );
 }
 
