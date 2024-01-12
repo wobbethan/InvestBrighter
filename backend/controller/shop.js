@@ -3,13 +3,14 @@ const router = express.Router();
 const path = require("path");
 const fs = require("fs");
 const sendMail = require("../utils/sendMail");
-const sendToken = require("../utils/jwtToken");
-const { isAuthenticated } = require("../middleware/auth");
+const sendShopToken = require("../utils/shopToken");
+const { isAuthenticated, isSeller } = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
 const Shop = require("../model/shop");
 const { upload } = require("../multer");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler.js");
+
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -45,15 +46,15 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
     try {
       await sendMail({
         email: seller.email,
-        subject: "Account Activation",
-        message: `Hello ${seller.name}, please click the link to activate your shop account ${activationUrl}`,
+        subject: "Shop Account Activation",
+        message: `Hello ${seller.name}, please click the link to activate your shop account \n${activationUrl}`,
       });
       res.status(201).json({
         success: true,
         message: `please check your email: ${seller.email} to activate your shop account`,
       });
     } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+      return next(new ErrorHandler(error.message, 502));
     }
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
@@ -63,20 +64,22 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
 //creating activation token
 const createActivationToken = (seller) => {
   return jwt.sign(seller, process.env.ACTIVATION_SECRET, {
-    expiresIn: "1m",
+    expiresIn: "55m",
   });
 };
 
-//activate shop
+// activate user
 router.post(
-  "/shop/activation",
+  "/activation",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { activation_token } = req.body;
+
       const newSeller = jwt.verify(
         activation_token,
         process.env.ACTIVATION_SECRET
       );
+
       if (!newSeller) {
         return next(new ErrorHandler("Invalid token", 400));
       }
@@ -84,23 +87,71 @@ router.post(
         newSeller;
 
       let seller = await Shop.findOne({ email });
+
       if (seller) {
-        return next(new ErrorHandler("Seller already exists", 400));
+        return next(new ErrorHandler("User already exists", 400));
       }
-      console.log(name, email, password, phoneNumber, address, avatar, zipCode);
+
       seller = await Shop.create({
         name,
         email,
-        password,
-        phoneNumber,
-        address,
         avatar,
+        password,
         zipCode,
+        address,
+        phoneNumber,
       });
 
-      sendToken(seller, 201, res);
+      sendShopToken(seller, 201, res);
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// login to shop
+
+router.post(
+  "/login-shop",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return next(new ErrorHandler("Please enter all fields!", 500));
+      }
+      const seller = await Shop.findOne({ email }).select("+password");
+      if (!seller) {
+        return next(new ErrorHandler("Shop does not exist", 400));
+      }
+      const isPasswordValid = await seller.comparePassword(password);
+      if (!isPasswordValid) {
+        return next(new ErrorHandler("Incorrect password", 400));
+      }
+      sendShopToken(seller, 201, res);
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 503));
+    }
+  })
+);
+
+//load shop
+
+router.get(
+  "/getSeller",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const seller = await Shop.findById(req.seller._id);
+      console.log(seller);
+      if (!seller) {
+        return next(new ErrorHandler("Seller does not exist", 400));
+      }
+      res.status(200).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 505));
     }
   })
 );

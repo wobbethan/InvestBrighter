@@ -43,13 +43,13 @@ function ShopCreate() {
       .post(`${server}/shop/create-shop`, newForm, config)
       .then((res) => {
         toast.success(res.data.message);
-        setName("");
-        setEmail("");
-        setPassword("");
-        setAvatar();
-        setZipCode();
-        setAddress();
-        setPhoneNumber();
+        // setName("");
+        // setEmail("");
+        // setPassword("");
+        // setAvatar();
+        // setZipCode();
+        // setAddress();
+        // setPhoneNumber();
       })
       .catch((err) => {
         console.log(err.response.data.message);
@@ -173,6 +173,7 @@ function ShopCreate() {
               <div className="mt-1 relative">
                 <input
                   type={visible ? "text" : "password"}
+                  minLength={6}
                   name="password"
                   autoComplete="current-password"
                   required
