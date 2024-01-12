@@ -13,6 +13,7 @@ const ErrorHandler = require("../utils/ErrorHandler.js");
 
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
+    console.log(req.body);
     const { email } = req.body;
     const sellerEmail = await Shop.findOne({ email });
 
@@ -54,7 +55,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
         message: `please check your email: ${seller.email} to activate your shop account`,
       });
     } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+      return next(new ErrorHandler(error.message, 502));
     }
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
@@ -70,7 +71,7 @@ const createActivationToken = (seller) => {
 
 //activate shop
 router.post(
-  "/shop/activation",
+  "/activation",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { activation_token } = req.body;
