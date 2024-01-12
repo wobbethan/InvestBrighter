@@ -13,7 +13,6 @@ const ErrorHandler = require("../utils/ErrorHandler.js");
 
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
-    console.log(req.body);
     const { email } = req.body;
     const sellerEmail = await Shop.findOne({ email });
 
@@ -69,7 +68,7 @@ const createActivationToken = (seller) => {
   });
 };
 
-//activate shop
+// activate user
 router.post(
   "/activation",
   catchAsyncErrors(async (req, res, next) => {
@@ -90,7 +89,7 @@ router.post(
       let seller = await Shop.findOne({ email });
 
       if (seller) {
-        return next(new ErrorHandler("Shop already exists", 400));
+        return next(new ErrorHandler("User already exists", 400));
       }
 
       seller = await Shop.create({
@@ -105,7 +104,7 @@ router.post(
 
       sendShopToken(seller, 201, res);
     } catch (error) {
-      return next(new ErrorHandler(error.message, 501));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );

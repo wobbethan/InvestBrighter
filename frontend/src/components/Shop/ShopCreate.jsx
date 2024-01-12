@@ -173,6 +173,7 @@ function ShopCreate() {
               <div className="mt-1 relative">
                 <input
                   type={visible ? "text" : "password"}
+                  minLength={6}
                   name="password"
                   autoComplete="current-password"
                   required
