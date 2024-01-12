@@ -43,13 +43,13 @@ function ShopCreate() {
       .post(`${server}/shop/create-shop`, newForm, config)
       .then((res) => {
         toast.success(res.data.message);
-        // setName("");
-        // setEmail("");
-        // setPassword("");
-        // setAvatar();
-        // setZipCode();
-        // setAddress();
-        // setPhoneNumber();
+        setName("");
+        setEmail("");
+        setPassword("");
+        setAvatar();
+        setZipCode();
+        setAddress();
+        setPhoneNumber();
       })
       .catch((err) => {
         console.log(err.response.data.message);

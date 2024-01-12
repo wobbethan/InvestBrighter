@@ -54,7 +54,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
         message: `please check your email: ${seller.email} to activate your shop account`,
       });
     } catch (error) {
-      return next(new ErrorHandler(error.message, 502));
+      return next(new ErrorHandler(error.message, 500));
     }
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
@@ -129,7 +129,7 @@ router.post(
       }
       sendShopToken(seller, 201, res);
     } catch (error) {
-      return next(new ErrorHandler(error.message, 503));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
@@ -151,7 +151,7 @@ router.get(
         seller,
       });
     } catch (error) {
-      return next(new ErrorHandler(error.message, 505));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );

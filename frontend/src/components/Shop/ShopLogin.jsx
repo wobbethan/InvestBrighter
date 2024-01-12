@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -26,12 +26,11 @@ function ShopLogin() {
       )
       .then((res) => {
         toast.success("Login Success!");
-        navigate("/shop");
+        navigate("/shop/:id");
         window.location.reload(true);
       })
       .catch((err) => {
-        toast.error("Invalid information");
-        //toast.error(err.response.data.message);
+        toast.error(err.response.data.message);
       });
   };
 
