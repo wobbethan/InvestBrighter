@@ -1,4 +1,4 @@
-# Updated by Ethan Wobb 01/09/2024:
+# Updated by Ethan Wobb 01/12/2024:
 
 ## On clean computer
 
@@ -20,11 +20,14 @@
 
 ### In first terminal:
 
-- 'npm install --legacy-peer-deps'
-- 'cd backend'
-- 'npm run dev'
+- git config --global user.name "your username in quotes"
+- git config --global user.email "your email in quotes"
+- cd backend
+- npm install --legacy-peer-deps
+- npm run dev
 
 ### In second terminal:
 
-- 'cd frontend'
-- 'npm start'
+- cd frontend
+- npm install --legacy-peer-deps
+- npm start
