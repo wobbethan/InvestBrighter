@@ -4,6 +4,7 @@ const Product = require("../model/product");
 const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
+const Shop = require("../model/shop.js");
 
 //create product
 router.post(
@@ -17,7 +18,7 @@ router.post(
         return next(new ErrorHandler("Shop ID invalid", 400));
       } else {
         const files = req.files;
-        const imageUrls = files.map((file) => `${file.fileName}`);
+        const imageUrls = files.map((file) => `${file.filename}`);
         const productData = req.body;
         productData.images = imageUrls;
         productData.shop = shop;
@@ -29,7 +30,7 @@ router.post(
         });
       }
     } catch (error) {
-      return next(new ErrorHandler(Error, 400));
+      return next(new ErrorHandler(error, 400));
     }
   })
 );
