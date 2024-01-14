@@ -1,12 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { backend_url } from "../../Server";
+import { backend_url, server } from "../../Server";
 import styles from "../../styles/styles";
+import axios from "axios";
 
 const ShopInfo = ({ isOwner }) => {
   const { seller } = useSelector((state) => state.seller);
 
-  const logoutHandler = () => {};
+  const logoutHandler = async () => {
+    axios.get(`${server}/shop/logout`, { withCredentials: true });
+    window.location.reload();
+  };
 
   return (
     <div>
