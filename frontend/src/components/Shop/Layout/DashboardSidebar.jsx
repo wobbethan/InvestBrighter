@@ -94,7 +94,7 @@ const DashboardSidebar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-events" className="w-full flex items-center">
+        <Link to="/dashboard-create-event" className="w-full flex items-center">
           <VscNewFile
             size={30}
             color={`${active === 6 ? "crimson" : "#555"}`}

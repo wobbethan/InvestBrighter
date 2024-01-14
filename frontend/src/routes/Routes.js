@@ -17,6 +17,7 @@ import ShopHomePage from "../pages/ShopHomePage.jsx";
 import ShopDashboardPage from "../pages/ShopDashboardPage.jsx";
 import ShopCreateProduct from "../pages/ShopCreateProduct.jsx";
 import ShopAllProducts from "../pages/ShopAllProducts.jsx";
+import ShopCreateEvents from "../pages/ShopCreateEvents.jsx";
 
 export {
   LoginPage,
@@ -36,6 +37,7 @@ export {
   ShopLoginPage,
   ShopHomePage,
   ShopDashboardPage,
+  ShopCreateEvents,
   ShopAllProducts,
   ShopCreateProduct,
 };
