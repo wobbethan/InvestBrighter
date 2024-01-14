@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { createProduct } from "../../redux/actions/product";
 import { toast } from "react-toastify";
+import { createEvent } from "../../redux/actions/event";
 
 const CreateEvents = () => {
   const { seller } = useSelector((state) => state.seller);
-  const { success, error } = useSelector((state) => state.products);
+  const { success, error } = useSelector((state) => state.events);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -44,7 +44,7 @@ const CreateEvents = () => {
       toast.error(error);
     }
     if (success) {
-      toast.success("Product created Successfully!");
+      toast.success("Event created successfully!");
       navigate("/dashboard");
       window.location.reload();
     }
@@ -77,7 +77,10 @@ const CreateEvents = () => {
     newForm.append("discountPrice", discountPrice);
     newForm.append("stock", stock);
     newForm.append("shopId", seller._id);
-    dispatch(createProduct(newForm));
+    newForm.append("start_Date", startDate.toISOString());
+    newForm.append("finish_Date", endDate.toISOString());
+
+    dispatch(createEvent(newForm));
   };
   return (
     <div className="800px:w-[50%] w-[90%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
@@ -202,10 +205,10 @@ const CreateEvents = () => {
             type="date"
             name="date"
             id="end-date"
-            value={startDate ? startDate.toISOString().slice(0, 10) : ""}
+            value={endDate ? endDate.toISOString().slice(0, 10) : ""}
             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            onChange={handleStartDateChange}
-            min={today}
+            onChange={handleEndDateChange}
+            min={minEndDate}
           />
         </div>
         <br />
