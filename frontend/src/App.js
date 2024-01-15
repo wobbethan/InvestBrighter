@@ -27,6 +27,7 @@ import {
   ShopCreateProduct,
   ShopAllProducts,
   ShopCreateEvents,
+  ShopAllEvents,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -98,6 +99,14 @@ function App() {
           element={
             <SellerProtectedRoute>
               <ShopCreateEvents />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-all-events"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllEvents />
             </SellerProtectedRoute>
           }
         />

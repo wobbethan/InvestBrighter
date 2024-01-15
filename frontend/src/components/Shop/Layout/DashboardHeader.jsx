@@ -25,13 +25,15 @@ const DashboardHeader = () => {
               color="#555"
               size={30}
               className="mx-5 cursor-pointer"
+              title="Coupons"
             />
           </Link>
-          <Link to={"/dashboard-events"} className="800px:block hidden">
+          <Link to={"/dashboard-all-events"} className="800px:block hidden">
             <MdOutlineLocalOffer
               color="#555"
               size={30}
               className="mx-5 cursor-pointer"
+              title="Events"
             />
           </Link>
           <Link to={"/dashboard-products"} className="800px:block hidden">
@@ -39,16 +41,23 @@ const DashboardHeader = () => {
               color="#555"
               size={30}
               className="mx-5 cursor-pointer"
+              title="Products"
             />
           </Link>
           <Link to={"/dashboard-orders"} className="800px:block hidden">
-            <FiPackage color="#555" size={30} className="mx-5 cursor-pointer" />
+            <FiPackage
+              color="#555"
+              size={30}
+              className="mx-5 cursor-pointer"
+              title="Orders"
+            />
           </Link>
           <Link to={"/dashboard-messages"} className="800px:block hidden">
             <BiMessageSquareDetail
               color="#555"
               size={30}
               className="mx-5 cursor-pointer"
+              title="Messages"
             />
           </Link>
           <Link to={`/shop/${seller._id}`}>
@@ -56,6 +65,7 @@ const DashboardHeader = () => {
               src={`${backend_url}${seller.avatar}`}
               alt=""
               className="w-[50px] h-[50px] rounded-full object-cover"
+              title="Shop Page"
             />
           </Link>
         </div>
