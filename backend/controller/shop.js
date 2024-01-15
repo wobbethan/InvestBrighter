@@ -54,7 +54,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
         message: `please check your email: ${seller.email} to activate your shop account`,
       });
     } catch (error) {
-      return next(new ErrorHandler(error.message, 502));
+      return next(new ErrorHandler(error.message, 500));
     }
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
@@ -129,7 +129,7 @@ router.post(
       }
       sendShopToken(seller, 201, res);
     } catch (error) {
-      return next(new ErrorHandler(error.message, 503));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
@@ -142,7 +142,6 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const seller = await Shop.findById(req.seller._id);
-      console.log(seller);
       if (!seller) {
         return next(new ErrorHandler("Seller does not exist", 400));
       }
@@ -151,7 +150,28 @@ router.get(
         seller,
       });
     } catch (error) {
-      return next(new ErrorHandler(error.message, 505));
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//Logout
+router.get(
+  "/logout",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      res.cookie("seller_token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      });
+
+      res.status(201).json({
+        success: true,
+        message: "Log out successful!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );

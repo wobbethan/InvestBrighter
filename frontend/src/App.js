@@ -1,4 +1,10 @@
-import { Route, Routes, BrowserRouter, useNavigate } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  BrowserRouter,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import "./App.css";
 import {
   LoginPage,
@@ -16,31 +22,33 @@ import {
   ShopCreatePage,
   SellerActivationPage,
   ShopLoginPage,
-} from "./Routes.js";
+  ShopHomePage,
+  ShopDashboardPage,
+  ShopCreateProduct,
+  ShopAllProducts,
+  ShopCreateEvents,
+  ShopAllCoupons,
+  ShopAllEvents,
+} from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { loadSeller, loadUser } from "./redux/actions/user";
 import Store from "./redux/store";
-import ProtectedRoute from "./ProtectedRoute.js";
+import ProtectedRoute from "./routes/ProtectedRoute.js";
 import { useSelector } from "react-redux";
+import SellerProtectedRoute from "./routes/SellerProtectedRoute.js";
 
 function App() {
-  const { isSeller, seller } = useSelector((state) => state.user);
-  //const navigate = useNavigate();
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
-    if (isSeller) {
-      //navigate(`/shop/${seller._id}`);
-    }
   }, []);
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" Component={LoginPage} />
         <Route path="/" Component={HomePage} />
+        <Route path="/login" Component={LoginPage} />
         <Route path="/sign-up" Component={SignupPage} />
         <Route
           path="/activation/:activation_token"
@@ -51,8 +59,68 @@ function App() {
           Component={SellerActivationPage}
         />
         <Route path="/products" Component={ProductPage} />
+
+        {/* Shop Routes */}
         <Route path="/shop-create" Component={ShopCreatePage} />
         <Route path="/shop-login" Component={ShopLoginPage} />
+        <Route
+          path="/shop/:id"
+          element={
+            <SellerProtectedRoute>
+              <ShopHomePage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <SellerProtectedRoute>
+              <ShopDashboardPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-create-product"
+          element={
+            <SellerProtectedRoute>
+              <ShopCreateProduct />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-products"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllProducts />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-create-event"
+          element={
+            <SellerProtectedRoute>
+              <ShopCreateEvents />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-events"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllEvents />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard-coupons"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllCoupons />
+            </SellerProtectedRoute>
+          }
+        />
+
         <Route path="/product/:name" Component={ProductDetailsPage} />
         <Route path="/best-selling" Component={BestSellingPage} />
         <Route path="/events" Component={EventsPage} />
@@ -61,7 +129,7 @@ function App() {
         <Route
           path="/profile"
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
           }
@@ -69,7 +137,7 @@ function App() {
         <Route
           path="/checkout"
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <ProtectedRoute>
               <CheckoutPage></CheckoutPage>
             </ProtectedRoute>
           }
