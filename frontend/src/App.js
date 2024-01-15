@@ -29,6 +29,7 @@ import {
   ShopCreateEvents,
   ShopAllCoupons,
   ShopAllEvents,
+  ShopPreviewPage,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -59,6 +60,8 @@ function App() {
           Component={SellerActivationPage}
         />
         <Route path="/products" Component={ProductPage} />
+
+        <Route path="/shop/preview/:id" Component={ShopPreviewPage} />
 
         {/* Shop Routes */}
         <Route path="/shop-create" Component={ShopCreatePage} />
