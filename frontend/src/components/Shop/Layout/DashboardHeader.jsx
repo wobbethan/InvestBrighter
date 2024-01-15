@@ -28,7 +28,7 @@ const DashboardHeader = () => {
               title="Coupons"
             />
           </Link>
-          <Link to={"/dashboard-all-events"} className="800px:block hidden">
+          <Link to={"/dashboard-events"} className="800px:block hidden">
             <MdOutlineLocalOffer
               color="#555"
               size={30}

@@ -24,7 +24,7 @@ const AllEvents = () => {
   }, [dispatch]);
 
   const columns = [
-    { field: "id", headerName: "Product ID", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "Event ID", minWidth: 150, flex: 0.7 },
     {
       field: "name",
       headerName: "Name",

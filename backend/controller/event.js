@@ -38,9 +38,9 @@ router.post(
   })
 );
 
-//Getting all events
+//Getting all events of shop
 router.get(
-  "/get-all-events/:id",
+  "/get-all-events-shop/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const events = await Event.find({ shopId: req.params.id });

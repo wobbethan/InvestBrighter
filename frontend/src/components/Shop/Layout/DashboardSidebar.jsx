@@ -78,7 +78,7 @@ const DashboardSidebar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-all-events" className="w-full flex items-center">
+        <Link to="/dashboard-events" className="w-full flex items-center">
           <MdOutlineLocalOffer
             size={30}
             color={`${active === 5 ? "crimson" : "#555"}`}
