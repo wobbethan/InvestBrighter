@@ -6,8 +6,9 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const Shop = require("../model/shop");
 const Event = require("../model/event");
 const { isSeller } = require("../middleware/auth");
+const fs = require("fs");
 
-//create product
+//create event
 router.post(
   "/create-event",
   upload.array("images"),
@@ -37,7 +38,7 @@ router.post(
   })
 );
 
-//Getting all products
+//Getting all events
 router.get(
   "/get-all-events/:id",
   catchAsyncErrors(async (req, res, next) => {
@@ -53,7 +54,7 @@ router.get(
   })
 );
 
-//delete product
+//delete event
 
 router.delete(
   "/delete-shop-event/:id",
@@ -61,10 +62,24 @@ router.delete(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const eventId = req.params.id;
+      const eventData = await Event.findById(eventId);
+
+      eventData.images.forEach((imageUrl) => {
+        const filename = imageUrl;
+        const filePath = `uploads/${filename}`;
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      });
+
       const event = await Event.findByIdAndDelete(eventId);
+
       if (!event) {
         return next(new ErrorHandler("Event not found", 500));
       }
+
       res.status(201).json({
         success: true,
         message: "Event successfully deleted!",
