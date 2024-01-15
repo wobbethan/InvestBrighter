@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ShopLogin from "../components/Shop/ShopLogin.jsx";
+import ShopLogin from "../../components/Shop/ShopLogin.jsx";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 

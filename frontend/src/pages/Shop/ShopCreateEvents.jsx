@@ -1,7 +1,7 @@
 import React from "react";
-import CreateEvents from "../components/Shop/CreateEvents.jsx";
-import DashboardHeader from "../components/Shop/Layout/DashboardHeader.jsx";
-import DashboardSidebar from "../components/Shop/Layout/DashboardSidebar.jsx";
+import CreateEvents from "../../components/Shop/CreateEvents.jsx";
+import DashboardHeader from "../../components/Shop/Layout/DashboardHeader.jsx";
+import DashboardSidebar from "../../components/Shop/Layout/DashboardSidebar.jsx";
 
 const ShopCreateEvents = () => {
   return (

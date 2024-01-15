@@ -10,15 +10,16 @@ import ProductDetailsPage from "../pages/ProductDetailsPage.jsx";
 import OrderSuccessPage from "../pages/OrderSuccessPage.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
 import CheckoutPage from "../pages/CheckoutPage.jsx";
-import ShopCreatePage from "../pages/ShopCreatePage.jsx";
+import ShopCreatePage from "../pages/Shop/ShopCreatePage.jsx";
 import SellerActivationPage from "../pages/SellerActivationPage.jsx";
-import ShopLoginPage from "../pages/ShopLoginPage.jsx";
-import ShopHomePage from "../pages/ShopHomePage.jsx";
-import ShopDashboardPage from "../pages/ShopDashboardPage.jsx";
-import ShopCreateProduct from "../pages/ShopCreateProduct.jsx";
-import ShopAllProducts from "../pages/ShopAllProducts.jsx";
-import ShopCreateEvents from "../pages/ShopCreateEvents.jsx";
-import ShopAllEvents from "../pages/ShopAllEvents.jsx";
+import ShopLoginPage from "../pages/Shop/ShopLoginPage.jsx";
+import ShopHomePage from "../pages/Shop/ShopHomePage.jsx";
+import ShopDashboardPage from "../pages/Shop/ShopDashboardPage.jsx";
+import ShopCreateProduct from "../pages/Shop/ShopCreateProduct.jsx";
+import ShopAllProducts from "../pages/Shop/ShopAllProducts.jsx";
+import ShopCreateEvents from "../pages/Shop/ShopCreateEvents.jsx";
+import ShopAllEvents from "../pages/Shop/ShopAllEvents.jsx";
+import ShopAllCoupons from "../pages/Shop/ShopAllCoupons.jsx";
 export {
   LoginPage,
   SignupPage,
@@ -41,4 +42,5 @@ export {
   ShopAllProducts,
   ShopCreateProduct,
   ShopAllEvents,
+  ShopAllCoupons,
 };

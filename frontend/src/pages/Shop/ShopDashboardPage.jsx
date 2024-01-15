@@ -1,6 +1,6 @@
 import React from "react";
-import DashboardHeader from "../components/Shop/Layout/DashboardHeader.jsx";
-import DashboardSideBar from "../components/Shop/Layout/DashboardSidebar.jsx";
+import DashboardHeader from "../../components/Shop/Layout/DashboardHeader.jsx";
+import DashboardSideBar from "../../components/Shop/Layout/DashboardSidebar.jsx";
 
 function ShopDashboardPage() {
   return (

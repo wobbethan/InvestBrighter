@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "../styles/styles";
-import ShopInfo from "../components/Shop/ShopInfo.jsx";
-import ShopProfileData from "../components/Shop/ShopProfileData.jsx";
+import styles from "../../styles/styles.js";
+import ShopInfo from "../../components/Shop/ShopInfo.jsx";
+import ShopProfileData from "../../components/Shop/ShopProfileData.jsx";
 
 function ShopHomePage() {
   return (
