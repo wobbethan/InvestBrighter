@@ -19,7 +19,7 @@ export const productReducer = createReducer(initialState, {
     state.success = false;
   },
 
-  //all products
+  //all products for shop
   getAllProductsShopRequest: (state) => {
     state.isLoading = true;
   },
@@ -41,6 +41,19 @@ export const productReducer = createReducer(initialState, {
     state.message = action.payload;
   },
   deleteProductFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // get all products
+  getAllProductsRequest: (state) => {
+    state.isLoading = true;
+  },
+  getAllProductsSuccess: (state, action) => {
+    state.isLoading = false;
+    state.allProducts = action.payload;
+  },
+  getAllProductsFailed: (state, action) => {
     state.isLoading = false;
     state.error = action.payload;
   },

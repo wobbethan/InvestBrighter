@@ -10,10 +10,14 @@ const EventCard = ({ active }) => {
       } lg:flex p-2`}
     >
       <div className="w-full m-auto lg:w-[50%]">
-        <img src="https://m.media-amazon.com/images/I/31Vle5fVdaL.jpg" alt="" />
+        <img
+          src="https://images.cnbctv18.com/wp-content/uploads/2020/04/wallstreet_NYSE1-768x512.jpg"
+          alt=""
+          className="p-5"
+        />
       </div>
       <div className="w-full lg:[w-50%] flex flex-col justify-center">
-        <h2 className={`${styles.productTitle}`}> Iphone 14pro max 8/256gb</h2>
+        <h2 className={`${styles.productTitle}`}> Seed Investment Round</h2>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
           Necessitatibus voluptate libero, odit, unde, enim rerum soluta quod
@@ -25,15 +29,11 @@ const EventCard = ({ active }) => {
         </p>
         <div className="flex py-2 justify-between">
           <div className="flex">
-            <h5 className="font-[500] text-[18px] text-[#d55b45] pr-3 line-through">
-              $1099
-            </h5>
-            <h5 className="font-bold text-[20px] text-[#333] font-Roboto">
-              $999
-            </h5>
+            <h5 className="font-[500] text-[18px] text-[#d55b45] pr-3 line-through"></h5>
+            <h5 className="font-bold text-[20px] text-[#333] font-Roboto"></h5>
           </div>
           <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
-            120 sold
+            120 Investments
           </span>
         </div>
         <CountDown />

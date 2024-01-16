@@ -19,9 +19,12 @@ const ShopProfileData = ({ isOwner }) => {
     dispatch(getAllEventsShop(id));
   }, [dispatch]);
 
+  console.log(products);
+
   const [active, setActive] = useState(1);
-  const allReviews =
-    products && products.map((product) => product.reviews).flat();
+
+  // const allReviews =
+  //   products && products.map((product) => product.reviews).flat();
 
   return (
     <div className="w-full">
@@ -72,6 +75,7 @@ const ShopProfileData = ({ isOwner }) => {
       <br />
       {active === 1 && (
         <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
+          {console.log(products)}
           {products &&
             products.map((i, index) => (
               <ProductCard data={i} key={index} isShop={true} />
@@ -99,7 +103,7 @@ const ShopProfileData = ({ isOwner }) => {
           )}
         </div>
       )}
-
+      {/* 
       {active === 3 && (
         <div className="w-full">
           {allReviews &&
@@ -126,7 +130,7 @@ const ShopProfileData = ({ isOwner }) => {
             </h5>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

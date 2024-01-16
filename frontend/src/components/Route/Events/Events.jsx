@@ -1,6 +1,7 @@
 import React from "react";
 import EventCard from "./EventCard.jsx";
 import styles from "../../../styles/styles.js";
+import Footer from "../../Layout/Footer.jsx";
 
 const Events = () => {
   return (

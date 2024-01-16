@@ -9,6 +9,7 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import { backend_url } from "../../Server";
 
 const ProductDetails = ({ data }) => {
   const [count, setCount] = useState(1);
@@ -34,7 +35,7 @@ const ProductDetails = ({ data }) => {
               <div className="w-full 800px:w-[50%]">
                 {" "}
                 <img
-                  src={data.image_Url[select].url}
+                  // src={data.image_Url[select].url}
                   alt=""
                   className="w-[80%]"
                 />
@@ -45,7 +46,7 @@ const ProductDetails = ({ data }) => {
                     } cursor-pointer`}
                   >
                     <img
-                      src={data?.image_Url[0].url}
+                      src={`${backend_url}${data.images && data.images[0]}`}
                       alt=""
                       className="h-[200px]"
                       onClick={() => setSelect(0)}
@@ -57,7 +58,7 @@ const ProductDetails = ({ data }) => {
                     } cursor-pointer`}
                   >
                     <img
-                      src={data?.image_Url[0].url}
+                      src={`${backend_url}${data.images && data.images[0]}`}
                       alt=""
                       className="h-[200px]"
                       onClick={() => setSelect(1)}
@@ -70,10 +71,10 @@ const ProductDetails = ({ data }) => {
                 <p>{data.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    ${data.discount_price}
+                    ${data.discountPrice}
                   </h4>
                   <h3 className={`${styles.price}`}>
-                    {data.price ? "$" + data.price : null}
+                    {data.originalPrice ? "$" + data.originalPrice : null}
                   </h3>
                 </div>
                 <div className="flex items-center mt-12 justify-between pr-3">
@@ -123,7 +124,7 @@ const ProductDetails = ({ data }) => {
                 </div>
                 <div className="flex items-center pt-8">
                   <img
-                    src={data.shop.shop_avatar.url}
+                    src={`${backend_url}${data?.shop?.avatar}`}
                     className="w-[50px] h-[50px] rounded-full mr-2"
                     alt=""
                   />
@@ -132,7 +133,7 @@ const ProductDetails = ({ data }) => {
                       {" "}
                       {data.shop.name}
                     </h3>
-                    <h5 className="pb-3 text=[15px]"> ({data.shop.ratings})</h5>
+                    <h5 className="pb-3 text=[15px]"> (4/5)</h5>
                   </div>
                   <div
                     className={`${styles.button} bg-[#6443d1] mt-4 rounded h-11`}
