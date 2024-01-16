@@ -8,6 +8,7 @@ import {
   AiFillHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import { backend_url } from "../../../Server";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
   const [count, setCount] = useState(1);
@@ -37,11 +38,16 @@ const ProductDetailsCard = ({ setOpen, data }) => {
 
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
-                <img src={`${data.images && data.images[0]?.url}`} alt="" />
-                <div className="flex">
+                <img
+                  src={`${backend_url}${data.images && data.images[0]}`}
+                  alt=""
+                  className="p-2"
+                />
+                <div className="flex mt-2">
+                  {console.log(data)}
                   <Link to={`/shop/preview/${data.shop._id}`} className="flex">
                     <img
-                      src={`${data.images && data.images[0]?.url}`}
+                      src={`${backend_url}${data.shop && data.shop.avatar}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />

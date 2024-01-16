@@ -186,8 +186,9 @@ function Header({ activeHeading }) {
             <div className="relative cursor-pointer mr-[15px]">
               {isAuthenticated ? (
                 <Link to="/profile">
+                  {console.log(user.avatar)}
                   <img
-                    src={`${user.avatar?.url}`}
+                    src={`${backend_url}${user.avatar}`}
                     alt=""
                     className="w-[35px] h-[35px] rounded-full"
                   />

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import styles from "../../../styles/styles";
 import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard.jsx";
+
 import {
   AiFillStar,
   AiOutlineStar,
@@ -12,6 +13,7 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import Ratings from "../../products/Ratings.jsx";
+import { backend_url } from "../../../Server.js";
 
 function ProductCard({ data, isEvent }) {
   const [click, setClick] = useState(false);
@@ -31,9 +33,9 @@ function ProductCard({ data, isEvent }) {
           }`}
         >
           <img
-            src={`${data.images && data.images[0]?.url}`}
+            src={`${backend_url}${data.images && data.images[0]}`}
             alt=""
-            className="w-full h-[170px] object-contain"
+            className="w-full h-[170px] object-contain p-6"
           />
         </Link>
         <Link to={`/shop/preview/${data?.shop._id}`}>
