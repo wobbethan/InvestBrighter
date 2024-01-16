@@ -28,8 +28,8 @@ function ProductCard({ data, isEvent }) {
         <Link
           to={`${
             isEvent === true
-              ? `/product/${data._id}?isEvent=true`
-              : `/product/${data._id}`
+              ? `/product/${product_name}?isEvent=true`
+              : `/product/${product_name}`
           }`}
         >
           <img

@@ -5,11 +5,12 @@ import ProductCard from "../Route/ProductCard/ProductCard";
 import { useSelector } from "react-redux";
 
 const SuggestedProduct = ({ data }) => {
-  const { products } = useSelector((state) => state.products);
+  const { allProducts } = useSelector((state) => state.products);
   const [productData, setProductData] = useState();
 
   useEffect(() => {
-    const d = products && products.filter((i) => i.category === data.category);
+    const d =
+      allProducts && allProducts.filter((i) => i.category === data.category);
     setProductData(d);
   }, []);
   return (

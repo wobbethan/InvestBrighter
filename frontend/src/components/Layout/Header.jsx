@@ -28,14 +28,15 @@ function Header({ activeHeading }) {
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
   const searchInput = React.useRef(null);
+  const { allProducts } = useSelector((state) => state.products);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
 
     const filterProducts =
-      productData &&
-      productData.filter((product) =>
+      allProducts &&
+      allProducts.filter((product) =>
         product.name.toLowerCase().includes(term.toLowerCase())
       );
     setSearchData(filterProducts);
@@ -87,7 +88,7 @@ function Header({ activeHeading }) {
                         <div className="w-full flex items-start py-3">
                           <img
                             className="w-[40px] h-[40px] mr-[10px]"
-                            src={i.image_Url[0].url}
+                            src={`${backend_url}${i.images[0]}`}
                             alt=""
                           />
                           <h1>{i.name}</h1>

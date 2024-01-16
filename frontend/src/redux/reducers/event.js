@@ -19,7 +19,7 @@ export const eventReducer = createReducer(initialState, {
     state.success = false;
   },
 
-  //all events
+  //all events shop
   getAllEventsShopRequest: (state) => {
     state.isLoading = true;
   },
