@@ -7,6 +7,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Shop = require("../model/shop.js");
 const { isSeller } = require("../middleware/auth");
 const fs = require("fs");
+
 //create product
 router.post(
   "/create-product",
@@ -36,7 +37,7 @@ router.post(
   })
 );
 
-//Getting all products
+//Getting all products of shop
 router.get(
   "/get-all-products-shop/:id",
   catchAsyncErrors(async (req, res, next) => {

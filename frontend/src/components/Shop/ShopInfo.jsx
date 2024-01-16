@@ -16,7 +16,6 @@ const ShopInfo = ({ isOwner }) => {
 
   useEffect(() => {
     dispatch(getAllProductsShop(id));
-    console.log(products);
     setIsLoading(true);
     axios
       .get(`${server}/shop/get-shop-info/${id}`)
@@ -59,7 +58,6 @@ const ShopInfo = ({ isOwner }) => {
         <div>
           <div className="w-full py-5">
             <div className="w-full flex item-center justify-center">
-              {console.log(data)}
               <img
                 src={`${backend_url}${data.avatar}`}
                 alt=""

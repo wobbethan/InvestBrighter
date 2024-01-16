@@ -6,13 +6,14 @@ import { useSelector } from "react-redux";
 
 function BestDeals() {
   const [data, setData] = useState([]);
-  const { products } = useSelector((state) => state.products);
+  const { allProducts } = useSelector((state) => state.products);
 
   useEffect(() => {
-    const topFive = products;
-    setData(topFive);
-    console.log(products);
-  }, []);
+    const productsData = allProducts ? [...allProducts] : [];
+    const sortedData = productsData?.sort((a, b) => b.sold_out - a.sold_out);
+    const firstFive = sortedData && sortedData.slice(0, 5);
+    setData(firstFive);
+  }, [allProducts]);
 
   return (
     <div>
