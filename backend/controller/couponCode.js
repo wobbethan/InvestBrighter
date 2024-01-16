@@ -17,7 +17,6 @@ router.post(
         return next(new ErrorHandler("Coupon code already exists", 400));
       }
       const coupon = await CouponCode.create(req.body);
-      console.log(req.body);
       res.status(201).json({
         success: true,
         coupon,

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import styles from "../../../styles/styles";
 import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard.jsx";
+
 import {
   AiFillStar,
   AiOutlineStar,
@@ -11,8 +12,10 @@ import {
   AiOutlineEye,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import Ratings from "../../products/Ratings.jsx";
+import { backend_url } from "../../../Server.js";
 
-function ProductCard({ data }) {
+function ProductCard({ data, isEvent }) {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
   const d = data.name;
@@ -22,60 +25,51 @@ function ProductCard({ data }) {
     <>
       <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <div className="flex justify-end"></div>
-        <Link to={`/product/${product_name}`}>
+        <Link
+          to={`${
+            isEvent === true
+              ? `/product/${product_name}?isEvent=true`
+              : `/product/${product_name}`
+          }`}
+        >
           <img
-            src={data.image_Url[0].url}
+            src={`${backend_url}${data.images && data.images[0]}`}
             alt=""
-            className="w-full h-[170px] object-contain"
+            className="w-full h-[170px] object-contain p-6"
           />
         </Link>
-        <Link to="/">
+        <Link to={`/shop/preview/${data?.shop._id}`}>
           <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
         </Link>
 
-        <Link to="/">
+        <Link
+          to={`${
+            isEvent === true
+              ? `/product/${data._id}?isEvent=true`
+              : `/product/${data._id}`
+          }`}
+        >
           <h4 className="pb-3 font-[500]">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
           <div className="flex">
-            <AiFillStar
-              size={20}
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-            ></AiFillStar>
-            <AiFillStar
-              size={20}
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-            ></AiFillStar>
-            <AiFillStar
-              size={20}
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-            ></AiFillStar>
-            <AiFillStar
-              size={20}
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-            ></AiFillStar>
-            <AiOutlineStar
-              size={20}
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-            ></AiOutlineStar>
+            <Ratings rating={data?.ratings} />
           </div>
 
           <div className="py-2 flex items-center justify-between">
             <div className="flex">
               <h5 className={`${styles.productDiscountPrice}`}>
-                ${data.price === 0 ? data.price : data.discount_price}
+                $
+                {data.originalPrice === 0
+                  ? data.originalPrice
+                  : data.discountPrice}
               </h5>
               <h4 className={`${styles.price}`}>
-                {data.price ? "$" + data.price : null}
+                {data.originalPrice ? "$" + data.originalPrice : null}
               </h4>
             </div>
             <span className="font-[400] text-[17px] text-[#6AD284]">
-              {data.total_sell} sold
+              {data.sold_out} sold
             </span>
           </div>
         </Link>

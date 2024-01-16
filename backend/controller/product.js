@@ -7,6 +7,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Shop = require("../model/shop.js");
 const { isSeller } = require("../middleware/auth");
 const fs = require("fs");
+
 //create product
 router.post(
   "/create-product",
@@ -36,7 +37,7 @@ router.post(
   })
 );
 
-//Getting all products
+//Getting all products of shop
 router.get(
   "/get-all-products-shop/:id",
   catchAsyncErrors(async (req, res, next) => {
@@ -80,6 +81,23 @@ router.delete(
       res.status(201).json({
         success: true,
         message: "Product successfully deleted!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// get all products
+router.get(
+  "/get-all-products",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const products = await Product.find().sort({ createdAt: -1 });
+
+      res.status(201).json({
+        success: true,
+        products,
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));

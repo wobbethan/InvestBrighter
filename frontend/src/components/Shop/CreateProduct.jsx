@@ -28,6 +28,7 @@ const CreateProduct = () => {
     if (success) {
       toast.success("Product created successfully!");
       navigate("/dashboard-products");
+      window.location.reload();
     }
   }, [dispatch, error, success]);
 
