@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import styles from "../../../styles/styles";
 import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard.jsx";
-
+import { useSelector } from "react-redux";
 import {
   AiFillStar,
   AiOutlineStar,
@@ -16,6 +16,7 @@ import Ratings from "../../products/Ratings.jsx";
 import { backend_url } from "../../../Server.js";
 
 function ProductCard({ data, isEvent }) {
+  const { cart } = useSelector((state) => state.cart);
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
   const d = data.name;

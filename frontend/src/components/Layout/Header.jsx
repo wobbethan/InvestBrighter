@@ -19,6 +19,7 @@ import Wishlist from "../wishlist/Wishlist.jsx";
 import { RxCross1 } from "react-icons/rx";
 
 function Header({ activeHeading }) {
+  const { cart } = useSelector((state) => state.cart);
   const { isAuthenticated, user, loading } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
@@ -176,8 +177,7 @@ function Header({ activeHeading }) {
                 color="rgb(255 255 255 / 83%)"
               ></AiOutlineShoppingCart>
               <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                {" "}
-                1{" "}
+                {cart && cart.length}
               </span>
             </div>
           </div>
@@ -237,9 +237,12 @@ function Header({ activeHeading }) {
           </div>
           <div>
             <div className="relative mr-[20px]">
-              <AiOutlineShoppingCart size={30} />
+              <AiOutlineShoppingCart
+                size={30}
+                onClick={() => setOpenCart(true)}
+              />
               <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                1
+                {cart && cart.length}
               </span>
             </div>
           </div>

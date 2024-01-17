@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 
 const ProductDetailsPage = () => {
   const { allProducts } = useSelector((state) => state.products);
-
   const { name } = useParams();
   const [data, setData] = useState(null);
   const productName = name.replace(/-/g, " ");

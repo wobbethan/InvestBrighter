@@ -12,8 +12,11 @@ import {
 import { backend_url } from "../../Server";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../redux/actions/product";
+import { toast } from "react-toastify";
+import { addToCart } from "../../redux/actions/cart";
 
 const ProductDetails = ({ data }) => {
+  const { cart } = useSelector((state) => state.cart);
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
@@ -26,14 +29,32 @@ const ProductDetails = ({ data }) => {
     dispatch(getAllProductsShop(data && data.shop._id));
   }, [dispatch, data]);
 
+  const handleMessageSubmit = () => {
+    navigate("/inbox?conversation=50gjhg8g87g6fghvjhgvjytd");
+  };
+
   const decrementCount = () => {
     if (count > 1) {
       setCount(count - 1);
     }
   };
+  const incrementCount = () => {
+    setCount(count + 1);
+  };
 
-  const handleMessageSubmit = () => {
-    navigate("/inbox?conversation=50gjhg8g87g6fghvjhgvjytd");
+  const addToCartHandler = (id) => {
+    const isItemExists = cart && cart.find((i) => i._id === id);
+    if (isItemExists) {
+      toast.error("Item already in cart");
+    } else {
+      if (data.stock < count) {
+        toast.error("Product stock limited");
+      } else {
+        const cartData = { ...data, qty: count };
+        dispatch(addToCart(cartData));
+        toast.success("Item added to cart");
+      }
+    }
   };
 
   return (
@@ -82,7 +103,7 @@ const ProductDetails = ({ data }) => {
                   <div>
                     <button
                       className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
-                      onClick={decrementCount}
+                      onClick={() => decrementCount()}
                     >
                       -
                     </button>
@@ -91,7 +112,7 @@ const ProductDetails = ({ data }) => {
                     </span>
                     <button
                       className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
-                      onClick={() => setCount(count + 1)}
+                      onClick={() => incrementCount()}
                     >
                       +
                     </button>
@@ -118,6 +139,7 @@ const ProductDetails = ({ data }) => {
                 </div>
                 <div
                   className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}
+                  onClick={addToCartHandler}
                 >
                   <span className="text-white flex items-center">
                     Add to Cart <AiOutlineShoppingCart className="ml-1" />
