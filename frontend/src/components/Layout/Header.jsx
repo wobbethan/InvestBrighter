@@ -20,6 +20,8 @@ import { RxCross1 } from "react-icons/rx";
 
 function Header({ activeHeading }) {
   const { cart } = useSelector((state) => state.cart);
+  const { wishlist } = useSelector((state) => state.wishlist);
+
   const { isAuthenticated, user, loading } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
@@ -85,7 +87,7 @@ function Header({ activeHeading }) {
                     const d = i.name;
                     const Product_name = d.replace(/\s+/g, "-");
                     return (
-                      <Link to={`/product/${Product_name}`}>
+                      <Link to={`/product/${i._id}`}>
                         <div className="w-full flex items-start py-3">
                           <img
                             className="w-[40px] h-[40px] mr-[10px]"
@@ -160,8 +162,7 @@ function Header({ activeHeading }) {
                 color="rgb(255 255 255 / 83%)"
               ></AiOutlineHeart>
               <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                {" "}
-                0{" "}
+                {wishlist && wishlist.length}
               </span>
             </div>
           </div>
