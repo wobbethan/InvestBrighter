@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { backend_url } from "../../Server";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AiOutlineCamera,
   AiOutlineArrowRight,
@@ -11,20 +11,31 @@ import { Button } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import styles from "../../styles/styles";
+import { updateUserInformation } from "../../redux/actions/user";
+import { toast } from "react-toastify";
 
 const ProfileContent = ({ active }) => {
-  const { user } = useSelector((state) => state.user);
+  const { user, error } = useSelector((state) => state.user);
+
   const [name, setName] = useState(user && user.name);
   const [email, setEmail] = useState(user && user.email);
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [zipCode, setZipCode] = useState();
-  const [address1, setAddress1] = useState();
-  const [address2, setAddress2] = useState();
+  const [phoneNumber, setPhoneNumber] = useState(user && user.phoneNumber);
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(updateUserInformation(name, email, password, phoneNumber));
   };
+
   return (
     <div className="w-full">
       {/* Profile Page */}
@@ -80,38 +91,17 @@ const ProfileContent = ({ active }) => {
                   />
                 </div>
                 <div className="w-full 800px:w-[50%]">
-                  <label className="block pb-2">Zip Code</label>
+                  <label className="block pb-2">Enter Password to Update</label>
                   <input
-                    type="number"
-                    className={`${styles.input} !w-[95%] 800px:mb-0 mb-2`}
+                    type="password"
+                    className={`${styles.input} !w-[95%]   800px:mb-0 mb-2`}
                     required
-                    value={zipCode}
-                    onChange={(e) => setZipCode(e.target.value)}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>
-              <div className="w-full 800px:flex block pb-3">
-                <div className="w-full 800px:w-[50%]">
-                  <label className="block pb-2">Address 1 </label>
-                  <input
-                    type="text"
-                    className={`${styles.input} !w-[95%] 800px:mb-0 mb-2  `}
-                    required
-                    value={address1}
-                    onChange={(e) => setAddress1(e.target.value)}
-                  />
-                </div>
-                <div className="w-full 800px:w-[50%]">
-                  <label className="block pb-2">Address 2 </label>
-                  <input
-                    type="number"
-                    className={`${styles.input} !w-[95%] 800px:mb-0 mb-2 `}
-                    required
-                    value={address2}
-                    onChange={(e) => setAddress2(e.target.value)}
-                  />
-                </div>
-              </div>
+
               <input
                 className={`w-[250px] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
                 required
