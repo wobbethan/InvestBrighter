@@ -128,7 +128,7 @@ function App() {
           }
         />
 
-        <Route path="/product/:name" Component={ProductDetailsPage} />
+        <Route path="/product/:id" Component={ProductDetailsPage} />
         <Route path="/best-selling" Component={BestSellingPage} />
         <Route path="/events" Component={EventsPage} />
         <Route path="/faq" Component={FaqPage} />

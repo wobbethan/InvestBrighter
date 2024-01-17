@@ -26,8 +26,7 @@ function ProductCard({ data, isEvent }) {
   const { cart } = useSelector((state) => state.cart);
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
-  const d = data.name;
-  const product_name = d.replace(/\s+/g, "-");
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -69,8 +68,8 @@ function ProductCard({ data, isEvent }) {
         <Link
           to={`${
             isEvent === true
-              ? `/product/${product_name}?isEvent=true`
-              : `/product/${product_name}`
+              ? `/product/${data._id}?isEvent=true`
+              : `/product/${data._id}`
           }`}
         >
           <img
