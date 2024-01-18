@@ -9,6 +9,7 @@ import { RxPerson } from "react-icons/rx";
 import { useNavigate } from "react-router";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import { TbAddressBook } from "react-icons/tb";
+import { RiLockPasswordLine } from "react-icons/ri";
 import axios from "axios";
 import { server } from "../../Server";
 import { toast } from "react-toastify";
@@ -102,36 +103,23 @@ const ProfileSideBar = ({ setActive, active }) => {
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(6)}
       >
-        <AiOutlineCreditCard size={20} color={active === 6 ? "red" : ""} />
+        <RiLockPasswordLine size={20} color={active === 6 ? "red" : ""} />
         <span
           className={`pl-3 ${
             active === 6 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
-          Payment Methods
+          Change Password
         </span>
       </div>
       <div
         className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(7)}
+        onClick={() => setActive(7) || logoutHandler()}
       >
-        <TbAddressBook size={20} color={active === 7 ? "red" : ""} />
+        <AiOutlineLogin size={20} color={active === 7 ? "red" : ""} />
         <span
           className={`pl-3 ${
             active === 7 ? "text-[red]" : ""
-          } 800px:block hidden`}
-        >
-          Address
-        </span>
-      </div>
-      <div
-        className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(8) || logoutHandler()}
-      >
-        <AiOutlineLogin size={20} color={active === 8 ? "red" : ""} />
-        <span
-          className={`pl-3 ${
-            active === 8 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
           Log out

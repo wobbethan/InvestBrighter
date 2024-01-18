@@ -51,7 +51,7 @@ export const updateUserInformation =
         type: "updateUserRequest",
       });
 
-      const { data } = await axios.get(
+      const { data } = await axios.put(
         `${server}/user/update-user-info`,
         {
           email,
