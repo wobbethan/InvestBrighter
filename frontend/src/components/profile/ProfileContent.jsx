@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { backend_url } from "../../Server";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { backend_url, server } from "../../Server";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AiOutlineCamera,
   AiOutlineArrowRight,
@@ -11,20 +11,54 @@ import { Button } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import styles from "../../styles/styles";
+import { updateUserInformation } from "../../redux/actions/user";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const ProfileContent = ({ active }) => {
-  const { user } = useSelector((state) => state.user);
+  const { user, error } = useSelector((state) => state.user);
+
   const [name, setName] = useState(user && user.name);
   const [email, setEmail] = useState(user && user.email);
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [zipCode, setZipCode] = useState();
-  const [address1, setAddress1] = useState();
-  const [address2, setAddress2] = useState();
+  const [phoneNumber, setPhoneNumber] = useState(user && user.phoneNumber);
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const handleImage = async (e) => {
+    const file = e.target.files[0];
+    setAvatar(file);
+
+    const formData = new FormData();
+
+    formData.append("image", e.target.files[0]);
+    await axios
+      .put(`${server}/user/update-avatar`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(updateUserInformation(name, email, password, phoneNumber));
   };
+
   return (
     <div className="w-full">
       {/* Profile Page */}
@@ -37,8 +71,17 @@ const ProfileContent = ({ active }) => {
                 className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
                 alt=""
               />
-              <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
-                <AiOutlineCamera />
+
+              <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center  absolute bottom-[5px] right-[5px]">
+                <input
+                  type="file"
+                  id="image"
+                  className="hidden"
+                  onChange={handleImage}
+                />
+                <label htmlFor="image" className="!cursor-pointer">
+                  <AiOutlineCamera />
+                </label>
               </div>
             </div>
             <br />
@@ -74,44 +117,22 @@ const ProfileContent = ({ active }) => {
                   <input
                     type="number"
                     className={`${styles.input} !w-[95%]   800px:mb-0 mb-2`}
-                    required
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                   />
                 </div>
                 <div className="w-full 800px:w-[50%]">
-                  <label className="block pb-2">Zip Code</label>
+                  <label className="block pb-2">Enter Password to Update</label>
                   <input
-                    type="number"
-                    className={`${styles.input} !w-[95%] 800px:mb-0 mb-2`}
+                    type="password"
+                    className={`${styles.input} !w-[95%]   800px:mb-0 mb-2`}
                     required
-                    value={zipCode}
-                    onChange={(e) => setZipCode(e.target.value)}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>
-              <div className="w-full 800px:flex block pb-3">
-                <div className="w-full 800px:w-[50%]">
-                  <label className="block pb-2">Address 1 </label>
-                  <input
-                    type="text"
-                    className={`${styles.input} !w-[95%] 800px:mb-0 mb-2  `}
-                    required
-                    value={address1}
-                    onChange={(e) => setAddress1(e.target.value)}
-                  />
-                </div>
-                <div className="w-full 800px:w-[50%]">
-                  <label className="block pb-2">Address 2 </label>
-                  <input
-                    type="number"
-                    className={`${styles.input} !w-[95%] 800px:mb-0 mb-2 `}
-                    required
-                    value={address2}
-                    onChange={(e) => setAddress2(e.target.value)}
-                  />
-                </div>
-              </div>
+
               <input
                 className={`w-[250px] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
                 required
@@ -144,17 +165,10 @@ const ProfileContent = ({ active }) => {
         </div>
       )}
 
-      {/* Payment Method */}
+      {/* ChangePassword */}
       {active === 6 && (
         <div>
-          <PaymentMethod></PaymentMethod>
-        </div>
-      )}
-
-      {/* Address */}
-      {active === 7 && (
-        <div>
-          <Address></Address>
+          <ChangePassword></ChangePassword>
         </div>
       )}
     </div>
@@ -429,71 +443,84 @@ const TrackOrder = () => {
   );
 };
 
-const PaymentMethod = () => {
+const ChangePassword = () => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const passwordChangeHandler = async (e) => {
+    e.preventDefault();
+    await axios
+      .put(
+        `${server}/user/update-user-password`,
+        { oldPassword, newPassword, confirmPassword },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        toast.success(res.data.success);
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  };
+
   return (
     <div className="w-full px-5">
-      <div className="flex w-full items-center justify-between">
-        <h1 className="text-[25px] font-[600] text-[#000000ba]">
-          Payment Methods
-        </h1>
-        <div className={`rounded-md ${styles.button}`}>
-          <span className="text-[#fff]">Add New</span>
-        </div>
-      </div>
-      <br />
-      <div className="w-full bg-white h-[70px] rounded-[4px] flex items-center px-3 shadow justify-between pr-10">
-        {" "}
-        <div className="flex items-center">
-          <img
-            src={
-              "https://bonik-react.vercel.app/assets/images/payment-methods/Visa.svg"
-            }
-            alt=""
-          />
-          <h5 className="pl-5 font-[600]">Cardholder name</h5>
-        </div>
-        <div className="pl-8 flex items-center">
-          <h6>1234 **** **** ****</h6>
-          <h5 className="pl-6">08/2024</h5>
-        </div>
-        <div className="min-w-[10%] flex items-center justify-between pl-8">
+      <h1 className="block text-[25px] text-center font-[600] text-[#000000ba] pb-2">
+        Change Password
+      </h1>
+      <div className="w-full">
+        <form
+          aria-required
+          onSubmit={passwordChangeHandler}
+          className="flex flex-col items-center"
+        >
           {" "}
-          <AiOutlineDelete size={25} className="cursor-pointer" />
-        </div>
+          <div className="w-full 800px:w-[50%]">
+            <label className="block pb-2">Current Password</label>
+            <input
+              type="password"
+              className={`${styles.input} !w-[95%] 800px:mb-2 mb-4 `}
+              required
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
+          </div>
+          <div className="w-full 800px:w-[50%]">
+            <label className="block pb-2">New Password</label>
+            <input
+              type="password"
+              className={`${styles.input} !w-[95%]  800px:mb-2 mb-4`}
+              required
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
+          <div className="w-full 800px:w-[50%]">
+            <label className="block pb-2">Confirm New Password</label>
+            <input
+              type="password"
+              className={`${styles.input} !w-[95%]  800px:mb-2 mb-4`}
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <input
+              className={`!w-[95%] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
+              required
+              value="Update"
+              type="submit"
+            />
+          </div>
+        </form>
       </div>
     </div>
   );
 };
 
-const Address = () => {
-  return (
-    <div className="w-full px-5">
-      <div className="flex w-full items-center justify-between">
-        <h1 className="text-[25px] font-[600] text-[#000000ba]">
-          My Addresses
-        </h1>
-        <div className={`rounded-md ${styles.button}`}>
-          <span className="text-[#fff]">Add New</span>
-        </div>
-      </div>
-      <br />
-      <div className="w-full bg-white h-[70px] rounded-[4px] flex items-center px-3 shadow justify-between pr-10">
-        {" "}
-        <div className="flex items-center">
-          <h5 className="pl-5 font-[600]">Default Address</h5>
-        </div>
-        <div className="pl-8 flex items-center">
-          <h6>494 Erdman Pasage, New Zoietown, Paraguay</h6>
-        </div>
-        <div className="pl-8 flex items-center">
-          <h6>(123)-456-7890</h6>
-        </div>
-        <div className="min-w-[10%] flex items-center justify-between pl-8">
-          {" "}
-          <AiOutlineDelete size={25} className="cursor-pointer" />
-        </div>
-      </div>
-    </div>
-  );
-};
 export default ProfileContent;
