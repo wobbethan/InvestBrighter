@@ -10,6 +10,7 @@ const Shop = require("../model/shop");
 const { upload } = require("../multer");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler.js");
+const User = require("../model/user");
 
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
@@ -185,6 +186,40 @@ router.get(
       res.status(201).json({
         success: true,
         shop,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// get user to add to shop
+router.get(
+  "/shop-add-member/:id/:email",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const shop = await Shop.findById(req.params.id);
+      const user = await User.find({ email: req.params.email });
+
+      if (!user) {
+        return next(new ErrorHandler("User doesn't exist", 400));
+      }
+      if (!shop) {
+        return next(new ErrorHandler("Shop doesn't exist", 400));
+      }
+
+      if (shop.teamMembers.indexOf(user) === -1) {
+        //No worky
+        shop.teamMembers.push(user);
+      } else {
+        return next(new ErrorHandler("User is already a member", 400));
+      }
+
+      await shop.save();
+
+      res.status(200).json({
+        success: true,
+        user,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

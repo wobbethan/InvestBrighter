@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { VscNewFile } from "react-icons/vsc";
 import { CiMoneyBill, CiSettings } from "react-icons/ci";
 import { BiMessageSquareDetail } from "react-icons/bi";
-import { HiOutlineReceiptRefund } from "react-icons/hi";
+import { AiOutlineTeam } from "react-icons/ai";
 
 const DashboardSidebar = ({ active }) => {
   return (
@@ -111,7 +111,7 @@ const DashboardSidebar = ({ active }) => {
 
       <div className="w-full flex items-center p-4">
         <Link
-          to="/dashboard-withdraw-money"
+          to="/dashboard-investment-income"
           className="w-full flex items-center"
         >
           <CiMoneyBill
@@ -123,7 +123,7 @@ const DashboardSidebar = ({ active }) => {
               active === 7 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            Withdraw Money
+            Investment Income
           </h5>
         </Link>
       </div>
@@ -161,8 +161,8 @@ const DashboardSidebar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-refunds" className="w-full flex items-center">
-          <HiOutlineReceiptRefund
+        <Link to="/dashboard-team" className="w-full flex items-center">
+          <AiOutlineTeam
             size={30}
             color={`${active === 10 ? "crimson" : "#555"}`}
           />
@@ -171,7 +171,7 @@ const DashboardSidebar = ({ active }) => {
               active === 10 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            Refunds
+            Company Members
           </h5>
         </Link>
       </div>

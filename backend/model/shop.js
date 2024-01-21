@@ -44,6 +44,11 @@ const shopSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  teamMembers: [
+    {
+      type: Object,
+    },
+  ],
   resetPasswordToken: String,
   resetPasswordTime: Date,
 });

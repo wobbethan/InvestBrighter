@@ -30,6 +30,7 @@ import {
   ShopAllCoupons,
   ShopAllEvents,
   ShopPreviewPage,
+  ShopTeamMembersPage,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -64,9 +65,7 @@ function App() {
           Component={SellerActivationPage}
         />
         <Route path="/products" Component={ProductPage} />
-
         <Route path="/shop/preview/:id" Component={ShopPreviewPage} />
-
         {/* Shop Routes */}
         <Route path="/shop-create" Component={ShopCreatePage} />
         <Route path="/shop-login" Component={ShopLoginPage} />
@@ -118,7 +117,6 @@ function App() {
             </SellerProtectedRoute>
           }
         />
-
         <Route
           path="/dashboard-coupons"
           element={
@@ -127,7 +125,14 @@ function App() {
             </SellerProtectedRoute>
           }
         />
-
+        <Route
+          path="/dashboard-team"
+          element={
+            <SellerProtectedRoute>
+              <ShopTeamMembersPage />
+            </SellerProtectedRoute>
+          }
+        />
         <Route path="/product/:id" Component={ProductDetailsPage} />
         <Route path="/best-selling" Component={BestSellingPage} />
         <Route path="/events" Component={EventsPage} />
