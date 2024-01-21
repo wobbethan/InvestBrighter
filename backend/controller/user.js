@@ -16,15 +16,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const userEmail = await User.findOne({ email });
-    // const domain = req.body.email;
-    // const ufEmail = domain.substr(domain.length - 7, domain.length);
-    // if (ufEmail !== "ufl.edu") {
-    //   console.log("Not a valid UFL email");
-    // }
-    // else{
-    //   console.log("Valid UFL email");
-    //
-    // }
+
     if (userEmail) {
       const filename = req.file.filename;
       const filePath = `uploads/${filename}`;

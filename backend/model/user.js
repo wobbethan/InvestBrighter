@@ -20,6 +20,13 @@ const userSchema = new mongoose.Schema({
   phoneNumber: {
     type: Number,
   },
+  accountBalance: {
+    type: Number,
+    default: 0,
+  },
+  section: {
+    type: String,
+  },
   role: {
     type: String,
     default: "user",
@@ -27,6 +34,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: true,
+    default: "assets/default.png",
   },
   createdAt: {
     type: Date,

@@ -151,6 +151,16 @@ function Header({ activeHeading }) {
           <Navbar active={activeHeading}></Navbar>
         </div>
         <div className="flex">
+          {isAuthenticated ? (
+            <div className="items-center justify-center text-white mr-[15px] text-lg">
+              $
+              {user.accountBalance.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+              })}
+            </div>
+          ) : (
+            <div></div>
+          )}
           {/* Heart */}
           <div className={`${styles.normalFlex}`}>
             <div
