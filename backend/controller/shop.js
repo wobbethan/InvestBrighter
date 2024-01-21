@@ -200,20 +200,31 @@ router.get(
     try {
       const shop = await Shop.findById(req.params.id);
       const user = await User.find({ email: req.params.email });
+      const userEmail = user[0].email;
+      const userAlreadyMember = false;
+      console.log(userEmail);
 
       if (!user) {
+        //not returning
         return next(new ErrorHandler("User doesn't exist", 400));
       }
       if (!shop) {
         return next(new ErrorHandler("Shop doesn't exist", 400));
       }
+      console.log(shop.teamMembers.indexOf(user));
 
-      if (shop.teamMembers.indexOf(user) === -1) {
-        //No worky
-        shop.teamMembers.push(user);
-      } else {
-        return next(new ErrorHandler("User is already a member", 400));
+      for (let i = 0; i < shop.teamMembers.length; i++) {
+        if (shop.teamMembers[i].email === userEmail) {
+          userAlreadyMember = true;
+        }
       }
+      console.log(userAlreadyMember);
+
+      // if (shop.teamMembers.indexOf(user[0]) === -1) {
+      //   shop.teamMembers.push(user[0]);
+      // } else {
+      //   return next(new ErrorHandler("User is already a member", 400));
+      // }
 
       await shop.save();
 

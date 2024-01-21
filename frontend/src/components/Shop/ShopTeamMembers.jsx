@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { server } from "../../Server";
 import axios from "axios";
 import { useSelector } from "react-redux";
-
+import { toast } from "react-toastify";
 const ShopTeamMembers = () => {
   const { seller } = useSelector((state) => state.seller);
   const [data, setData] = useState({});
@@ -13,15 +13,16 @@ const ShopTeamMembers = () => {
     axios
       .get(`${server}/shop/shop-add-member/${seller._id}/${email}`)
       .then((res) => {
-        setData(res.data.user);
+        setData(res.data.user[0]);
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error);
       });
   };
   return (
     <div>
-      <div>Returned Name: {data[0] && data[0].name}</div>
+      <div>Returned Name: {data && data.name}</div>
       <form onSubmit={handleSubmit}>
         <div>
           <label className="pb-2">Search Users by email</label>

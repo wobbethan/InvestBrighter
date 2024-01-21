@@ -95,9 +95,10 @@ const ProfileContent = ({ active }) => {
               </div>
               <div className="flex justify-center w-full text-5xl text-bold">
                 $
-                {user.accountBalance.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                })}
+                {user.accountBalance &&
+                  user.accountBalance.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                  })}
               </div>
               <br />
               <br />

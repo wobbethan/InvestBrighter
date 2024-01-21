@@ -172,8 +172,11 @@ const UserInfo = ({
             {user && user.phoneNumber}
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2 font-bold">Account Balance</label>
-            $60,000
+            <label className="block pb-2 font-bold">Account Balance</label>$
+            {user.accountBalance &&
+              user.accountBalance.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+              })}
           </div>
         </div>
       </form>
