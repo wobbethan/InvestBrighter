@@ -4,11 +4,11 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
+import { getAllMembersShop } from "../../redux/actions/seller";
 const ShopTeamMembers = () => {
-  const { seller } = useSelector((state) => state.seller);
+  const { members, seller } = useSelector((state) => state.seller);
   const [data, setData] = useState({});
   const [email, setEmail] = useState("");
-  const [members, setMembers] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -37,6 +37,9 @@ const ShopTeamMembers = () => {
         window.location.reload();
       });
   };
+  useEffect(() => {
+    console.log(members);
+  }, [members]);
 
   return (
     <div className="flex flex-col">
@@ -51,8 +54,8 @@ const ShopTeamMembers = () => {
           </div>
           <br></br>
           <div className="flex flex-col">
-            {seller.teamMembers &&
-              seller.teamMembers.map((i, index) => (
+            {/* {members &&
+              members.map((i, index) => (
                 <div className="flex flex-row items-center">
                   <div className="flex items-center m-2 text-lg">
                     <RxCross1
@@ -60,15 +63,15 @@ const ShopTeamMembers = () => {
                       className="mr-3 cursor-pointer"
                       onClick={() => removeUser(index)}
                     />
-                    {seller.teamMembers[index].name}
+                    {members[index].name}
                   </div>
-                  {/* <div>
-                    {seller.teamMembers[index].companyRole
-                      ? seller.teamMembers[index].companyRole
+                  <div>
+                    {members[index].companyRole
+                      ? members[index].companyRole
                       : " No role assigned"}
-                  </div> */}
+                  </div>
                 </div>
-              ))}
+              ))} */}
           </div>
         </div>
       </div>

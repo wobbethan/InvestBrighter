@@ -8,6 +8,7 @@ import { getAllEventsShop } from "../../redux/actions/event";
 import { getAllProductsShop } from "../../redux/actions/product";
 import Ratings from "../products/Ratings.jsx";
 import { backend_url } from "../../Server.js";
+import { getAllMembersShop } from "../../redux/actions/seller.js";
 
 const ShopProfileData = ({ isOwner }) => {
   const { seller } = useSelector((state) => state.seller);
@@ -19,7 +20,10 @@ const ShopProfileData = ({ isOwner }) => {
   useEffect(() => {
     dispatch(getAllProductsShop(id));
     dispatch(getAllEventsShop(id));
-  }, [dispatch]);
+    // dispatch(getAllMembersShop(id));
+    console.log(products);
+    console.log(seller);
+  }, []);
 
   const [active, setActive] = useState(1);
 
@@ -102,15 +106,15 @@ const ShopProfileData = ({ isOwner }) => {
 
       {active === 3 && (
         <div className="w-full">
-          {seller.teamMembers.length === 0 ? (
+          {seller ? (
             <div className="w-full text-center py-5 text-[25px]">
               This company currently has not added any team members
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:gap-[20px] mb-12 border-0">
-              {seller.teamMembers &&
-                seller.teamMembers.map((i, index) => (
-                  <TeamMemberCard member={seller.teamMembers[index]} />
+              {seller &&
+                seller.map((i, index) => (
+                  <TeamMemberCard member={seller[index]} />
                 ))}
             </div>
           )}

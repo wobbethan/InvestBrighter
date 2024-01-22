@@ -218,8 +218,8 @@ router.get(
       }
 
       if (userAlreadyMember === false) {
+        user[0].companyId = req.params.id;
         shop.teamMembers.push(user[0]);
-        user.company = shop.name;
       } else {
         res.status(400).json({
           success: false,
@@ -261,6 +261,22 @@ router.get(
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+//getting all members of a shop
+router.get(
+  "/get-all-members-shop/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const members = await User.find({ companyId: req.params.id });
+      console.log(members);
+      res.status(201).json({
+        success: true,
+        members,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
     }
   })
 );

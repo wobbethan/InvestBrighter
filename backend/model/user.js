@@ -34,13 +34,12 @@ const userSchema = new mongoose.Schema({
   companyRole: {
     type: String,
   },
-  company: {
+  companyId: {
     type: String,
   },
   avatar: {
     type: String,
     required: true,
-    default: "assets/default.png",
   },
   createdAt: {
     type: Date,

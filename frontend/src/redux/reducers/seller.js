@@ -18,6 +18,19 @@ export const sellerReducer = createReducer(initialState, {
     state.error = action.payload;
     state.isSeller = false;
   },
+  getAllMembersShopRequest: (state) => {
+    state.isLoading = true;
+  },
+  getAllMembersShopSuccess: (state, action) => {
+    state.isSeller = true;
+    state.isLoading = false;
+    state.members = action.payload;
+  },
+  getAllMembersShopFail: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+    state.isSeller = false;
+  },
   clearErrors: (state) => {
     state.error = null;
   },
