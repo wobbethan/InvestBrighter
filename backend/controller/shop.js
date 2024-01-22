@@ -193,7 +193,7 @@ router.get(
   })
 );
 
-// get user to add to shop
+// add user to shop
 router.get(
   "/shop-add-member/:id/:email",
   catchAsyncErrors(async (req, res, next) => {
@@ -201,8 +201,7 @@ router.get(
       const shop = await Shop.findById(req.params.id);
       const user = await User.find({ email: req.params.email });
       const userEmail = user[0].email;
-      const userAlreadyMember = false;
-      console.log(userEmail);
+      let userAlreadyMember = false;
 
       if (!user) {
         //not returning
@@ -211,26 +210,54 @@ router.get(
       if (!shop) {
         return next(new ErrorHandler("Shop doesn't exist", 400));
       }
-      console.log(shop.teamMembers.indexOf(user));
 
       for (let i = 0; i < shop.teamMembers.length; i++) {
         if (shop.teamMembers[i].email === userEmail) {
           userAlreadyMember = true;
         }
       }
-      console.log(userAlreadyMember);
 
-      // if (shop.teamMembers.indexOf(user[0]) === -1) {
-      //   shop.teamMembers.push(user[0]);
-      // } else {
-      //   return next(new ErrorHandler("User is already a member", 400));
-      // }
+      if (userAlreadyMember === false) {
+        shop.teamMembers.push(user[0]);
+        user.company = shop.name;
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "User is already a member",
+        });
+        return next(new ErrorHandler("User is already a member", 401));
+      }
 
       await shop.save();
 
       res.status(200).json({
         success: true,
         user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// remove user to shop
+router.get(
+  "/shop-remove-member/:index/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const shop = await Shop.findById(req.params.id);
+
+      if (!shop) {
+        return next(new ErrorHandler("Shop doesn't exist", 400));
+      }
+
+      shop.teamMembers.splice(req.params.index, 1);
+
+      await shop.save();
+
+      res.status(200).json({
+        success: true,
+        shop,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

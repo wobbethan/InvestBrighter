@@ -34,6 +34,9 @@ const userSchema = new mongoose.Schema({
   companyRole: {
     type: String,
   },
+  company: {
+    type: String,
+  },
   avatar: {
     type: String,
     required: true,

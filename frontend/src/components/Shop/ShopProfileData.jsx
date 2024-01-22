@@ -7,8 +7,10 @@ import styles from "../../styles/styles";
 import { getAllEventsShop } from "../../redux/actions/event";
 import { getAllProductsShop } from "../../redux/actions/product";
 import Ratings from "../products/Ratings.jsx";
+import { backend_url } from "../../Server.js";
 
 const ShopProfileData = ({ isOwner }) => {
+  const { seller } = useSelector((state) => state.seller);
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
   const { id } = useParams();
@@ -20,9 +22,6 @@ const ShopProfileData = ({ isOwner }) => {
   }, [dispatch]);
 
   const [active, setActive] = useState(1);
-
-  // const allReviews =
-  //   products && products.map((product) => product.reviews).flat();
 
   return (
     <div className="w-full">
@@ -53,7 +52,7 @@ const ShopProfileData = ({ isOwner }) => {
                 active === 3 ? "text-red-500" : "text-[#333]"
               } cursor-pointer pr-[20px]`}
             >
-              Shop Reviews
+              Team Members
             </h5>
           </div>
         </div>
@@ -94,40 +93,43 @@ const ShopProfileData = ({ isOwner }) => {
               ))}
           </div>
           {events && events.length === 0 && (
-            <h5 className="w-full text-center py-5 text-[18px]">
+            <h5 className="w-full text-center py-5 text-[25px]">
               No Events have for this shop!
             </h5>
           )}
         </div>
       )}
-      {/* 
+
       {active === 3 && (
         <div className="w-full">
-          {allReviews &&
-            allReviews.map((item, index) => (
-              <div className="w-full flex my-4">
-                <img
-                  src={`${item.user.avatar?.url}`}
-                  className="w-[50px] h-[50px] rounded-full"
-                  alt=""
-                />
-                <div className="pl-2">
-                  <div className="flex w-full items-center">
-                    <h1 className="font-[600] pr-2">{item.user.name}</h1>
-                    <Ratings rating={item.rating} />
-                  </div>
-                  <p className="font-[400] text-[#000000a7]">{item?.comment}</p>
-                  <p className="text-[#000000a7] text-[14px]">{"2days ago"}</p>
-                </div>
-              </div>
-            ))}
-          {allReviews && allReviews.length === 0 && (
-            <h5 className="w-full text-center py-5 text-[18px]">
-              No Reviews have for this shop!
-            </h5>
+          {seller.teamMembers.length === 0 ? (
+            <div className="w-full text-center py-5 text-[25px]">
+              This company currently has not added any team members
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:gap-[20px] mb-12 border-0">
+              {seller.teamMembers &&
+                seller.teamMembers.map((i, index) => (
+                  <TeamMemberCard member={seller.teamMembers[index]} />
+                ))}
+            </div>
           )}
         </div>
-      )} */}
+      )}
+    </div>
+  );
+};
+
+const TeamMemberCard = ({ member }) => {
+  return (
+    <div className=" w-[80%] 800px:w-full h-[250px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center">
+      <div className="justify-center self-center flex">
+        <img
+          className="w-[150px] h-[150px] object-contain rounded-3xl m-[10px]"
+          src={`${backend_url}${member.avatar}`}
+        />
+      </div>
+      <div className="text-2xl text-bold">{member.name}</div>
     </div>
   );
 };
