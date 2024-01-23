@@ -264,12 +264,13 @@ router.get(
     }
   })
 );
+
 //getting all members of a shop
 router.get(
   "/get-all-members-shop/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const members = await User.find({ companyId: req.params.id });
+      const members = await User.find({ name: "Ethan Wobb" });
       console.log(members);
       res.status(201).json({
         success: true,

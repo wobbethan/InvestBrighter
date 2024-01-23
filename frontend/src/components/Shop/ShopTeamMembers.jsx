@@ -18,7 +18,7 @@ const ShopTeamMembers = () => {
       .get(`${server}/shop/shop-add-member/${seller._id}/${email}`)
       .then((res) => {
         setData(res.data.user[0]);
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         toast.error(error.message);
@@ -31,15 +31,17 @@ const ShopTeamMembers = () => {
       .get(`${server}/shop/shop-remove-member/${index}/${seller._id}`)
       .then((res) => {
         setData(res.data.user[0]);
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
-        window.location.reload();
+        //window.location.reload();
       });
   };
+
   useEffect(() => {
+    //dispatch(getAllMembersShop(seller._id));
     console.log(members);
-  }, [members]);
+  }, []);
 
   return (
     <div className="flex flex-col">

@@ -13,9 +13,8 @@ const { isAuthenticated } = require("../middleware/auth");
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, section } = req.body;
     const userEmail = await User.findOne({ email });
-
     if (userEmail) {
       const filename = req.file.filename;
       const filePath = `uploads/${filename}`;
@@ -34,8 +33,10 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
       name: name,
       email: email,
       password: password,
+      section: section,
       avatar: fileUrl,
     };
+    console.log(user);
 
     const activationToken = createActivationToken(user);
     const activationUrl = `http://localhost:3000/activation/${activationToken}`;
@@ -60,7 +61,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
 //creating activation token
 const createActivationToken = (user) => {
   return jwt.sign(user, process.env.ACTIVATION_SECRET, {
-    expiresIn: "1m",
+    expiresIn: "55m",
   });
 };
 
@@ -77,7 +78,7 @@ router.post(
       if (!newUser) {
         return next(new ErrorHandler("Invalid token", 400));
       }
-      const { name, email, password, avatar } = newUser;
+      const { name, email, password, avatar, section } = newUser;
 
       let user = await User.findOne({ email });
       if (user) {
@@ -88,6 +89,7 @@ router.post(
         email,
         avatar,
         password,
+        section,
       });
 
       sendToken(user, 201, res, "token");

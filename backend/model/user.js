@@ -17,15 +17,13 @@ const userSchema = new mongoose.Schema({
     minLength: [6, "Password should be greater than 6 characters"],
     select: false,
   },
-  phoneNumber: {
-    type: Number,
-  },
   accountBalance: {
     type: Number,
     default: 0,
   },
   section: {
-    type: String,
+    type: Number,
+    required,
   },
   role: {
     type: String,

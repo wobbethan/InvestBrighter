@@ -11,7 +11,7 @@ import { backend_url } from "../../Server.js";
 import { getAllMembersShop } from "../../redux/actions/seller.js";
 
 const ShopProfileData = ({ isOwner }) => {
-  const { seller } = useSelector((state) => state.seller);
+  const { seller, members } = useSelector((state) => state.seller);
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
   const { id } = useParams();
@@ -104,7 +104,7 @@ const ShopProfileData = ({ isOwner }) => {
         </div>
       )}
 
-      {active === 3 && (
+      {/* {active === 3 && (
         <div className="w-full">
           {seller ? (
             <div className="w-full text-center py-5 text-[25px]">
@@ -119,23 +119,23 @@ const ShopProfileData = ({ isOwner }) => {
             </div>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
 
-const TeamMemberCard = ({ member }) => {
-  return (
-    <div className=" w-[80%] 800px:w-full h-[250px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center">
-      <div className="justify-center self-center flex">
-        <img
-          className="w-[150px] h-[150px] object-contain rounded-3xl m-[10px]"
-          src={`${backend_url}${member.avatar}`}
-        />
-      </div>
-      <div className="text-2xl text-bold">{member.name}</div>
-    </div>
-  );
-};
+// const TeamMemberCard = ({ member }) => {
+//   return (
+//     <div className=" w-[80%] 800px:w-full h-[250px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center">
+//       <div className="justify-center self-center flex">
+//         <img
+//           className="w-[150px] h-[150px] object-contain rounded-3xl m-[10px]"
+//           src={`${backend_url}${member.avatar}`}
+//         />
+//       </div>
+//       <div className="text-2xl text-bold">{member.name}</div>
+//     </div>
+//   );
+// };
 
 export default ShopProfileData;
