@@ -21,8 +21,6 @@ const ShopProfileData = ({ isOwner }) => {
     dispatch(getAllProductsShop(id));
     dispatch(getAllEventsShop(id));
     // dispatch(getAllMembersShop(id));
-    console.log(products);
-    console.log(seller);
   }, []);
 
   const [active, setActive] = useState(1);
@@ -104,38 +102,39 @@ const ShopProfileData = ({ isOwner }) => {
         </div>
       )}
 
-      {/* {active === 3 && (
+      {active === 3 && (
         <div className="w-full">
-          {seller ? (
+          {seller.teamMembers.length === 0 ? (
             <div className="w-full text-center py-5 text-[25px]">
               This company currently has not added any team members
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:gap-[20px] mb-12 border-0">
-              {seller &&
-                seller.map((i, index) => (
-                  <TeamMemberCard member={seller[index]} />
+              {seller.teamMembers &&
+                seller.teamMembers.map((i, index) => (
+                  <TeamMemberCard member={seller.teamMembers[index]} />
                 ))}
             </div>
           )}
         </div>
-      )} */}
+      )}
     </div>
   );
 };
 
-// const TeamMemberCard = ({ member }) => {
-//   return (
-//     <div className=" w-[80%] 800px:w-full h-[250px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center">
-//       <div className="justify-center self-center flex">
-//         <img
-//           className="w-[150px] h-[150px] object-contain rounded-3xl m-[10px]"
-//           src={`${backend_url}${member.avatar}`}
-//         />
-//       </div>
-//       <div className="text-2xl text-bold">{member.name}</div>
-//     </div>
-//   );
-// };
+const TeamMemberCard = ({ member }) => {
+  return (
+    <div className=" w-[80%] 800px:w-full h-[250px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center">
+      <div className="justify-center self-center flex">
+        <img
+          draggable={false}
+          className="w-[150px] h-[150px] object-contain rounded-3xl m-[10px]"
+          src={`${backend_url}${member.avatar}`}
+        />
+      </div>
+      <div className="text-2xl text-bold">{member.name}</div>
+    </div>
+  );
+};
 
 export default ShopProfileData;

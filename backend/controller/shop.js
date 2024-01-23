@@ -36,9 +36,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
       email: email,
       password: req.body.password,
       avatar: fileUrl,
-      address: req.body.address,
-      phoneNumber: req.body.phoneNumber,
-      zipCode: req.body.zipCode,
+      section: req.body.section,
     };
 
     const activationToken = createActivationToken(seller);
@@ -84,8 +82,7 @@ router.post(
       if (!newSeller) {
         return next(new ErrorHandler("Invalid token", 400));
       }
-      const { name, email, password, avatar, zipCode, address, phoneNumber } =
-        newSeller;
+      const { name, email, password, avatar, section } = newSeller;
 
       let seller = await Shop.findOne({ email });
 
@@ -98,9 +95,7 @@ router.post(
         email,
         avatar,
         password,
-        zipCode,
-        address,
-        phoneNumber,
+        section,
       });
 
       sendShopToken(seller, 201, res);
@@ -229,6 +224,7 @@ router.get(
       }
 
       await shop.save();
+      await user[0].save();
 
       res.status(200).json({
         success: true,
@@ -270,9 +266,9 @@ router.get(
   "/get-all-members-shop/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const members = await User.find({ name: "Ethan Wobb" });
+      const members = await User.find({ companyId: req.params.id });
       console.log(members);
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         members,
       });

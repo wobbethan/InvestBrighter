@@ -17,16 +17,12 @@ const shopSchema = new mongoose.Schema({
     minLength: [6, "Password should be greater than 6 characters"],
     select: false,
   },
-  description: {
-    type: String,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  phoneNumber: {
+  section: {
     type: Number,
     required: true,
+  },
+  description: {
+    type: String,
   },
   role: {
     type: String,
@@ -36,13 +32,25 @@ const shopSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  zipCode: {
-    type: Number,
-    required: true,
-  },
   createdAt: {
     type: Date,
     default: Date.now(),
+  },
+  balance: {
+    type: Number,
+    default: 0,
+  },
+  foundingSharePrice: {
+    type: Number,
+    default: 0,
+  },
+  valuation: {
+    type: Number,
+    default: 0,
+  },
+  finalAcquisition: {
+    type: Number,
+    default: 0,
   },
   teamMembers: [
     {

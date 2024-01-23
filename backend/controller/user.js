@@ -171,7 +171,7 @@ router.put(
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { email, password, phoneNumber, name } = req.body;
+      const { email, password, section, name } = req.body;
       const user = await User.findOne({ email }).select("+password");
       if (!user) {
         return next(new ErrorHandler("User not found", 400));
@@ -184,7 +184,7 @@ router.put(
       }
       user.name = name;
       user.email = email;
-      user.phoneNumber = phoneNumber;
+      user.section = section;
 
       await user.save();
 

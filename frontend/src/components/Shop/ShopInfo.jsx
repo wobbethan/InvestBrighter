@@ -36,20 +36,6 @@ const ShopInfo = ({ isOwner }) => {
     window.location.reload();
   };
 
-  // const totalReviewsLength =
-  //   products &&
-  //   products.reduce((acc, product) => acc + product.reviews.length, 0);
-
-  // const totalRatings =
-  //   products &&
-  //   products.reduce(
-  //     (acc, product) =>
-  //       acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
-  //     0
-  //   );
-
-  // const averageRating = totalRatings / totalReviewsLength || 0;
-
   return (
     <>
       {isLoading ? (
@@ -70,21 +56,18 @@ const ShopInfo = ({ isOwner }) => {
             </p>
           </div>
           <div className="p-3">
-            <h5 className="font-[600]">Address</h5>
-            <h4 className="text-[#000000a6]">{data.address}</h4>
+            <h5 className="font-[600]">Valuation</h5>
+            <h4 className="text-[#000000a6]">{data.valuation}</h4>
           </div>
           <div className="p-3">
-            <h5 className="font-[600]">Phone Number</h5>
-            <h4 className="text-[#000000a6]">{data.phoneNumber}</h4>
+            <h5 className="font-[600]">Founding Share Price</h5>
+            <h4 className="text-[#000000a6]">{data.foundingSharePrice}</h4>
           </div>
           <div className="p-3">
-            <h5 className="font-[600]">Total Products</h5>
-            <h4 className="text-[#000000a6]">{products && products.length}</h4>
+            <h5 className="font-[600]">Final Acquisition</h5>
+            <h4 className="text-[#000000a6]">{data.finalAcquisition}</h4>
           </div>
-          <div className="p-3">
-            <h5 className="font-[600]">Shop Ratings</h5>
-            <h4 className="text-[#000000b0]">4/5</h4>
-          </div>
+
           <div className="p-3">
             <h5 className="font-[600]">Joined On</h5>
             <h4 className="text-[#000000b0]">

@@ -169,7 +169,7 @@ const UserInfo = ({
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
             <label className="block pb-2 font-bold">Class Code</label>
-            {user && user.phoneNumber}
+            {user && user.section}
           </div>
           <div className="w-[50%]">
             <label className="block pb-2 font-bold">Account Balance</label>$

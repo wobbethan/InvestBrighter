@@ -15,7 +15,7 @@ const CreateProduct = () => {
   const [images, setImages] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(seller && seller.section);
   const [tags, setTags] = useState("");
   const [originalPrice, setOriginalPrice] = useState();
   const [discountPrice, setDiscountPrice] = useState();
@@ -89,21 +89,15 @@ const CreateProduct = () => {
         </div>
         <br />
         <div>
-          <label className="pb-2">Category</label>
-          <select
+          <label className="pb-2">Section</label>
+          <input
+            disabled={true}
+            type="text"
+            name="section"
             value={category}
-            required
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full mt-2 border h-[35px] rounded-[5px]"
-          >
-            <option value="Choose a category">Choose a category</option>
-            {categoriesData &&
-              categoriesData.map((i) => (
-                <option value={i.title} key={i.title}>
-                  {i.title}
-                </option>
-              ))}
-          </select>
+            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm cursor-not-allowed"
+            placeholder="Enter product tags..."
+          />
         </div>
         <br />
         <div>

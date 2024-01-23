@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   },
   section: {
     type: Number,
-    required,
+    required: true,
   },
   role: {
     type: String,
@@ -31,9 +31,11 @@ const userSchema = new mongoose.Schema({
   },
   companyRole: {
     type: String,
+    default: "Not Assigned",
   },
   companyId: {
     type: String,
+    default: "Not Assigned",
   },
   avatar: {
     type: String,

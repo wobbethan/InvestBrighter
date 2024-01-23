@@ -7,6 +7,7 @@ import { RxCross1 } from "react-icons/rx";
 import { getAllMembersShop } from "../../redux/actions/seller";
 const ShopTeamMembers = () => {
   const { members, seller } = useSelector((state) => state.seller);
+
   const [data, setData] = useState({});
   const [email, setEmail] = useState("");
 
@@ -18,12 +19,12 @@ const ShopTeamMembers = () => {
       .get(`${server}/shop/shop-add-member/${seller._id}/${email}`)
       .then((res) => {
         setData(res.data.user[0]);
-        // window.location.reload();
+        window.location.reload();
+        setEmail("");
       })
       .catch((error) => {
-        toast.error(error.message);
+        console.log(error.message);
       });
-    setEmail("");
   };
 
   const removeUser = async (index) => {
@@ -31,17 +32,17 @@ const ShopTeamMembers = () => {
       .get(`${server}/shop/shop-remove-member/${index}/${seller._id}`)
       .then((res) => {
         setData(res.data.user[0]);
-        // window.location.reload();
+        window.location.reload();
       })
       .catch((error) => {
-        //window.location.reload();
+        window.location.reload();
       });
   };
 
-  useEffect(() => {
-    //dispatch(getAllMembersShop(seller._id));
-    console.log(members);
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getAllMembersShop(seller._id));
+  //   console.log(members);
+  // }, [dispatch]);
 
   return (
     <div className="flex flex-col">
@@ -56,8 +57,8 @@ const ShopTeamMembers = () => {
           </div>
           <br></br>
           <div className="flex flex-col">
-            {/* {members &&
-              members.map((i, index) => (
+            {seller.teamMembers &&
+              seller.teamMembers.map((i, index) => (
                 <div className="flex flex-row items-center">
                   <div className="flex items-center m-2 text-lg">
                     <RxCross1
@@ -65,15 +66,10 @@ const ShopTeamMembers = () => {
                       className="mr-3 cursor-pointer"
                       onClick={() => removeUser(index)}
                     />
-                    {members[index].name}
-                  </div>
-                  <div>
-                    {members[index].companyRole
-                      ? members[index].companyRole
-                      : " No role assigned"}
+                    {seller.teamMembers[index].name}
                   </div>
                 </div>
-              ))} */}
+              ))}
           </div>
         </div>
       </div>

@@ -10,8 +10,8 @@ import axios from "axios";
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [visible, setVisible] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [selectedSection, setSelectedSection] = useState(12575);
 
@@ -45,11 +45,11 @@ function Signup() {
         .post(`${server}/user/create-user`, newForm, config)
         .then((res) => {
           toast.success(res.data.message);
-          // setName("");
-          // setEmail("");
-          // setPassword("");
-          // setConfirmPassword("");
-          // setAvatar();
+          setName("");
+          setEmail("");
+          setPassword("");
+          setConfirmPassword("");
+          setAvatar();
         })
         .catch((err) => {
           console.log(err.response.data.message);
