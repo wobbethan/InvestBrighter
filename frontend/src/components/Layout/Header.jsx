@@ -151,6 +151,17 @@ function Header({ activeHeading }) {
           <Navbar active={activeHeading}></Navbar>
         </div>
         <div className="flex">
+          {isAuthenticated ? (
+            <div className="items-center justify-center text-white mr-[15px] text-lg">
+              $
+              {user.accountBalance &&
+                user.accountBalance.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                })}
+            </div>
+          ) : (
+            <div></div>
+          )}
           {/* Heart */}
           <div className={`${styles.normalFlex}`}>
             <div
@@ -247,6 +258,11 @@ function Header({ activeHeading }) {
               </span>
             </div>
           </div>
+          {/* cart popup */}
+          {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
+
+          {/* wishlist popup */}
+          {openWishlist ? <Wishlist setOpenWishlist={setOpenWishlist} /> : null}
         </div>
 
         {/* Header Sidebar*/}
@@ -257,10 +273,13 @@ function Header({ activeHeading }) {
             <div className="fixed w-[60%] bg-white h-screen top-0 left-0 z-10">
               <div className="w-full justify-between flex pr-3">
                 <div>
-                  <div className="relative mr-[15px]">
+                  <div
+                    className="relative mr-[15px]"
+                    onClick={() => setOpenWishlist(true) || setOpen(false)}
+                  >
                     <AiOutlineHeart size={30} className="mt-5 ml-3" />
                     <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                      0
+                      {wishlist && wishlist.length}
                     </span>
                   </div>
                 </div>

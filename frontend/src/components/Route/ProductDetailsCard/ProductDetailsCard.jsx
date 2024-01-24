@@ -86,7 +86,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   className="p-2"
                 />
                 <div className="flex mt-2">
-                  {console.log(data)}
                   <Link to={`/shop/preview/${data.shop._id}`} className="flex">
                     <img
                       src={`${backend_url}${data.shop && data.shop.avatar}`}

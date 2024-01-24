@@ -51,7 +51,7 @@ const Checkout = () => {
     e.preventDefault();
     const name = couponCode;
 
-    await axios.get(`${server}/coupon/get-coupon-value/${name}`).then((res) => {
+    await axios.get(`${server}/shop-get-user`).then((res) => {
       const shopId = res.data.couponCode?.shopId;
       const couponCodeValue = res.data.couponCode?.value;
       if (res.data.couponCode !== null) {
@@ -169,11 +169,14 @@ const UserInfo = ({
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
             <label className="block pb-2 font-bold">Class Code</label>
-            {user && user.phoneNumber}
+            {user && user.section}
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2 font-bold">Account Balance</label>
-            $60,000
+            <label className="block pb-2 font-bold">Account Balance</label>$
+            {user.accountBalance &&
+              user.accountBalance.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+              })}
           </div>
         </div>
       </form>

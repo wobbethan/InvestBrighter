@@ -9,7 +9,7 @@ import { RxPerson } from "react-icons/rx";
 import { useNavigate } from "react-router";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import { TbAddressBook } from "react-icons/tb";
-import { RiLockPasswordLine } from "react-icons/ri";
+import { RiLockPasswordLine, RiTeamLine } from "react-icons/ri";
 import axios from "axios";
 import { server } from "../../Server";
 import { toast } from "react-toastify";
@@ -58,29 +58,17 @@ const ProfileSideBar = ({ setActive, active }) => {
           Orders
         </span>
       </div>
-      <div
-        className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(3)}
-      >
-        <HiOutlineReceiptRefund size={20} color={active === 3 ? "red" : ""} />
-        <span
-          className={`pl-3 ${
-            active === 3 ? "text-[red]" : ""
-          } 800px:block hidden`}
-        >
-          Refunds
-        </span>
-      </div>
+
       <div
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => {
-          setActive(4) || navigate("/inbox");
+          setActive(3) || navigate("/inbox");
         }}
       >
-        <AiOutlineMessage size={20} color={active === 4 ? "red" : ""} />
+        <AiOutlineMessage size={20} color={active === 3 ? "red" : ""} />
         <span
           className={`pl-3 ${
-            active === 4 ? "text-[red]" : ""
+            active === 3 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
           Inbox
@@ -88,25 +76,12 @@ const ProfileSideBar = ({ setActive, active }) => {
       </div>
       <div
         className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(5)}
+        onClick={() => setActive(4)}
       >
-        <MdOutlineTrackChanges size={20} color={active === 5 ? "red" : ""} />
+        <RiLockPasswordLine size={20} color={active === 4 ? "red" : ""} />
         <span
           className={`pl-3 ${
-            active === 5 ? "text-[red]" : ""
-          } 800px:block hidden`}
-        >
-          Track Orders
-        </span>
-      </div>
-      <div
-        className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(6)}
-      >
-        <RiLockPasswordLine size={20} color={active === 6 ? "red" : ""} />
-        <span
-          className={`pl-3 ${
-            active === 6 ? "text-[red]" : ""
+            active === 4 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
           Change Password
@@ -114,12 +89,25 @@ const ProfileSideBar = ({ setActive, active }) => {
       </div>
       <div
         className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(7) || logoutHandler()}
+        onClick={() => setActive(5)}
       >
-        <AiOutlineLogin size={20} color={active === 7 ? "red" : ""} />
+        <RiTeamLine size={20} color={active === 5 ? "red" : ""} />
         <span
           className={`pl-3 ${
-            active === 7 ? "text-[red]" : ""
+            active === 5 ? "text-[red]" : ""
+          } 800px:block hidden`}
+        >
+          Company Details{" "}
+        </span>
+      </div>
+      <div
+        className="flex items-center cursor-pointer w-full mb-8"
+        onClick={() => setActive(6) || logoutHandler()}
+      >
+        <AiOutlineLogin size={20} color={active === 6 ? "red" : ""} />
+        <span
+          className={`pl-3 ${
+            active === 6 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
           Log out

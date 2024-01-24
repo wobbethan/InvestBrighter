@@ -8,23 +8,13 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const user = require("../model/user");
 const sendToken = require("../utils/jwtToken");
 const { isAuthenticated } = require("../middleware/auth");
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, section } = req.body;
     const userEmail = await User.findOne({ email });
-    // const domain = req.body.email;
-    // const ufEmail = domain.substr(domain.length - 7, domain.length);
-    // if (ufEmail !== "ufl.edu") {
-    //   console.log("Not a valid UFL email");
-    // }
-    // else{
-    //   console.log("Valid UFL email");
-    //
-    // }
     if (userEmail) {
       const filename = req.file.filename;
       const filePath = `uploads/${filename}`;
@@ -43,8 +33,10 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
       name: name,
       email: email,
       password: password,
+      section: section,
       avatar: fileUrl,
     };
+    console.log(user);
 
     const activationToken = createActivationToken(user);
     const activationUrl = `http://localhost:3000/activation/${activationToken}`;
@@ -69,7 +61,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
 //creating activation token
 const createActivationToken = (user) => {
   return jwt.sign(user, process.env.ACTIVATION_SECRET, {
-    expiresIn: "1m",
+    expiresIn: "55m",
   });
 };
 
@@ -86,7 +78,7 @@ router.post(
       if (!newUser) {
         return next(new ErrorHandler("Invalid token", 400));
       }
-      const { name, email, password, avatar } = newUser;
+      const { name, email, password, avatar, section } = newUser;
 
       let user = await User.findOne({ email });
       if (user) {
@@ -97,6 +89,7 @@ router.post(
         email,
         avatar,
         password,
+        section,
       });
 
       sendToken(user, 201, res, "token");
@@ -178,7 +171,7 @@ router.put(
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { email, password, phoneNumber, name } = req.body;
+      const { email, password, section, name } = req.body;
       const user = await User.findOne({ email }).select("+password");
       if (!user) {
         return next(new ErrorHandler("User not found", 400));
@@ -191,7 +184,7 @@ router.put(
       }
       user.name = name;
       user.email = email;
-      user.phoneNumber = phoneNumber;
+      user.section = section;
 
       await user.save();
 

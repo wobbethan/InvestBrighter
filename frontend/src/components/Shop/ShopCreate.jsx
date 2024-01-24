@@ -13,9 +13,11 @@ function ShopCreate() {
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [selectedSection, setSelectedSection] = useState(12575);
+
+  const sections = [12575, 12576, 18886, 21640];
 
   const navigate = useNavigate();
 
@@ -27,34 +29,36 @@ function ShopCreate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    if (confirmPassword !== password) {
+      toast.error("Passwords do not match");
+    } else {
+      const config = { headers: { "Content-Type": "multipart/form-data" } };
 
-    const newForm = new FormData();
+      const newForm = new FormData();
 
-    newForm.append("file", avatar);
-    newForm.append("name", name);
-    newForm.append("email", email);
-    newForm.append("password", password);
-    newForm.append("zipCode", zipCode);
-    newForm.append("address", address);
-    newForm.append("phoneNumber", phoneNumber);
+      newForm.append("file", avatar);
+      newForm.append("name", name);
+      newForm.append("email", email);
+      newForm.append("password", password);
+      newForm.append("section", selectedSection);
 
-    axios
-      .post(`${server}/shop/create-shop`, newForm, config)
-      .then((res) => {
-        toast.success(res.data.message);
-        setName("");
-        setEmail("");
-        setPassword("");
-        setAvatar();
-        setZipCode();
-        setAddress();
-        setPhoneNumber();
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-        toast.error(err.response.data.message);
-      });
+      axios
+        .post(`${server}/shop/create-shop`, newForm, config)
+        .then((res) => {
+          toast.success(res.data.message);
+          setName("");
+          setEmail("");
+          setPassword("");
+          setPassword("");
+          setConfirmPassword("");
+          setAvatar();
+          setSelectedSection(12575);
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+          toast.error(err.response.data.message);
+        });
+    }
   };
 
   return (
@@ -110,57 +114,19 @@ function ShopCreate() {
             </div>
 
             <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium text-gray-700"
+              <label className="pb-2">Class Section</label>
+              <select
+                value={selectedSection}
+                onChange={(e) => setSelectedSection(e.target.value)}
+                className="w-full mt-2 border h-[35px] rounded-[5px]"
               >
-                Phone Number
-              </label>
-              <div className="mt-1 relative">
-                <input
-                  name="phone"
-                  required
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="appearance-none block w-full  px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm "
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="address"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Address
-              </label>
-              <div className="mt-1 relative">
-                <input
-                  name="address"
-                  required
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  className="appearance-none block w-full  px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm "
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="address"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Zip Code
-              </label>
-              <div className="mt-1 relative">
-                <input
-                  name="zip code"
-                  required
-                  value={zipCode}
-                  onChange={(e) => setZipCode(e.target.value)}
-                  className="appearance-none block w-full  px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm "
-                />
-              </div>
+                {sections &&
+                  sections.map((i, index) => (
+                    <option value={i} key={index}>
+                      {i}
+                    </option>
+                  ))}
+              </select>
             </div>
 
             <div>
@@ -192,6 +158,39 @@ function ShopCreate() {
                     className="absolute right-2 top-2 cursor-pointer"
                     size={25}
                     onClick={() => setVisible(true)}
+                  />
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Confirm Password
+              </label>
+              <div className="mt-1 relative">
+                <input
+                  type={confirmVisible ? "text" : "password"}
+                  name="confirmPassword"
+                  autoComplete="current-password"
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="appearance-none block w-full  px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm "
+                />
+                {confirmVisible ? (
+                  <AiOutlineEye
+                    className="absolute right-2 top-2 cursor-pointer"
+                    size={25}
+                    onClick={() => setConfirmVisible(false)}
+                  />
+                ) : (
+                  <AiOutlineEyeInvisible
+                    className="absolute right-2 top-2 cursor-pointer"
+                    size={25}
+                    onClick={() => setConfirmVisible(true)}
                   />
                 )}
               </div>

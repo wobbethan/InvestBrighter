@@ -14,13 +14,14 @@ import styles from "../../styles/styles";
 import { updateUserInformation } from "../../redux/actions/user";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { getAllMembersShop } from "../../redux/actions/seller";
 
 const ProfileContent = ({ active }) => {
   const { user, error } = useSelector((state) => state.user);
 
   const [name, setName] = useState(user && user.name);
   const [email, setEmail] = useState(user && user.email);
-  const [phoneNumber, setPhoneNumber] = useState(user && user.phoneNumber);
+  const [section, setSection] = useState(user && user.section);
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
 
@@ -48,6 +49,13 @@ const ProfileContent = ({ active }) => {
       });
   };
 
+  const { seller, members } = useSelector((state) => state.seller);
+
+  useEffect(() => {
+    dispatch(getAllMembersShop(user.companyId));
+    console.log(members);
+  }, []);
+
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -56,7 +64,7 @@ const ProfileContent = ({ active }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateUserInformation(name, email, password, phoneNumber));
+    dispatch(updateUserInformation(name, email, password, section));
   };
 
   return (
@@ -64,28 +72,45 @@ const ProfileContent = ({ active }) => {
       {/* Profile Page */}
       {active === 1 && (
         <>
-          <div className="flex justify-center w-full">
-            <div className="relative">
-              <img
-                src={`${backend_url}${user.avatar}`}
-                className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
-                alt=""
-              />
-
-              <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center  absolute bottom-[5px] right-[5px]">
-                <input
-                  type="file"
-                  id="image"
-                  className="hidden"
-                  onChange={handleImage}
+          <div>
+            <div className="flex justify-center w-full">
+              <div className="relative">
+                <img
+                  src={`${backend_url}${user.avatar}`}
+                  className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
+                  alt=""
                 />
-                <label htmlFor="image" className="!cursor-pointer">
-                  <AiOutlineCamera />
-                </label>
+
+                <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center  absolute bottom-[5px] right-[5px]">
+                  <input
+                    type="file"
+                    id="image"
+                    className="hidden"
+                    onChange={handleImage}
+                  />
+                  <label htmlFor="image" className="!cursor-pointer">
+                    <AiOutlineCamera />
+                  </label>
+                </div>
               </div>
+              <br />
+              <br />
             </div>
-            <br />
-            <br />
+            <div>
+              <br />
+              <div className="flex justify-center w-full text-xl text-bold mb-1">
+                Available Balance:
+              </div>
+              <div className="flex justify-center w-full text-5xl text-bold">
+                $
+                {user.accountBalance &&
+                  user.accountBalance.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                  })}
+              </div>
+              <br />
+              <br />
+            </div>
           </div>
           <div className="w-full px-5">
             <form onSubmit={handleSubmit} aria-required>
@@ -113,12 +138,12 @@ const ProfileContent = ({ active }) => {
               </div>
               <div className="w-full 800px:flex block pb-3">
                 <div className="w-full 800px:w-[50%]">
-                  <label className="block pb-2">Phone Number</label>
+                  <label className="block pb-2">Class Section</label>
                   <input
                     type="number"
-                    className={`${styles.input} !w-[95%]   800px:mb-0 mb-2`}
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    className={`${styles.input} !w-[95%] 800px:mb-0 mb-2`}
+                    value={section}
+                    onChange={(e) => setSection(e.target.value)}
                   />
                 </div>
                 <div className="w-full 800px:w-[50%]">
@@ -151,24 +176,16 @@ const ProfileContent = ({ active }) => {
         </div>
       )}
 
-      {/* Refund */}
-      {active === 3 && (
-        <div>
-          <AllRefundOrders></AllRefundOrders>
-        </div>
-      )}
-
-      {/* Track Order */}
-      {active === 5 && (
-        <div>
-          <TrackOrder></TrackOrder>
-        </div>
-      )}
-
       {/* ChangePassword */}
-      {active === 6 && (
+      {active === 4 && (
         <div>
           <ChangePassword></ChangePassword>
+        </div>
+      )}
+      {/* Company info */}
+      {active === 5 && (
+        <div>
+          <CompanyInfo members={members}></CompanyInfo>
         </div>
       )}
     </div>
@@ -264,185 +281,6 @@ const AllOrders = () => {
   );
 };
 
-const AllRefundOrders = () => {
-  const orders = [
-    {
-      _id: "8u9asd89uasdasdasdjlkj",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 120,
-      orderStatus: "Processing",
-    },
-  ];
-
-  const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
-    {
-      field: "status",
-      headerName: "Status",
-      minWidth: 130,
-      flex: 0.7,
-      cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
-          ? "greenColor"
-          : "redColor";
-      },
-    },
-    {
-      field: "itemsQty",
-      headerName: "Items Qty",
-      type: "number",
-      minWidth: 130,
-      flex: 0.7,
-    },
-
-    {
-      field: "total",
-      headerName: "Total",
-      type: "number",
-      minWidth: 130,
-      flex: 0.8,
-    },
-
-    {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/user/order/${params.id}`}>
-              <Button>
-                <AiOutlineArrowRight size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
-    },
-  ];
-
-  const row = [];
-
-  orders &&
-    orders.forEach((item) => {
-      row.push({
-        id: item._id,
-        itemsQty: item.orderItems.length,
-        total: "$" + item.totalPrice,
-        status: item.orderStatus,
-      });
-    });
-
-  return (
-    <div className="pl-8 pt-1">
-      <DataGrid
-        rows={row}
-        columns={columns}
-        pageSize={10}
-        autoHeight
-        disableSelectionOnClick
-      />
-    </div>
-  );
-};
-const TrackOrder = () => {
-  const orders = [
-    {
-      _id: "8u9asd89uasdasdasdjlkj",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 120,
-      orderStatus: "Processing",
-    },
-  ];
-
-  const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
-    {
-      field: "status",
-      headerName: "Status",
-      minWidth: 130,
-      flex: 0.7,
-      cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
-          ? "greenColor"
-          : "redColor";
-      },
-    },
-    {
-      field: "itemsQty",
-      headerName: "Items Qty",
-      type: "number",
-      minWidth: 130,
-      flex: 0.7,
-    },
-
-    {
-      field: "total",
-      headerName: "Total",
-      type: "number",
-      minWidth: 130,
-      flex: 0.8,
-    },
-
-    {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/user/order/${params.id}`}>
-              <Button>
-                <MdOutlineTrackChanges size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
-    },
-  ];
-
-  const row = [];
-
-  orders &&
-    orders.forEach((item) => {
-      row.push({
-        id: item._id,
-        itemsQty: item.orderItems.length,
-        total: "$" + item.totalPrice,
-        status: item.orderStatus,
-      });
-    });
-
-  return (
-    <div className="pl-8 pt-1">
-      <DataGrid
-        rows={row}
-        columns={columns}
-        pageSize={10}
-        autoHeight
-        disableSelectionOnClick
-      />
-    </div>
-  );
-};
-
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -519,6 +357,30 @@ const ChangePassword = () => {
           </div>
         </form>
       </div>
+    </div>
+  );
+};
+
+const CompanyInfo = ({ members }) => {
+  return (
+    <div>
+      {console.log(members)}
+      {/* {members && members.map((i) => <TeamMemberCard member={i} />)} */}
+    </div>
+  );
+};
+
+const TeamMemberCard = ({ member }) => {
+  return (
+    <div className=" w-[80%] 800px:w-full h-[250px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center">
+      <div className="justify-center self-center flex">
+        <img
+          draggable={false}
+          className="w-[150px] h-[150px] object-contain rounded-3xl m-[10px]"
+          src={`${backend_url}${member.avatar}`}
+        />
+      </div>
+      <div className="text-2xl text-bold">{member.name}</div>
     </div>
   );
 };

@@ -10,6 +10,7 @@ const Shop = require("../model/shop");
 const { upload } = require("../multer");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler.js");
+const User = require("../model/user");
 
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
@@ -35,9 +36,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
       email: email,
       password: req.body.password,
       avatar: fileUrl,
-      address: req.body.address,
-      phoneNumber: req.body.phoneNumber,
-      zipCode: req.body.zipCode,
+      section: req.body.section,
     };
 
     const activationToken = createActivationToken(seller);
@@ -83,8 +82,7 @@ router.post(
       if (!newSeller) {
         return next(new ErrorHandler("Invalid token", 400));
       }
-      const { name, email, password, avatar, zipCode, address, phoneNumber } =
-        newSeller;
+      const { name, email, password, avatar, section } = newSeller;
 
       let seller = await Shop.findOne({ email });
 
@@ -97,9 +95,7 @@ router.post(
         email,
         avatar,
         password,
-        zipCode,
-        address,
-        phoneNumber,
+        section,
       });
 
       sendShopToken(seller, 201, res);
@@ -188,6 +184,96 @@ router.get(
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// add user to shop
+router.get(
+  "/shop-add-member/:id/:email",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const shop = await Shop.findById(req.params.id);
+      const user = await User.find({ email: req.params.email });
+      const userEmail = user[0].email;
+      let userAlreadyMember = false;
+
+      if (!user) {
+        //not returning
+        return next(new ErrorHandler("User doesn't exist", 400));
+      }
+      if (!shop) {
+        return next(new ErrorHandler("Shop doesn't exist", 400));
+      }
+
+      for (let i = 0; i < shop.teamMembers.length; i++) {
+        if (shop.teamMembers[i].email === userEmail) {
+          userAlreadyMember = true;
+        }
+      }
+
+      if (userAlreadyMember === false) {
+        user[0].companyId = req.params.id;
+        shop.teamMembers.push(user[0]);
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "User is already a member",
+        });
+        return next(new ErrorHandler("User is already a member", 401));
+      }
+
+      await shop.save();
+      await user[0].save();
+
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// remove user to shop
+router.get(
+  "/shop-remove-member/:index/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const shop = await Shop.findById(req.params.id);
+
+      if (!shop) {
+        return next(new ErrorHandler("Shop doesn't exist", 400));
+      }
+
+      shop.teamMembers.splice(req.params.index, 1);
+
+      await shop.save();
+
+      res.status(200).json({
+        success: true,
+        shop,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//getting all members of a shop
+router.get(
+  "/get-all-members-shop/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const members = await User.find({ companyId: req.params.id });
+      console.log(members);
+      res.status(200).json({
+        success: true,
+        members,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
     }
   })
 );
