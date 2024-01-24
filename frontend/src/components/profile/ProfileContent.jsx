@@ -49,6 +49,13 @@ const ProfileContent = ({ active }) => {
       });
   };
 
+  const { seller, members } = useSelector((state) => state.seller);
+
+  useEffect(() => {
+    dispatch(getAllMembersShop(user.companyId));
+    console.log(members);
+  }, []);
+
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -178,7 +185,7 @@ const ProfileContent = ({ active }) => {
       {/* Company info */}
       {active === 5 && (
         <div>
-          <CompanyInfo id={user.companyId}></CompanyInfo>
+          <CompanyInfo members={members}></CompanyInfo>
         </div>
       )}
     </div>
@@ -354,16 +361,13 @@ const ChangePassword = () => {
   );
 };
 
-const CompanyInfo = ({ id }) => {
-  const { seller, members } = useSelector((state) => state.seller);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getAllMembersShop(id));
-    console.log(members);
-  }, []);
-
-  return <div>{id}</div>;
+const CompanyInfo = ({ members }) => {
+  return (
+    <div>
+      {console.log(members)}
+      {/* {members && members.map((i) => <TeamMemberCard member={i} />)} */}
+    </div>
+  );
 };
 
 const TeamMemberCard = ({ member }) => {
