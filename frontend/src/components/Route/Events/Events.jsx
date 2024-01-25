@@ -17,7 +17,7 @@ const Events = () => {
         <div>
           <div className={`${styles.section}`}>
             <div className={`${styles.heading}`}>
-              <h1>Popular Events</h1>
+              <h1>Events</h1>
             </div>
             <div className="w-full grid">
               <EventCard data={allEvents[0]} />

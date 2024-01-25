@@ -123,11 +123,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   <h4 className={`${styles.productDiscountPrice}`}>
                     ${data.discountPrice.toLocaleString()}
                   </h4>
-                  <h3 className={`${styles.price}`}>
-                    {data.originalPrice
-                      ? "$" + data.originalPrice.toLocaleString()
-                      : null}
-                  </h3>
                 </div>
                 <div className="flex items-center mt-12 justify-between pr-3">
                   <div>

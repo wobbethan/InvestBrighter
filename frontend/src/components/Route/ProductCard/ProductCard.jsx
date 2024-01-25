@@ -104,11 +104,6 @@ function ProductCard({ data, isEvent }) {
                   ? data.originalPrice.toLocaleString()
                   : data.discountPrice.toLocaleString()}
               </h5>
-              <h4 className={`${styles.price}`}>
-                {data.originalPrice.toLocaleString()
-                  ? "$" + data.originalPrice.toLocaleString()
-                  : null}
-              </h4>
             </div>
             <span className="font-[400] text-[17px] text-[#6AD284]">
               {data.sold_out} Investments
