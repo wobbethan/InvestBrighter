@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -16,8 +16,16 @@ function ShopCreate() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [selectedSection, setSelectedSection] = useState(12575);
+  const [sections, setSections] = useState([]);
 
-  const sections = [12575, 12576, 18886, 21640];
+  useEffect(() => {
+    const getSections = async () => {
+      await axios.get(`${server}/section/get-sections`).then((res) => {
+        setSections(res.data.sections);
+      });
+    };
+    getSections();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -122,8 +130,8 @@ function ShopCreate() {
               >
                 {sections &&
                   sections.map((i, index) => (
-                    <option value={i} key={index}>
-                      {i}
+                    <option value={i.name} key={index}>
+                      {i.name}
                     </option>
                   ))}
               </select>

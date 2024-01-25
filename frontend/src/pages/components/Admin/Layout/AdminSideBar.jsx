@@ -107,20 +107,20 @@ const AdminSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/profile" className="w-full flex items-center">
+        <Link to="/admin/manage-sections" className="w-full flex items-center">
           <GrGroup size={30} color={`${active === 7 ? "crimson" : "#555"}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 87 ? "text-[crimson]" : "text-[#555]"
+              active === 7 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            Create Class
+            Manage Sections
           </h5>
         </Link>
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/admin/add-admin" className="w-full flex items-center">
+        <Link to="/admin/manage-admins" className="w-full flex items-center">
           <GrUserAdmin
             size={30}
             color={`${active === 8 ? "crimson" : "#555"}`}
