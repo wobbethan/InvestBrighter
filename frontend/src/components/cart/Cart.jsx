@@ -112,7 +112,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
 
   return (
     <div className="border-b p-4">
-      <div className="w-full flex items-center">
+      <div className="w-full flex items-center justify-between">
         <div>
           <div
             className={`bg-[#e44343] justify-center cursor-pointer border border-[#e4434373] rounded-full w-[25px] h-[25px] ${styles.normalFlex}`}

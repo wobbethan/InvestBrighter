@@ -82,7 +82,7 @@ const CartSingle = ({ data, removeFromWishlistHandler, addToCartHandler }) => {
   const totalPrice = data.discountPrice * value;
   return (
     <div className="border-b p-4">
-      <div className="w-full flex items-center">
+      <div className="w-full flex items-center justify-evenly">
         <RxCross1
           className="cursor-pointer"
           onClick={() => removeFromWishlistHandler(data)}
