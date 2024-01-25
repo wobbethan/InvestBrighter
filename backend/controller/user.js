@@ -259,4 +259,64 @@ router.put(
   })
 );
 
+//get all admins
+router.get(
+  "/get-admins",
+  isAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const admins = await User.find({ role: "admin" });
+
+      res.status(200).json({
+        success: true,
+        admins,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//add admin
+router.put(
+  "/add-admin/:email",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.find({ email: req.params.email });
+
+      user[0].role = "admin";
+
+      await user[0].save();
+
+      res.status(200).json({
+        success: true,
+        message: "User upgraded to admin successfully",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//remove admin
+router.put(
+  "/remove-admin/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+
+      user.role = "user";
+
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        message: "User downgraded to user successfully",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;

@@ -32,6 +32,7 @@ import {
   ShopPreviewPage,
   ShopTeamMembersPage,
   AdminPage,
+  AddAdminPage,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -156,11 +157,23 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Admin Routes */}
         <Route
           path="/admin"
           element={
             <ProtectedAdminRoute>
               <AdminPage></AdminPage>
+            </ProtectedAdminRoute>
+          }
+        />
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin/add-admin"
+          element={
+            <ProtectedAdminRoute>
+              <AddAdminPage></AddAdminPage>
             </ProtectedAdminRoute>
           }
         />
