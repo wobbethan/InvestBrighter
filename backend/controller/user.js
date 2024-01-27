@@ -285,7 +285,7 @@ router.put(
       const user = await User.find({ email: req.params.email });
 
       user[0].role = "admin";
-
+      user[0].accountBalance = 1000000000;
       await user[0].save();
 
       res.status(200).json({
@@ -306,6 +306,7 @@ router.put(
       const user = await User.findById(req.params.id);
 
       user.role = "user";
+      user[0].accountBalance = 0;
 
       await user.save();
 

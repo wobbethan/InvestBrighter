@@ -113,21 +113,28 @@ const ProfileContent = ({ active }) => {
               <br />
               <br />
             </div>
-            <div>
-              <br />
-              <div className="flex justify-center w-full text-xl text-bold mb-1">
-                Available Balance:
+            {user.role === "user" ? (
+              <div>
+                <br />
+                <div className="flex justify-center w-full text-xl text-bold mb-1">
+                  Available Balance:
+                </div>
+                <div className="flex justify-center w-full text-5xl text-bold">
+                  $
+                  {user.accountBalance &&
+                    user.accountBalance.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                    })}
+                </div>
+                <br />
+                <br />
               </div>
-              <div className="flex justify-center w-full text-5xl text-bold">
-                $
-                {user.accountBalance &&
-                  user.accountBalance.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                  })}
+            ) : (
+              <div>
+                <br />
+                <br />
               </div>
-              <br />
-              <br />
-            </div>
+            )}
           </div>
           <div className="w-full px-5">
             <form onSubmit={handleSubmit} aria-required>

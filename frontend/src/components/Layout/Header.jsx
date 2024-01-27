@@ -151,7 +151,7 @@ function Header({ activeHeading }) {
           <Navbar active={activeHeading}></Navbar>
         </div>
         <div className="flex">
-          {isAuthenticated ? (
+          {isAuthenticated && user.role == "user" ? (
             <div className="items-center justify-center text-white mr-[15px] text-lg">
               $
               {user.accountBalance &&

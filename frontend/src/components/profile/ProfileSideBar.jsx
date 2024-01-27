@@ -13,9 +13,12 @@ import { RiLockPasswordLine, RiTeamLine } from "react-icons/ri";
 import axios from "axios";
 import { server } from "../../Server";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { GrUserAdmin } from "react-icons/gr";
 
 const ProfileSideBar = ({ setActive, active }) => {
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
 
   const logoutHandler = () => {
     axios
@@ -100,6 +103,23 @@ const ProfileSideBar = ({ setActive, active }) => {
           Company Details{" "}
         </span>
       </div>
+      {user.role == "admin" ? (
+        <div
+          className="flex items-center cursor-pointer w-full mb-8"
+          onClick={() => navigate("/admin")}
+        >
+          <GrUserAdmin size={20} color={active === 8 ? "red" : ""} />
+          <span
+            className={`pl-3 ${
+              active === 8 ? "text-[red]" : ""
+            } 800px:block hidden`}
+          >
+            Admin Dashboard
+          </span>
+        </div>
+      ) : (
+        <div></div>
+      )}
       <div
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(6) || logoutHandler()}
