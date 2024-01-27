@@ -41,7 +41,6 @@ const AllOrders = () => {
       type: "number",
       minWidth: 130,
       flex: 0.8,
-      cellClassName: "greenColor",
     },
 
     {

@@ -78,8 +78,6 @@ router.get(
         createdAt: -1,
       });
 
-      console.log(orders);
-
       res.status(200).json({
         success: true,
         orders,
@@ -94,13 +92,12 @@ router.get(
 router.get(
   "/admin-all-orders",
   isAuthenticated,
-  isAdmin("Admin"),
   catchAsyncErrors(async (req, res, next) => {
     try {
       const orders = await Order.find().sort({
-        deliveredAt: -1,
         createdAt: -1,
       });
+      console.log(orders);
       res.status(201).json({
         success: true,
         orders,
