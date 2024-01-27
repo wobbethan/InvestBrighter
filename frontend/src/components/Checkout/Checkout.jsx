@@ -26,32 +26,37 @@ const Payment = () => {
     0
   );
 
-  let order = {
-    cart: cart,
-    user: user && user,
-    totalPrice: totalPrice,
-    quantity: 1,
-  };
-
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
+    cart.forEach((item) => {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+      let order = {
+        company: item,
+        user: user && user,
+        totalPrice: item.qty * item.discountPrice,
+        quantity: item.qty,
+      };
 
-    await axios
-      .post(`${server}/order/create-order`, order, config)
-      .then((res) => {
-        setOpen(false);
-        navigate("/order/success");
-        toast.success("Order successful!");
-        localStorage.setItem("cartItems", JSON.stringify([]));
-        localStorage.setItem("latestOrder", JSON.stringify([]));
-        window.location.reload();
-      });
+      const sendOrder = async (order, config) => {
+        await axios
+          .post(`${server}/order/create-order`, order, config)
+          .then((res) => {
+            setOpen(false);
+            navigate("/order/success");
+            toast.success("Order successful!");
+            localStorage.setItem("cartItems", JSON.stringify([]));
+            localStorage.setItem("latestOrder", JSON.stringify([]));
+            window.location.reload();
+          });
+      };
+
+      sendOrder(order, config);
+    });
   };
 
   return (

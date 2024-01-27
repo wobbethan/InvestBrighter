@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
-  cart: {
-    type: Array,
+  company: {
+    type: Object,
     required: true,
   },
   user: {

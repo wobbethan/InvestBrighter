@@ -12,42 +12,35 @@ router.post(
   "/create-order",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      console.log(req.body);
-      const { cart, user, totalPrice, quantity } = req.body;
+      const { company, user, totalPrice, quantity } = req.body;
+
+      //Objs
       const userObj = await User.findById(user._id);
+      const companyObj = await Shop.findById(company.shop._id);
+      const productObj = await Product.findById(company._id);
 
-      // group cart items by shopId
-      const shopItemsMap = new Map();
-
-      for (const item of cart) {
-        const shopId = item.shopId;
-        if (!shopItemsMap.has(shopId)) {
-          shopItemsMap.set(shopId, []);
-        }
-        shopItemsMap.get(shopId).push(item);
-      }
-
-      // create an order for each shop
-      const orders = [];
-
-      for (const [shopId, items] of shopItemsMap) {
-        const order = await Order.create({
-          cart: items,
-          user,
-          totalPrice,
-          quantity,
-        });
-        orders.push(order);
-        //Update shop balance
-      }
-
-      //Update user balance
+      //Update OBJ vars
       userObj.accountBalance -= totalPrice;
+      companyObj.balance += totalPrice;
+      productObj.stock -= quantity;
+      productObj.sold += quantity;
+
+      //Save
       await userObj.save();
+      await companyObj.save();
+      await productObj.save();
+
+      //Create Order
+      const order = await Order.create({
+        company: company,
+        user,
+        totalPrice,
+        quantity,
+      });
 
       res.status(201).json({
         success: true,
-        orders,
+        order,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
