@@ -267,7 +267,7 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const members = await User.find({ companyId: req.params.id });
-      console.log(members);
+      console.log("HERE");
       res.status(200).json({
         success: true,
         members,

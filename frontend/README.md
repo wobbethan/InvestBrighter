@@ -1,37 +1,47 @@
 # Testing Account Information
 
+## Admins:
+
+- Dr. Lawrence Tinker
+  email: tinker@ufl.edu
+  password: password
+
+- Erik Sanders
+  email: sanders@ufl.edu
+  password: password
+
 ## Users:
 
 - Ethan Wobb
-  email: tafex22306@wuzak.com
+  email: ethan@ufl.edu
   password: password
 
-- Chris Bello
-  email: nxp5y7j4yv@bloheyz.com
+- Christian Bello
+  email: chris@ufl.edu
   password: password
 
 - Ryan McPherson
-  email: k2or1m5nvx@rentforsale7.com
+  email: ryan@ufl.edu
   password: password
 
 ## Shops:
 
 - October's Very Own
-  email: roln0ilji6@greencafe24.com
+  email: ovo@gmail.com
   password: password
 
-- Publix
-  email: gboc03duj4@sfolkar.com
+- Amazon
+  email: amazon@gmail.com
   password: password
 
 - Nike
-  email: 5v2gwcmzf3@gixenmixen.com
+  email: nike@gmail.com
   password: password
 
-- Tesla
-  email: e7sbs32s6z@tippabble.com
+- Adidas
+  email: adidas@gmail.com
   password: password
 
-- Google
-  email: h2k5bl2z40@myinfoinc.com
+- Walmart
+  email: walmart@gmail.com
   password: password

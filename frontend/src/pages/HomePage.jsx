@@ -13,11 +13,9 @@ function HomePage() {
     <div>
       <Header activeHeading={1}></Header>
       <Hero />
-      <Categories></Categories>
       <BestDeals />
       <Events />
       <FeaturedProduct />
-      <Sponsored></Sponsored>
       <Footer />
     </div>
   );

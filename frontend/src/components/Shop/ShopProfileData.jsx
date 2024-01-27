@@ -7,23 +7,35 @@ import styles from "../../styles/styles";
 import { getAllEventsShop } from "../../redux/actions/event";
 import { getAllProductsShop } from "../../redux/actions/product";
 import Ratings from "../products/Ratings.jsx";
-import { backend_url } from "../../Server.js";
+import { backend_url, server } from "../../Server.js";
 import { getAllMembersShop } from "../../redux/actions/seller.js";
+import axios from "axios";
 
 const ShopProfileData = ({ isOwner }) => {
-  const { seller, members } = useSelector((state) => state.seller);
+  const { seller } = useSelector((state) => state.seller);
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
+  const [members, setMembers] = useState([]);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [active, setActive] = useState(1);
 
   useEffect(() => {
     dispatch(getAllProductsShop(id));
     dispatch(getAllEventsShop(id));
-    // dispatch(getAllMembersShop(id));
-  }, []);
 
-  const [active, setActive] = useState(1);
+    const getMembers = async () => {
+      await axios
+        .get(`${server}/shop/get-all-members-shop/${id}`)
+        .then((response) => {
+          setMembers(response.data.members);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getMembers();
+  }, [active]);
 
   return (
     <div className="w-full">
@@ -110,9 +122,9 @@ const ShopProfileData = ({ isOwner }) => {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:gap-[20px] mb-12 border-0">
-              {seller.teamMembers &&
-                seller.teamMembers.map((i, index) => (
-                  <TeamMemberCard member={seller.teamMembers[index]} />
+              {members &&
+                members.map((i, index) => (
+                  <TeamMemberCard member={members[index]} />
                 ))}
             </div>
           )}

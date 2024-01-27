@@ -24,6 +24,8 @@ const ProfileContent = ({ active }) => {
   const [section, setSection] = useState(user && user.section);
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [shopInfo, setShopInfo] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -49,11 +51,26 @@ const ProfileContent = ({ active }) => {
       });
   };
 
-  const { seller, members } = useSelector((state) => state.seller);
-
   useEffect(() => {
-    dispatch(getAllMembersShop(user.companyId));
-    console.log(members);
+    const getMembers = async () => {
+      await axios
+        .get(`${server}/shop/get-all-members-shop/${user.companyId}`)
+        .then((response) => {
+          setMembers(response.data.members);
+        })
+        .catch((err) => {
+          toast.error(err);
+        });
+      await axios
+        .get(`${server}/shop/get-shop-info/${user.companyId}`)
+        .then((response) => {
+          setShopInfo(response.data.shop);
+        })
+        .catch((err) => {
+          toast.error(err);
+        });
+    };
+    getMembers();
   }, []);
 
   useEffect(() => {
@@ -184,8 +201,19 @@ const ProfileContent = ({ active }) => {
       )}
       {/* Company info */}
       {active === 5 && (
-        <div>
-          <CompanyInfo members={members}></CompanyInfo>
+        <div className="flex flex-col justify-center w-full items-center">
+          <div className="flex flex-col justify-center w-full items-center">
+            <img
+              src={`${backend_url}${shopInfo.avatar}`}
+              className="w-[350px] h-[250px] object-cover border-[3px] border-[#3ad132] justify-center items-center "
+            />
+            <div className="flex justify-center w-full text-4xl text-bold mb-4 mt-4">
+              {shopInfo.name}
+            </div>
+          </div>
+          <div>
+            <CompanyInfo members={members}></CompanyInfo>
+          </div>
         </div>
       )}
     </div>
@@ -363,20 +391,20 @@ const ChangePassword = () => {
 
 const CompanyInfo = ({ members }) => {
   return (
-    <div>
-      {console.log(members)}
-      {/* {members && members.map((i) => <TeamMemberCard member={i} />)} */}
+    <div className="flex flex-wrap m-5">
+      {members.length !== 0 &&
+        members.map((i, index) => <TeamMemberCard member={i} />)}
     </div>
   );
 };
 
 const TeamMemberCard = ({ member }) => {
   return (
-    <div className=" w-[80%] 800px:w-full h-[250px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center">
+    <div className=" w-[100%] 800px:w-[250px] h-[250px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center m-2">
       <div className="justify-center self-center flex">
         <img
           draggable={false}
-          className="w-[150px] h-[150px] object-contain rounded-3xl m-[10px]"
+          className="w-full h-[150px] object-contain  m-[10px]"
           src={`${backend_url}${member.avatar}`}
         />
       </div>

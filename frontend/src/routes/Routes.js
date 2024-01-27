@@ -23,7 +23,8 @@ import ShopAllEvents from "../pages/Shop/ShopAllEvents.jsx";
 import ShopPreviewPage from "../pages/Shop/ShopPreviewPage.jsx";
 import ShopTeamMembersPage from "../pages/Shop/ShopTeamMembersPage.jsx";
 import AdminPage from "../pages/admin/AdminPage.jsx";
-
+import AddAdminPage from "../pages/admin/AddAdminPage.jsx";
+import ManageSectionPage from "../pages/admin/ManageSectionPage.jsx";
 export {
   LoginPage,
   SignupPage,
@@ -50,4 +51,6 @@ export {
   ShopPreviewPage,
   ShopTeamMembersPage,
   AdminPage,
+  AddAdminPage,
+  ManageSectionPage,
 };

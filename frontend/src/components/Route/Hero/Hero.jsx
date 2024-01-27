@@ -20,13 +20,6 @@ function Hero() {
           quidem asperiores, laudantium temporibus soluta optio consequatur{" "}
           <br /> aliquam deserunt officia. Dolorum saepe nulla provident.
         </p>
-        <Link to="/products">
-          <div className={`${styles.button} mt-5`}>
-            <span className="text-[#fff] font-[Poppins] text-[18px]">
-              Shop Now
-            </span>
-          </div>
-        </Link>
       </div>
     </div>
   );

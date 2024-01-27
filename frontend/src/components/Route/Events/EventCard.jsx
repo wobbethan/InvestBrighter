@@ -21,12 +21,9 @@ const EventCard = ({ active, data }) => {
             <h5 className="font-bold text-[20px] text-[#333] pr-3 font-Roboto">
               ${data.discountPrice.toLocaleString()}
             </h5>
-            <h5 className="font-[500] text-[18px] text-[#d55b45] line-through">
-              ${data.originalPrice.toLocaleString()}
-            </h5>
           </div>
           <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
-            120 Investments
+            3 Investment Checks
           </span>
         </div>
         <CountDown data={data} />
