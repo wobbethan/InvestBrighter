@@ -106,7 +106,7 @@ function ProductCard({ data, isEvent }) {
               </h5>
             </div>
             <span className="font-[400] text-[17px] text-[#6AD284]">
-              {data.sold_out} Investments
+              {data.sold} Investments
             </span>
           </div>
         </Link>

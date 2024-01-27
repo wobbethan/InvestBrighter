@@ -81,6 +81,7 @@ function App() {
             </SellerProtectedRoute>
           }
         />
+
         <Route
           path="/dashboard"
           element={
@@ -141,7 +142,7 @@ function App() {
         <Route path="/best-selling" Component={BestSellingPage} />
         <Route path="/events" Component={EventsPage} />
         <Route path="/faq" Component={FaqPage} />
-        <Route path="/order/success/:id" Component={OrderSuccessPage} />
+        <Route path="/order/success/" Component={OrderSuccessPage} />
         <Route
           path="/profile"
           element={
