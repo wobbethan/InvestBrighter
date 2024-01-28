@@ -27,6 +27,9 @@ import AddAdminPage from "../pages/admin/AddAdminPage.jsx";
 import ManageSectionPage from "../pages/admin/ManageSectionPage.jsx";
 import ShopAllOrders from "../pages/Shop/ShopAllOrders.jsx";
 import AdminAllOrdersPage from "../pages/admin/AdminAllOrdersPage.jsx";
+import AdminAllCompaniesPage from "../pages/admin/AdminAllCompaniesPage.jsx";
+import AdminAllUsersPage from "../pages/admin/AdminAllUsersPage.jsx";
+
 export {
   LoginPage,
   SignupPage,
@@ -57,4 +60,6 @@ export {
   ManageSectionPage,
   ShopAllOrders,
   AdminAllOrdersPage,
+  AdminAllUsersPage,
+  AdminAllCompaniesPage,
 };

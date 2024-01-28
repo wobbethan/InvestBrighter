@@ -91,6 +91,11 @@ router.post(
         section,
       });
 
+      const userSection = await section.find({ name: section });
+      userSection.numStudents += 1;
+
+      await userSection.save();
+
       sendToken(user, 201, res, "token");
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
@@ -305,13 +310,62 @@ router.put(
       const user = await User.findById(req.params.id);
 
       user.role = "user";
-      user[0].accountBalance = 0;
+      user.accountBalance = 0;
 
       await user.save();
 
       res.status(200).json({
         success: true,
         message: "User downgraded to user successfully",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// all users --- for admin
+router.get(
+  "/admin-all-users",
+
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const users = await User.find().sort({
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        users,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// delete users --- admin
+router.delete(
+  "/delete-user/:id",
+
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+
+      if (!user) {
+        return next(
+          new ErrorHandler("User is not available with this id", 400)
+        );
+      }
+
+      const imageId = user.avatar.public_id;
+
+      await cloudinary.v2.uploader.destroy(imageId);
+
+      await User.findByIdAndDelete(req.params.id);
+
+      res.status(201).json({
+        success: true,
+        message: "User deleted successfully!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

@@ -48,34 +48,24 @@ const ProfileSideBar = ({ setActive, active }) => {
           Profile
         </span>
       </div>
-      <div
-        className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(2)}
-      >
-        <HiOutlineShoppingBag size={20} color={active === 2 ? "red" : ""} />
-        <span
-          className={`pl-3 ${
-            active === 2 ? "text-[red]" : ""
-          } 800px:block hidden`}
-        >
-          Orders
-        </span>
-      </div>
-
-      <div
-        className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => {
-          setActive(3) || navigate("/inbox");
-        }}
-      >
-        <AiOutlineMessage size={20} color={active === 3 ? "red" : ""} />
-        <span
-          className={`pl-3 ${
-            active === 3 ? "text-[red]" : ""
-          } 800px:block hidden`}
-        >
-          Inbox
-        </span>
+      <div>
+        {user.role == "user" ? (
+          <div
+            className="flex items-center cursor-pointer w-full mb-8"
+            onClick={() => setActive(2)}
+          >
+            <HiOutlineShoppingBag size={20} color={active === 2 ? "red" : ""} />
+            <span
+              className={`pl-3 ${
+                active === 2 ? "text-[red]" : ""
+              } 800px:block hidden`}
+            >
+              Orders
+            </span>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
       <div
         className="flex items-center cursor-pointer w-full mb-8"
@@ -90,18 +80,24 @@ const ProfileSideBar = ({ setActive, active }) => {
           Change Password
         </span>
       </div>
-      <div
-        className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(5)}
-      >
-        <RiTeamLine size={20} color={active === 5 ? "red" : ""} />
-        <span
-          className={`pl-3 ${
-            active === 5 ? "text-[red]" : ""
-          } 800px:block hidden`}
-        >
-          Company Details{" "}
-        </span>
+      <div>
+        {user.role == "user" ? (
+          <div
+            className="flex items-center cursor-pointer w-full mb-8"
+            onClick={() => setActive(5)}
+          >
+            <RiTeamLine size={20} color={active === 5 ? "red" : ""} />
+            <span
+              className={`pl-3 ${
+                active === 5 ? "text-[red]" : ""
+              } 800px:block hidden`}
+            >
+              Company Details{" "}
+            </span>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
       {user.role == "admin" ? (
         <div

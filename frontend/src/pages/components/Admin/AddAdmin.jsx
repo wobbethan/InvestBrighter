@@ -3,8 +3,7 @@ import { FaCirclePlus } from "react-icons/fa6";
 import { backend_url, server } from "../../../Server";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
-import Loader from "../../../components/Layout/Loader";
-
+import styles from "../../../styles/styles";
 const AddAdmin = () => {
   const [admins, setAdmins] = useState([]);
   const [open, setOpen] = useState(false);
@@ -94,6 +93,8 @@ const AddAdmin = () => {
 };
 
 const AdminCard = ({ admin }) => {
+  const [openConfirm, setOpenConfirm] = useState(false);
+
   const removeAdmin = async (id) => {
     await axios
       .put(`${server}/user/remove-admin/${id}`, { withCredentials: true })
@@ -114,10 +115,36 @@ const AdminCard = ({ admin }) => {
       <div className="text-2xl text-bold">{admin.name}</div>
       <div
         className="text-lg text-bold italic text-slate-400 cursor-pointer"
-        onClick={() => removeAdmin(admin._id)}
+        onClick={() => setOpenConfirm(true)}
       >
         remove
       </div>
+      {openConfirm && (
+        <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
+          <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">
+            <div className="w-full flex justify-end cursor-pointer">
+              <RxCross1 size={25} onClick={() => setOpenConfirm(false)} />
+            </div>
+            <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb]">
+              Are you sure you want to remove this admin?
+            </h3>
+            <div className="w-full flex items-center justify-center">
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] mr-4`}
+                onClick={() => setOpenConfirm(false)}
+              >
+                cancel
+              </div>
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] ml-4`}
+                onClick={() => setOpenConfirm(false) || removeAdmin(admin._id)}
+              >
+                confirm
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -36,6 +36,8 @@ import {
   ManageSectionPage,
   ShopAllOrders,
   AdminAllOrdersPage,
+  AdminAllCompaniesPage,
+  AdminAllUsersPage,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -201,6 +203,22 @@ function App() {
           element={
             <ProtectedAdminRoute>
               <AdminAllOrdersPage></AdminAllOrdersPage>
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/admin-companies"
+          element={
+            <ProtectedAdminRoute>
+              <AdminAllCompaniesPage></AdminAllCompaniesPage>
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/admin-users"
+          element={
+            <ProtectedAdminRoute>
+              <AdminAllUsersPage></AdminAllUsersPage>
             </ProtectedAdminRoute>
           }
         />

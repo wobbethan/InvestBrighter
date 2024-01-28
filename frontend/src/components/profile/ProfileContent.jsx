@@ -162,15 +162,20 @@ const ProfileContent = ({ active }) => {
                 </div>
               </div>
               <div className="w-full 800px:flex block pb-3">
-                <div className="w-full 800px:w-[50%]">
-                  <label className="block pb-2">Class Section</label>
-                  <input
-                    type="number"
-                    className={`${styles.input} !w-[95%] 800px:mb-0 mb-2`}
-                    value={section}
-                    onChange={(e) => setSection(e.target.value)}
-                  />
-                </div>
+                {user.role == "user" ? (
+                  <div className="w-full 800px:w-[50%]">
+                    <label className="block pb-2">Class Section</label>
+                    <input
+                      type="number"
+                      className={`${styles.input} !w-[95%] 800px:mb-0 mb-2`}
+                      value={section}
+                      onChange={(e) => setSection(e.target.value)}
+                    />
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+
                 <div className="w-full 800px:w-[50%]">
                   <label className="block pb-2">Enter Password to Update</label>
                   <input

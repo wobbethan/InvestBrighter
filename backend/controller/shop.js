@@ -247,9 +247,14 @@ router.get(
         return next(new ErrorHandler("Shop doesn't exist", 400));
       }
 
+      const userEmail = shop.teamMembers[req.params.index].email;
+
+      const user = User.find({ email: userEmail });
+      user.companyId = "Not Assigned";
       shop.teamMembers.splice(req.params.index, 1);
 
       await shop.save();
+      await user.save();
 
       res.status(200).json({
         success: true,
@@ -273,6 +278,51 @@ router.get(
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// all sellers --- for admin
+router.get(
+  "/admin-all-sellers",
+
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const sellers = await Shop.find().sort({
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        sellers,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// delete seller ---admin
+router.delete(
+  "/delete-seller/:id",
+
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const seller = await Shop.findById(req.params.id);
+
+      if (!seller) {
+        return next(
+          new ErrorHandler("Seller is not available with this id", 400)
+        );
+      }
+
+      await Shop.findByIdAndDelete(req.params.id);
+
+      res.status(201).json({
+        success: true,
+        message: "Company deleted successfully!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
