@@ -34,6 +34,8 @@ import {
   AdminPage,
   AddAdminPage,
   ManageSectionPage,
+  ShopAllOrders,
+  AdminAllOrdersPage,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -138,6 +140,14 @@ function App() {
             </SellerProtectedRoute>
           }
         />
+        <Route
+          path="/dashboard-orders"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllOrders />
+            </SellerProtectedRoute>
+          }
+        />
         <Route path="/product/:id" Component={ProductDetailsPage} />
         <Route path="/best-selling" Component={BestSellingPage} />
         <Route path="/events" Component={EventsPage} />
@@ -183,6 +193,14 @@ function App() {
           element={
             <ProtectedAdminRoute>
               <ManageSectionPage></ManageSectionPage>
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/admin-orders"
+          element={
+            <ProtectedAdminRoute>
+              <AdminAllOrdersPage></AdminAllOrdersPage>
             </ProtectedAdminRoute>
           }
         />

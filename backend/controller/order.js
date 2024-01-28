@@ -73,7 +73,7 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const orders = await Order.find({
-        "cart.shopId": req.params.shopId,
+        "company.shop._id": req.params.shopId,
       }).sort({
         createdAt: -1,
       });
@@ -92,11 +92,9 @@ router.get(
 router.get(
   "/admin-all-orders",
   isAuthenticated,
-  isAdmin("Admin"),
   catchAsyncErrors(async (req, res, next) => {
     try {
       const orders = await Order.find().sort({
-        deliveredAt: -1,
         createdAt: -1,
       });
       res.status(201).json({

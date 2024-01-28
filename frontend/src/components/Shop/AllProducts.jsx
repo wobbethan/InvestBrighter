@@ -99,7 +99,7 @@ const AllProducts = () => {
         name: item.name,
         price: "$" + item.discountPrice,
         stock: item.stock,
-        sold: 10,
+        sold: item.sold,
       });
     });
 

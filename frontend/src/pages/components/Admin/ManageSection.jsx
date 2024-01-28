@@ -25,7 +25,6 @@ const ManageSection = () => {
       setCurrentSection(sections[0]);
     };
     getSections();
-    console.log(sections);
   }, []);
 
   const handleUpdateSubmit = async () => {
