@@ -1,7 +1,15 @@
 import React, { useEffect } from "react";
 import AdminHeader from "../components/Layout/AdminHeader";
 import AdminSideBar from "../components/Admin/Layout/AdminSideBar";
-import { DataGrid, GridToolbar } from "@material-ui/data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarExport,
+  GridToolbarFilterButton,
+} from "@material-ui/data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfAdmin } from "../../redux/actions/order";
 
@@ -17,8 +25,6 @@ const AdminAllOrdersPage = () => {
   }, []);
 
   const columns = [
-    { field: "id", headerName: "Investment ID", minWidth: 150, flex: 0.7 },
-
     {
       field: "section",
       headerName: "Section",
@@ -30,6 +36,14 @@ const AdminAllOrdersPage = () => {
     {
       field: "investor",
       headerName: "Investor",
+      type: "string",
+      minWidth: 130,
+      flex: 0.7,
+    },
+
+    {
+      field: "company",
+      headerName: "Company",
       type: "string",
       minWidth: 130,
       flex: 0.7,
@@ -50,6 +64,13 @@ const AdminAllOrdersPage = () => {
       minWidth: 130,
       flex: 0.8,
     },
+    {
+      field: "createdAt",
+      headerName: "Order Date",
+      type: "number",
+      minWidth: 130,
+      flex: 0.8,
+    },
   ];
 
   const row = [];
@@ -59,8 +80,10 @@ const AdminAllOrdersPage = () => {
         id: item._id,
         section: item.user.section,
         investor: item.user.name,
+        company: item.company.shop.name,
         itemsQty: item.quantity,
         total: "$" + item.totalPrice.toLocaleString(),
+        createdAt: item?.createdAt.slice(0, 10),
       });
     });
   return (
@@ -80,9 +103,7 @@ const AdminAllOrdersPage = () => {
                 pageSizeOptions={[10, 20, 50]}
                 disableSelectionOnClick
                 autoHeight
-                slots={{
-                  toolbar: GridToolbar,
-                }}
+                components={{ Toolbar: GridToolbar }}
               />
             </div>
           </div>

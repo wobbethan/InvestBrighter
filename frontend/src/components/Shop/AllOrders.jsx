@@ -1,5 +1,5 @@
 import { Button } from "@material-ui/core";
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid, GridToolbar } from "@material-ui/data-grid";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -44,6 +44,14 @@ const AllOrders = () => {
     },
 
     {
+      field: "createdAt",
+      headerName: "Order Date",
+      type: "number",
+      minWidth: 130,
+      flex: 0.8,
+    },
+
+    {
       field: " ",
       flex: 1,
       minWidth: 150,
@@ -73,6 +81,7 @@ const AllOrders = () => {
         investor: item.user.name,
         itemsQty: item.quantity,
         total: "$" + item.totalPrice.toLocaleString(),
+        createdAt: item?.createdAt.slice(0, 10),
       });
     });
 
@@ -85,9 +94,10 @@ const AllOrders = () => {
           <DataGrid
             rows={row}
             columns={columns}
-            pageSize={10}
+            pageSizeOptions={[10, 20, 50]}
             disableSelectionOnClick
             autoHeight
+            components={{ Toolbar: GridToolbar }}
           />
         </div>
       )}

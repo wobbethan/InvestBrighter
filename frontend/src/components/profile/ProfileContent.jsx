@@ -8,13 +8,14 @@ import {
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid, GridToolbar } from "@material-ui/data-grid";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import styles from "../../styles/styles";
 import { updateUserInformation } from "../../redux/actions/user";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { getAllMembersShop } from "../../redux/actions/seller";
+import { getAllOrdersOfUser } from "../../redux/actions/order";
 
 const ProfileContent = ({ active }) => {
   const { user, error } = useSelector((state) => state.user);
@@ -228,43 +229,40 @@ const ProfileContent = ({ active }) => {
 };
 
 const AllOrders = () => {
-  const orders = [
-    {
-      _id: "8u9asd89uasdasdasdjlkj",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 120,
-      orderStatus: "Processing",
-    },
-  ];
-  const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+  const { user } = useSelector((state) => state.user);
+  const { orders } = useSelector((state) => state.order);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id));
+  }, []);
+
+  const columns = [
     {
-      field: "status",
-      headerName: "Status",
+      field: "company",
+      headerName: "Company",
+      type: "string",
       minWidth: 130,
       flex: 0.7,
-      cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
-          ? "greenColor"
-          : "redColor";
-      },
     },
+
     {
-      field: "itemsQty",
-      headerName: "Items Qty",
+      field: "quantity",
+      headerName: "Quantity",
       type: "number",
       minWidth: 130,
-      flex: 0.7,
+      flex: 0.8,
     },
-
     {
       field: "total",
       headerName: "Total",
+      type: "number",
+      minWidth: 130,
+      flex: 0.8,
+    },
+    {
+      field: "createdAt",
+      headerName: "Order Date",
       type: "number",
       minWidth: 130,
       flex: 0.8,
@@ -296,10 +294,11 @@ const AllOrders = () => {
   orders &&
     orders.forEach((item) => {
       row.push({
-        id: item._id,
-        itemsQty: item.orderItems.length,
-        total: "$" + item.totalPrice,
-        status: item.orderStatus,
+        id: item?._id,
+        company: item?.company.shop.name,
+        quantity: item?.quantity,
+        total: "$" + item?.totalPrice.toLocaleString(),
+        createdAt: item?.createdAt.slice(0, 10),
       });
     });
 
@@ -308,9 +307,10 @@ const AllOrders = () => {
       <DataGrid
         rows={row}
         columns={columns}
-        pageSize={10}
+        pageSizeOptions={[10, 20, 50]}
         disableSelectionOnClick
         autoHeight
+        components={{ Toolbar: GridToolbar }}
       />
     </div>
   );

@@ -30,7 +30,6 @@ router.post(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const sectionData = await Section.find({ name: req.params.name });
-      console.log(sectionData);
 
       if (!sectionData[0]) {
         return next(new ErrorHandler("Section does not exist", 400));

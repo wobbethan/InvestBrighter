@@ -97,7 +97,6 @@ router.get(
       const orders = await Order.find().sort({
         createdAt: -1,
       });
-      console.log(orders);
       res.status(201).json({
         success: true,
         orders,
