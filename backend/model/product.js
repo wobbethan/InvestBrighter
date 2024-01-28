@@ -30,6 +30,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  eventId: {
+    type: String,
+    required: true,
+  },
   shop: {
     type: Object,
     required: true,

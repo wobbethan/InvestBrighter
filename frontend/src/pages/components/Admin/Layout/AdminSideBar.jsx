@@ -63,7 +63,10 @@ const AdminSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/admin/admin-events" className="w-full flex items-center">
+        <Link
+          to="/admin/investment-rounds"
+          className="w-full flex items-center"
+        >
           <MdOutlineLocalOffer
             size={30}
             color={`${active === 6 ? "crimson" : "#555"}`}
@@ -73,7 +76,7 @@ const AdminSideBar = ({ active }) => {
               active === 6 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            All Events
+            Create Round
           </h5>
         </Link>
       </div>

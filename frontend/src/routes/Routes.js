@@ -29,7 +29,7 @@ import ShopAllOrders from "../pages/Shop/ShopAllOrders.jsx";
 import AdminAllOrdersPage from "../pages/admin/AdminAllOrdersPage.jsx";
 import AdminAllCompaniesPage from "../pages/admin/AdminAllCompaniesPage.jsx";
 import AdminAllUsersPage from "../pages/admin/AdminAllUsersPage.jsx";
-
+import AdminInvestmentRoundPage from "../pages/admin/AdminInvestmentRoundPage.jsx";
 export {
   LoginPage,
   SignupPage,
@@ -62,4 +62,5 @@ export {
   AdminAllOrdersPage,
   AdminAllUsersPage,
   AdminAllCompaniesPage,
+  AdminInvestmentRoundPage,
 };

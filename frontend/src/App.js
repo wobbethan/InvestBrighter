@@ -38,6 +38,7 @@ import {
   AdminAllOrdersPage,
   AdminAllCompaniesPage,
   AdminAllUsersPage,
+  AdminInvestmentRoundPage,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -219,6 +220,15 @@ function App() {
           element={
             <ProtectedAdminRoute>
               <AdminAllUsersPage></AdminAllUsersPage>
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/investment-rounds"
+          element={
+            <ProtectedAdminRoute>
+              <AdminInvestmentRoundPage></AdminInvestmentRoundPage>
             </ProtectedAdminRoute>
           }
         />
