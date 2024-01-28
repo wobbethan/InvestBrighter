@@ -102,7 +102,7 @@ const ProfileSideBar = ({ setActive, active }) => {
       {user.role == "admin" ? (
         <div
           className="flex items-center cursor-pointer w-full mb-8"
-          onClick={() => navigate("/admin")}
+          onClick={() => navigate("/admin/admin-orders")}
         >
           <GrUserAdmin size={20} color={active === 8 ? "red" : ""} />
           <span

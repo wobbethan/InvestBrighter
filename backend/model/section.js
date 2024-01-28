@@ -8,11 +8,20 @@ const sectionSchema = new mongoose.Schema({
     unique: true,
   },
   admin: {
-    type: String,
+    id: {
+      type: String,
+    },
+    name: {
+      type: String,
+    },
   },
   numStudents: {
     type: Number,
     default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
   },
 });
 

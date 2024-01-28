@@ -10,6 +10,7 @@ const sendMail = require("../utils/sendMail");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
 const { isAuthenticated } = require("../middleware/auth");
+const Section = require("../model/section");
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
@@ -83,6 +84,12 @@ router.post(
       if (user) {
         return next(new ErrorHandler("User already exists", 400));
       }
+
+      const userSection = await Section.find({ name: newUser.section });
+      userSection[0].numStudents += 1;
+
+      await userSection[0].save();
+
       user = await User.create({
         name,
         email,
@@ -90,11 +97,6 @@ router.post(
         password,
         section,
       });
-
-      const userSection = await section.find({ name: section });
-      userSection.numStudents += 1;
-
-      await userSection.save();
 
       sendToken(user, 201, res, "token");
     } catch (error) {
@@ -289,6 +291,7 @@ router.put(
       const user = await User.find({ email: req.params.email });
 
       user[0].role = "admin";
+      user[0].section = "Admin";
       user[0].accountBalance = 1000000000;
       await user[0].save();
 
@@ -311,7 +314,7 @@ router.put(
 
       user.role = "user";
       user.accountBalance = 0;
-
+      user.section = "Not Assigned";
       await user.save();
 
       res.status(200).json({
@@ -358,8 +361,6 @@ router.delete(
       }
 
       const imageId = user.avatar.public_id;
-
-      await cloudinary.v2.uploader.destroy(imageId);
 
       await User.findByIdAndDelete(req.params.id);
 

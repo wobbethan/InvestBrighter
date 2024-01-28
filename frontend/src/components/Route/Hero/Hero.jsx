@@ -1,26 +1,19 @@
 import React from "react";
 import styles from "../../../styles/styles";
-import { Link } from "react-router-dom";
+import { backend_url } from "../../../Server";
+import vid from "../../../assets/bgvideo.mp4";
 function Hero() {
   return (
     <div
-      className={`relative min-h-[70vh] 800px:min-h-[80vh] w-full bg-no-repeat ${styles.normalFlex}`}
-      style={{
-        backgroundImage:
-          "url(https://themes.rslahmed.dev/rafcart/assets/images/banner-2.jpg)",
-      }}
+      className={`relative min-h-[70vh] 800px:min-h-[90vh] w-full bg-no-repeat ${styles.normalFlex}`}
     >
-      <div className={`${styles.section} w-[90%] 800px:w-[60%]`}>
-        <h1 className="text-[35px] leading-[1.2] 800px:text-[60px] text-[#3d3a3a] font-[600] capitalize">
-          Best Collection for <br></br> home Decoration
-        </h1>
-        <p className="pt-5 text-[16px] font-[Poppins] font-[400] text-[#000000ba]">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae,
-          assumenda? Quisquam itaque <br /> exercitationem labore vel, dolore
-          quidem asperiores, laudantium temporibus soluta optio consequatur{" "}
-          <br /> aliquam deserunt officia. Dolorum saepe nulla provident.
-        </p>
-      </div>
+      {/* <video
+        src={vid}
+        loop
+        autoPlay
+        muted
+        className="w-full h-full object-cover"
+      ></video> */}
     </div>
   );
 }

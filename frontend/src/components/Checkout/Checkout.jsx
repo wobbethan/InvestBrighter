@@ -18,7 +18,6 @@ const Payment = () => {
   useEffect(() => {
     const orderData = JSON.parse(localStorage.getItem("latestOrder"));
     setOrderData(orderData);
-    console.log(cart);
   }, []);
 
   const totalPrice = cart.reduce(

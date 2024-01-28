@@ -112,7 +112,7 @@ const AdminAllCompanies = () => {
           <DataGrid
             rows={row}
             columns={columns}
-            pageSize={10}
+            pageSizeOptions={[10, 20, 50]}
             disableSelectionOnClick
             autoHeight
             components={{ Toolbar: GridToolbar }}

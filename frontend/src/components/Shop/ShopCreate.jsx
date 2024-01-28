@@ -32,7 +32,6 @@ function ShopCreate() {
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
     setAvatar(file);
-    console.log("Avatar uploaded");
   };
 
   const handleSubmit = async (e) => {

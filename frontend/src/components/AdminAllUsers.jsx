@@ -32,8 +32,12 @@ const AdminAllUsers = () => {
   };
 
   const columns = [
-    { field: "id", headerName: "User ID", minWidth: 150, flex: 0.7 },
-
+    {
+      field: "section",
+      headerName: "Section",
+      minWidth: 130,
+      flex: 0.7,
+    },
     {
       field: "name",
       headerName: "name",
@@ -57,7 +61,7 @@ const AdminAllUsers = () => {
 
     {
       field: "joinedAt",
-      headerName: "joinedAt",
+      headerName: "Created on",
       type: "text",
       minWidth: 130,
       flex: 0.8,
@@ -73,7 +77,7 @@ const AdminAllUsers = () => {
       renderCell: (params) => {
         return (
           <>
-            <Button onClick={() => setUserId(params.id) || setOpen(true)}>
+            <Button onClick={() => setUserId(params.row.id) || setOpen(true)}>
               <AiOutlineDelete size={20} />
             </Button>
           </>
@@ -86,11 +90,12 @@ const AdminAllUsers = () => {
   users &&
     users.forEach((item) => {
       row.push({
-        id: item._id,
-        name: item.name,
-        email: item.email,
-        role: item.role,
-        joinedAt: item.createdAt.slice(0, 10),
+        section: item?.section,
+        id: item?._id,
+        name: item?.name,
+        email: item?.email,
+        role: item?.role.charAt(0).toUpperCase() + item?.role.slice(1),
+        joinedAt: item?.createdAt.slice(0, 10),
       });
     });
 
@@ -102,7 +107,7 @@ const AdminAllUsers = () => {
           <DataGrid
             rows={row}
             columns={columns}
-            pageSize={10}
+            pageSizeOptions={[10, 20, 50]}
             disableSelectionOnClick
             autoHeight
             components={{ Toolbar: GridToolbar }}

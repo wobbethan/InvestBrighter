@@ -5,7 +5,7 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const Section = require("../model/section");
 
 router.post(
-  "/create-section/:name",
+  "/create-section/:name/:id/:adminName",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const section = await Section.find({ name: req.params.name });
@@ -14,6 +14,8 @@ router.post(
       }
       const newSection = await Section.create({
         name: req.params.name,
+        numStudents: 0,
+        admin: { id: req.params.id, name: req.params.adminName },
       });
       res.status(200).json({
         success: true,
@@ -67,12 +69,30 @@ router.get(
   })
 );
 
+//get all sections
 router.get(
   "/get-sections",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const sections = await Section.find().sort({ createdAt: -1 });
+      const sections = await Section.find().sort({
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        sections,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
 
+//get section for specific admin
+router.get(
+  "/get-sections/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const sections = await Section.find({ "admin.id": req.params.id });
       res.status(201).json({
         success: true,
         sections,

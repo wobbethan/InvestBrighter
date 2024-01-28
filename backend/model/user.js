@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     default: 0,
   },
   section: {
-    type: Number,
+    type: String,
     required: true,
   },
   role: {
