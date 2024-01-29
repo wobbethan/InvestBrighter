@@ -13,7 +13,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/data-grid": "^4.0.0-alpha.37",
-    "axios": "^1.5.0",
+    "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",

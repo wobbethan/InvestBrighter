@@ -19,11 +19,11 @@ const EventCard = ({ active, data }) => {
         <div className="flex py-2 justify-between">
           <div className="flex">
             <h5 className="font-bold text-[20px] text-[#333] pr-3 font-Roboto">
-              ${data?.discountPrice.toLocaleString()}
+              ${data?.checkPrice.toLocaleString()}
             </h5>
           </div>
           <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
-            3 Investment Checks
+            {data?.numChecks} Investment Checks
           </span>
         </div>
         <CountDown data={data} />

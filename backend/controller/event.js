@@ -4,9 +4,11 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
 const User = require("../model/user");
+const Shop = require("../model/shop");
 const Event = require("../model/event");
 const { isSeller } = require("../middleware/auth");
 const fs = require("fs");
+const axios = require("axios");
 
 //create event
 router.post(
@@ -44,23 +46,48 @@ router.post(
   upload.array("images"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const userID = req.body.adminId;
-      const user = await User.findById(userID);
-      if (user.role !== "admin") {
-        return next(new ErrorHandler("User is not an admin", 400));
-      } else {
-        const files = req.files;
-        const imageUrls = files.map((file) => `${file.filename}`);
+      //For each section
+      req.body.sections.forEach(async (i) => {
+        //Get users within section
+        const users = await User.find({ section: i });
 
-        const eventData = req.body;
-        eventData.images = imageUrls;
-        const event = await Event.create(eventData);
-
-        res.status(201).json({
-          success: true,
-          event,
+        //Update account balances
+        users.forEach(async (user) => {
+          const userObj = await User.findById(user._id);
+          userObj.accountBalance = req.body.numChecks * req.body.checkPrice;
+          userObj.save();
         });
-      }
+
+        //Get companies in section
+        const companies = await Shop.find({ section: i });
+        companies.forEach(async (company) => {
+          const companyObj = await Shop.findById(company._id);
+
+          //Create product using company + event info
+          const config = { headers: { "Content-Type": "multipart/form-data" } };
+          const newForm = new FormData();
+
+          newForm.append("images", companyObj.avatar);
+          newForm.append("name", companyObj.name + " - " + req.body.name);
+          newForm.append("description", companyObj.description);
+          newForm.append("section", companyObj.section);
+          newForm.append("price", req.body.checkPrice);
+          newForm.append("stock", req.body.maxInvestmentsRound);
+          newForm.append("eventID", req.body.name);
+          newForm.append("shopId", companyObj._id);
+          newForm.append("shop", companyObj);
+
+          await axios
+            .post(
+              `http://localhost:8000/api/v2/product/create-product`,
+              newForm,
+              config
+            )
+            .catch((err) => console.log(err));
+
+          // companyObj.save();
+        });
+      });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
     }

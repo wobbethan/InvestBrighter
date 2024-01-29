@@ -24,7 +24,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(false);
   const dispatch = useDispatch();
-  const handleMessageSubmit = () => {};
 
   useEffect(() => {
     if (wishlist && wishlist.find((i) => i._id === data._id)) {
@@ -102,14 +101,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                     </div>
                   </Link>
                 </div>
-                <div
-                  className={`${styles.button} bg-[#000] mt-4 rounded-[4px] h-11`}
-                  // onClick={handleMessageSubmit}
-                >
-                  <span className="text-[#fff] flex items-center">
-                    Send Message <AiOutlineMessage className="ml-1" />
-                  </span>
-                </div>
+
                 <h5 className="text-[16px] text-[red] mt-5">(50) Sold out</h5>
               </div>
 
@@ -121,7 +113,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
 
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    ${data.discountPrice.toLocaleString()}
+                    ${data.price?.toLocaleString()}
                   </h4>
                 </div>
                 <div className="flex items-center mt-12 justify-between pr-3">

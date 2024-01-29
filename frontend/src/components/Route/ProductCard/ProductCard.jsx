@@ -99,10 +99,7 @@ function ProductCard({ data, isEvent }) {
           <div className="py-2 flex items-center justify-between">
             <div className="flex">
               <h5 className={`${styles.productDiscountPrice}`}>
-                $
-                {data.originalPrice === 0
-                  ? data.originalPrice.toLocaleString()
-                  : data.discountPrice.toLocaleString()}
+                ${data.price.toLocaleString()}
               </h5>
             </div>
             <span className="font-[400] text-[17px] text-[#6AD284]">
