@@ -47,7 +47,8 @@ router.post(
   catchAsyncErrors(async (req, res, next) => {
     try {
       //For each section
-      req.body.sections.forEach(async (i) => {
+      sections = req.body.sections.slice(1);
+      sections.forEach(async (i) => {
         //Get users within section
         const users = await User.find({ section: i });
 
@@ -127,7 +128,6 @@ router.get(
 
 router.delete(
   "/delete-shop-event/:id",
-  isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
       const eventId = req.params.id;
@@ -155,6 +155,22 @@ router.delete(
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// all events by admin
+router.get(
+  "/admin-all-events/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const events = await Event.find({ adminId: req.params.id });
+      res.status(201).json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );

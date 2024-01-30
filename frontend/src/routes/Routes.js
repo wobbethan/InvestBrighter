@@ -30,6 +30,8 @@ import AdminAllOrdersPage from "../pages/admin/AdminAllOrdersPage.jsx";
 import AdminAllCompaniesPage from "../pages/admin/AdminAllCompaniesPage.jsx";
 import AdminAllUsersPage from "../pages/admin/AdminAllUsersPage.jsx";
 import AdminInvestmentRoundPage from "../pages/admin/AdminInvestmentRoundPage.jsx";
+import AdminManageRoundPage from "../pages/admin/AdminManageRoundPage.jsx";
+
 export {
   LoginPage,
   SignupPage,
@@ -63,4 +65,5 @@ export {
   AdminAllUsersPage,
   AdminAllCompaniesPage,
   AdminInvestmentRoundPage,
+  AdminManageRoundPage,
 };

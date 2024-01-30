@@ -20,10 +20,7 @@ const Payment = () => {
     setOrderData(orderData);
   }, []);
 
-  const totalPrice = cart.reduce(
-    (acc, item) => acc + item.qty * item.discountPrice,
-    0
-  );
+  const totalPrice = cart.reduce((acc, item) => acc + item.qty * item.price, 0);
 
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
@@ -37,7 +34,7 @@ const Payment = () => {
       let order = {
         company: item,
         user: user && user,
-        totalPrice: item.qty * item.discountPrice,
+        totalPrice: item.qty * item.price,
         quantity: item.qty,
       };
 

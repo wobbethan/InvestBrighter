@@ -6,9 +6,10 @@ import { CiMoneyBill, CiSettings } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { BsHandbag } from "react-icons/bs";
-import { MdOutlineLocalOffer } from "react-icons/md";
+import { MdManageHistory, MdOutlineLocalOffer } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
 import { GrUserAdmin, GrGroup } from "react-icons/gr";
+import { FaCalendarPlus, FaChartBar } from "react-icons/fa";
 const AdminSideBar = ({ active }) => {
   return (
     <div className="w-full h-[90vh] bg-white shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
@@ -16,7 +17,7 @@ const AdminSideBar = ({ active }) => {
 
       <div className="w-full flex items-center p-4">
         <Link to="/admin/admin-orders" className="w-full flex items-center">
-          <FiShoppingBag
+          <FaChartBar
             size={30}
             color={`${active === 2 ? "crimson" : "#555"}`}
           />
@@ -67,7 +68,7 @@ const AdminSideBar = ({ active }) => {
           to="/admin/investment-rounds"
           className="w-full flex items-center"
         >
-          <MdOutlineLocalOffer
+          <FaCalendarPlus
             size={30}
             color={`${active === 6 ? "crimson" : "#555"}`}
           />
@@ -77,6 +78,22 @@ const AdminSideBar = ({ active }) => {
             }`}
           >
             Create Round
+          </h5>
+        </Link>
+      </div>
+
+      <div className="w-full flex items-center p-4">
+        <Link to="/admin/manage-rounds" className="w-full flex items-center">
+          <MdManageHistory
+            size={30}
+            color={`${active === 10 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 10 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Manage Rounds
           </h5>
         </Link>
       </div>

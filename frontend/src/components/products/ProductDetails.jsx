@@ -107,11 +107,11 @@ const ProductDetails = ({ data }) => {
                 </div>
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
-                <h1 className={`${styles.productTitle}`}>{data.name}</h1>
-                <p>{data.description}</p>
+                <h1 className={`${styles.productTitle}`}>{data?.name}</h1>
+                <p>{data?.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    ${data.discountPrice.toLocaleString()}
+                    ${data?.price.toLocaleString()}
                   </h4>
                 </div>
                 <div className="flex items-center mt-12 justify-between pr-3">
@@ -259,10 +259,6 @@ const ProductDetailsInfo = ({ data, products }) => {
               />
               <div className="pl-3">
                 <h3 className={`${styles.shop_name}`}> {data.shop.name}</h3>
-                <h5 className="pb-2 text-[15px]">
-                  {" "}
-                  ({data.shop.ratings}) Ratings
-                </h5>
               </div>
             </div>
             <p className="pt-2">{data.shop.description}</p>
@@ -281,9 +277,7 @@ const ProductDetailsInfo = ({ data, products }) => {
                   {products && products.length}
                 </span>
               </h5>
-              <h5 className="font-[600] pt-3">
-                Total Reviews: <span className="font-[500]">432</span>
-              </h5>
+
               <Link to={`/shop/preview/${data?.shop._id}`}>
                 <div
                   className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}

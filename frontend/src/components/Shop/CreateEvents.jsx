@@ -19,7 +19,7 @@ const CreateEvents = () => {
   const [images, setImages] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [sections, setSections] = useState([]);
+  const [sections, setSections] = useState(["forceArray"]);
   const [priceCheck, setPriceCheck] = useState(20000);
   const [numChecks, setNumChecks] = useState(3);
   const [startDate, setStartDate] = useState(null);
@@ -81,24 +81,30 @@ const CreateEvents = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newForm = new FormData();
-    images.forEach((image) => {
-      newForm.append("images", image);
-    });
-    sections.forEach((section) => {
-      newForm.append("sections", section);
-    });
-    newForm.append("adminId", user._id);
-    newForm.append("name", name);
-    newForm.append("description", description);
-    newForm.append("maxInvestmentsCompany", investCompany);
-    newForm.append("maxInvestmentsRound", investRound);
-    newForm.append("numChecks", numChecks);
-    newForm.append("checkPrice", priceCheck);
-    newForm.append("start_Date", startDate.toISOString());
-    newForm.append("finish_Date", endDate.toISOString());
+    if (sections.length !== 0) {
+      const newForm = new FormData();
+      images.forEach((image) => {
+        newForm.append("images", image);
+      });
+      sections.forEach((section) => {
+        newForm.append("sections", section);
+      });
+      newForm.append("adminId", user._id);
+      newForm.append("name", name);
+      newForm.append("description", description);
+      newForm.append("maxInvestmentsCompany", investCompany);
+      newForm.append("maxInvestmentsRound", investRound);
+      newForm.append("numChecks", numChecks);
+      newForm.append("checkPrice", priceCheck);
+      newForm.append("start_Date", startDate.toISOString());
+      newForm.append("finish_Date", endDate.toISOString());
 
-    dispatch(createEvent(newForm));
+      dispatch(createEvent(newForm));
+      // toast.success("New event created!");
+      // window.location.reload();
+    } else {
+      toast.error("Please select a section");
+    }
   };
   return (
     <div className="800px:w-[50%] w-[90%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
