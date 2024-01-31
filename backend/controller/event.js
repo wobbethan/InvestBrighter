@@ -27,6 +27,11 @@ router.post(
         const eventData = req.body;
         eventData.images = imageUrls;
         const event = await Event.create(eventData);
+        //create product
+        await axios.post(
+          `http://localhost:8000/api/v2/event/create-event-products/${event._id}`,
+          eventData
+        );
 
         res.status(201).json({
           success: true,
@@ -42,7 +47,7 @@ router.post(
 //Creating all products within round and giving balance to users
 
 router.post(
-  "/create-event-products",
+  "/create-event-products/:id",
   upload.array("images"),
   catchAsyncErrors(async (req, res, next) => {
     try {
@@ -51,24 +56,32 @@ router.post(
       sections.forEach(async (i) => {
         //Get users within section
         const users = await User.find({ section: i });
-
         //Update account balances
         users.forEach(async (user) => {
           const userObj = await User.findById(user._id);
           userObj.accountBalance = req.body.numChecks * req.body.checkPrice;
           userObj.save();
         });
-
         //Get companies in section
         const companies = await Shop.find({ section: i });
+
         companies.forEach(async (company) => {
           const companyObj = await Shop.findById(company._id);
-
           //Create product using company + event info
           const config = { headers: { "Content-Type": "multipart/form-data" } };
           const newForm = new FormData();
+          //images
 
-          newForm.append("images", companyObj.avatar);
+          let files = [companyObj.avatar, ...req.body.images];
+
+          // Remove new line characters and trim each file name
+          const sanitizedFiles = files.map((file) => file.trim());
+
+          //form
+          sanitizedFiles.forEach((image) => {
+            newForm.append("images", image);
+          });
+          newForm.append("eventId", req.params.id);
           newForm.append("name", companyObj.name + " - " + req.body.name);
           newForm.append("description", companyObj.description);
           newForm.append("section", companyObj.section);
@@ -77,7 +90,6 @@ router.post(
           newForm.append("eventID", req.body.name);
           newForm.append("shopId", companyObj._id);
           newForm.append("shop", companyObj);
-
           await axios
             .post(
               `http://localhost:8000/api/v2/product/create-product`,
@@ -85,8 +97,6 @@ router.post(
               config
             )
             .catch((err) => console.log(err));
-
-          // companyObj.save();
         });
       });
     } catch (error) {

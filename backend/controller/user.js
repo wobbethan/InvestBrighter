@@ -15,7 +15,6 @@ const Section = require("../model/section");
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password, section } = req.body;
-    console.log("create user " + section);
     const userEmail = await User.findOne({ email });
 
     if (userEmail) {
@@ -88,9 +87,7 @@ router.post(
         return next(new ErrorHandler("User already exists", 400));
       }
 
-      console.log("Here " + section);
       const userSection = await Section.find({ name: newUser.section });
-      console.log(userSection[0]);
       userSection[0].numStudents += 1;
 
       await userSection[0].save();

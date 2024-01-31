@@ -110,7 +110,6 @@ const CreateEvents = () => {
     <div className="800px:w-[50%] w-[90%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
       <h5 className="text-[30px] font-Poppins text-center">Create Round</h5>
       {/* Form */}
-      {console.log(sections)}
       <form onSubmit={handleSubmit} aria-required={true}>
         <br />
         <div>
