@@ -92,3 +92,47 @@ export const getAllProducts = () => async (dispatch) => {
     });
   }
 };
+
+// get all products admin
+export const getAllProductsAdmin = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllProductsAdminRequest",
+    });
+
+    const { data } = await axios.get(
+      `${server}/product/get-all-products-admin/${id}`
+    );
+    dispatch({
+      type: "getAllProductsAdminSuccess",
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllProductsAdminFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// get all products of section
+export const getAllProductsSection = (section) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllProductsSectionRequest",
+    });
+
+    const { data } = await axios.get(
+      `${server}/product/get-all-products-section/${section}`
+    );
+    dispatch({
+      type: "getAllProductsSectionSuccess",
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllProductsSectionFailed",
+      payload: error.response.data.message,
+    });
+  }
+};

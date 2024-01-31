@@ -5,6 +5,9 @@ const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Shop = require("../model/shop.js");
+const Section = require("../model/section.js");
+const User = require("../model/user.js");
+
 const { isSeller } = require("../middleware/auth");
 const fs = require("fs");
 
@@ -54,21 +57,22 @@ router.get(
 
 router.delete(
   "/delete-shop-product/:id",
-  isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
       const productId = req.params.id;
       const productData = await Product.findById(productId);
 
-      productData.images.forEach((imageUrl) => {
-        const filename = imageUrl;
-        const filePath = `uploads/${filename}`;
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      });
+      // productData.images.forEach((imageUrl) => {
+      //   const filename = imageUrl;
+      //   const filePath = `uploads/${filename}`;
+      //   try {
+      //     fs.unlink(filePath, (err) => {
+      //       if (err) {
+      //         console.log(err);
+      //       }
+      //     });
+      //   } catch (error) {}
+      // });
 
       const product = await Product.findByIdAndDelete(productId);
 
@@ -91,6 +95,43 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const products = await Product.find().sort({ createdAt: -1 });
+
+      res.status(201).json({
+        success: true,
+        products,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// get all products
+router.get(
+  "/get-all-products-admin/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const adminSections = await Section.find({ "admin.id": req.params.id });
+      const sectionNames = adminSections.map((section) => section.name);
+
+      const products = await Product.find({ section: { $in: sectionNames } });
+
+      res.status(201).json({
+        success: true,
+        products,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// get all products
+router.get(
+  "/get-all-products-section/:section",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const products = await Product.find({ section: req.params.section });
 
       res.status(201).json({
         success: true,

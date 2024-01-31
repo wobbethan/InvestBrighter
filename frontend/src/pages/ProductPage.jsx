@@ -19,7 +19,7 @@ function ProductPage() {
       setData(d);
     } else {
       const d =
-        allProducts && allProducts.filter((i) => i.category === categoryData);
+        allProducts && allProducts.filter((i) => i.section === categoryData);
       setData(d);
     }
   }, [allProducts]);

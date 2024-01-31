@@ -74,11 +74,10 @@ function App() {
           path="/seller/activation/:activation_token"
           Component={SellerActivationPage}
         />
-        <Route path="/products" Component={ProductPage} />
         <Route path="/shop/preview/:id" Component={ShopPreviewPage} />
         {/* Shop Routes */}
-        <Route path="/shop-create" Component={ShopCreatePage} />
-        <Route path="/shop-login" Component={ShopLoginPage} />
+        <Route path="/create-company" Component={ShopCreatePage} />
+        <Route path="/company-login" Component={ShopLoginPage} />
         <Route
           path="/shop/:id"
           element={
@@ -216,6 +215,16 @@ function App() {
             </ProtectedAdminRoute>
           }
         />
+
+        <Route
+          path="/companies"
+          element={
+            <ProtectedAdminRoute>
+              <ProductPage></ProductPage>
+            </ProtectedAdminRoute>
+          }
+        />
+
         <Route
           path="/admin/admin-users"
           element={

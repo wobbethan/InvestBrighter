@@ -100,13 +100,11 @@ function ProductCard({ data, isEvent }) {
           <h4 className="pb-3 font-[500]">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
-          <div className="flex">
-            <Ratings rating={data?.ratings} />
-          </div>
+          <h5 className="text-[16px] text-[red]">{data.stock} remaining</h5>
 
-          <div className="py-2 flex items-center justify-between">
+          <div className="py-2 flex items-center justify-between mt-3">
             <div className="flex">
-              <h5 className={`${styles.productDiscountPrice}`}>
+              <h5 className={`${styles.productDiscountPrice} !text-2xl`}>
                 ${data.price.toLocaleString()}
               </h5>
             </div>

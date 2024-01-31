@@ -130,7 +130,7 @@ function ShopLogin() {
             </div>
             <div className="flex items-center w-full">
               <h4>Need an account?</h4>
-              <Link to="/shop-create" className="text-blue-600 pl-2">
+              <Link to="/create-company" className="text-blue-600 pl-2">
                 Sign-up
               </Link>
             </div>
