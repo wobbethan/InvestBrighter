@@ -27,6 +27,11 @@ import AddAdminPage from "../pages/admin/AddAdminPage.jsx";
 import ManageSectionPage from "../pages/admin/ManageSectionPage.jsx";
 import ShopAllOrders from "../pages/Shop/ShopAllOrders.jsx";
 import AdminAllOrdersPage from "../pages/admin/AdminAllOrdersPage.jsx";
+import AdminAllCompaniesPage from "../pages/admin/AdminAllCompaniesPage.jsx";
+import AdminAllUsersPage from "../pages/admin/AdminAllUsersPage.jsx";
+import AdminInvestmentRoundPage from "../pages/admin/AdminInvestmentRoundPage.jsx";
+import AdminManageRoundPage from "../pages/admin/AdminManageRoundPage.jsx";
+
 export {
   LoginPage,
   SignupPage,
@@ -57,4 +62,8 @@ export {
   ManageSectionPage,
   ShopAllOrders,
   AdminAllOrdersPage,
+  AdminAllUsersPage,
+  AdminAllCompaniesPage,
+  AdminInvestmentRoundPage,
+  AdminManageRoundPage,
 };

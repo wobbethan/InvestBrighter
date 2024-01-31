@@ -46,14 +46,14 @@ export const getAllOrdersOfShop = (shopId) => async (dispatch) => {
   }
 };
 
-// get all orders of Admin
-export const getAllOrdersOfAdmin = () => async (dispatch) => {
+// get all orders for Admin
+export const getAllOrdersOfAdmin = (id) => async (dispatch) => {
   try {
     dispatch({
       type: "adminAllOrdersRequest",
     });
 
-    const { data } = await axios.get(`${server}/order/admin-all-orders`, {
+    const { data } = await axios.get(`${server}/order/admin-all-orders/${id}`, {
       withCredentials: true,
     });
 

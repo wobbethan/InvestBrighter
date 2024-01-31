@@ -11,6 +11,7 @@ const { upload } = require("../multer");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const User = require("../model/user");
+const Section = require("../model/section");
 
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
@@ -247,9 +248,14 @@ router.get(
         return next(new ErrorHandler("Shop doesn't exist", 400));
       }
 
+      const userEmail = shop.teamMembers[req.params.index].email;
+
+      const user = User.find({ email: userEmail });
+      user.companyId = "Not Assigned";
       shop.teamMembers.splice(req.params.index, 1);
 
       await shop.save();
+      await user.save();
 
       res.status(200).json({
         success: true,
@@ -273,6 +279,52 @@ router.get(
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// all sellers --- for admin
+router.get(
+  "/admin-all-sellers/:id",
+
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const adminSections = await Section.find({ "admin.id": req.params.id });
+      const sectionNames = adminSections.map((section) => section.name);
+
+      const sellers = await Shop.find({ section: { $in: sectionNames } });
+      res.status(201).json({
+        success: true,
+        sellers,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// delete seller ---admin
+router.delete(
+  "/delete-seller/:id",
+
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const seller = await Shop.findById(req.params.id);
+
+      if (!seller) {
+        return next(
+          new ErrorHandler("Seller is not available with this id", 400)
+        );
+      }
+
+      await Shop.findByIdAndDelete(req.params.id);
+
+      res.status(201).json({
+        success: true,
+        message: "Company deleted successfully!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );

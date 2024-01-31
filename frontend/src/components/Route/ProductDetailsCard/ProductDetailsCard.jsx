@@ -20,11 +20,12 @@ import {
 const ProductDetailsCard = ({ setOpen, data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
+  const { isAuthenticated } = useSelector((state) => state.user);
+
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(false);
   const dispatch = useDispatch();
-  const handleMessageSubmit = () => {};
 
   useEffect(() => {
     if (wishlist && wishlist.find((i) => i._id === data._id)) {
@@ -44,17 +45,21 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   };
 
   const addToCartHandler = (id) => {
-    const isItemExists = cart && cart.find((i) => i._id === id);
-    if (isItemExists) {
-      toast.error("Item already in cart");
-    } else {
-      if (data.stock < count) {
-        toast.error("Product stock limited");
+    if (isAuthenticated) {
+      const isItemExists = cart && cart.find((i) => i._id === id);
+      if (isItemExists) {
+        toast.error("Item already in cart");
       } else {
-        const cartData = { ...data, qty: count };
-        dispatch(addToCart(cartData));
-        toast.success("Item added to cart");
+        if (data.stock < count) {
+          toast.error("Product stock limited");
+        } else {
+          const cartData = { ...data, qty: count };
+          dispatch(addToCart(cartData));
+          toast.success("Item added to cart");
+        }
       }
+    } else {
+      toast.error("Please sign in to add to cart");
     }
   };
 
@@ -63,8 +68,12 @@ const ProductDetailsCard = ({ setOpen, data }) => {
     dispatch(removeFromWishlist(data));
   };
   const addToWishlistHandler = (data) => {
-    setClick(!click);
-    dispatch(addToWishlist(data));
+    if (isAuthenticated) {
+      setClick(!click);
+      dispatch(addToWishlist(data));
+    } else {
+      toast.error("Please sign in to add to wishlist");
+    }
   };
 
   return (
@@ -102,15 +111,10 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                     </div>
                   </Link>
                 </div>
-                <div
-                  className={`${styles.button} bg-[#000] mt-4 rounded-[4px] h-11`}
-                  // onClick={handleMessageSubmit}
-                >
-                  <span className="text-[#fff] flex items-center">
-                    Send Message <AiOutlineMessage className="ml-1" />
-                  </span>
-                </div>
-                <h5 className="text-[16px] text-[red] mt-5">(50) Sold out</h5>
+
+                <h5 className="text-[16px] text-[red] mt-5">
+                  {data.stock} remaining
+                </h5>
               </div>
 
               <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">
@@ -121,7 +125,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
 
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    ${data.discountPrice.toLocaleString()}
+                    ${data.price?.toLocaleString()}
                   </h4>
                 </div>
                 <div className="flex items-center mt-12 justify-between pr-3">

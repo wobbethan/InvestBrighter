@@ -1,18 +1,24 @@
 const mongoose = require("mongoose");
 
 const eventSchema = new mongoose.Schema({
+  adminId: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
-    required: [true, "Please enter your event name!"],
+    required: true,
   },
   description: {
     type: String,
-    required: [true, "Please enter your event description!"],
+    required: true,
   },
-  category: {
-    type: String,
-    required: [true, "Please enter your event category!"],
-  },
+  sections: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
   start_Date: {
     type: Date,
     required: true,
@@ -25,37 +31,30 @@ const eventSchema = new mongoose.Schema({
     type: String,
     default: "Running",
   },
-  tags: {
-    type: String,
-    required: [true, "Please enter your event tags!"],
-  },
-  originalPrice: {
-    type: Number,
-  },
-  discountPrice: {
-    type: Number,
-    required: [true, "Please enter your event discount price!"],
-  },
-  stock: {
-    type: Number,
-    required: [true, "Please enter your event stock!"],
-  },
   images: [
     {
       type: String,
     },
   ],
-  shopId: {
-    type: String,
-    required: true,
+  maxInvestmentsCompany: {
+    type: Number,
+    default: 32,
   },
-  shop: {
-    type: Object,
-    required: true,
+  maxInvestmentsRound: {
+    type: Number,
+    default: 20,
   },
-  sold_out: {
+  numInvestments: {
     type: Number,
     default: 0,
+  },
+  numChecks: {
+    type: Number,
+    default: 3,
+  },
+  checkPrice: {
+    type: Number,
+    default: 20000,
   },
   createdAt: {
     type: Date,

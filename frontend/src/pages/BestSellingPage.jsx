@@ -10,7 +10,6 @@ import Loader from "../components/Layout/Loader";
 
 const BestSellingPage = () => {
   const { allProducts, isLoading } = useSelector((state) => state.products);
-  console.log(allProducts);
   const [data, setData] = useState([]);
 
   useEffect(() => {

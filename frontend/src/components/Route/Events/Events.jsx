@@ -13,11 +13,11 @@ const Events = () => {
 
   return (
     <>
-      {!isLoading && (
+      {!isLoading && allEvents?.length !== 0 && (
         <div>
           <div className={`${styles.section}`}>
             <div className={`${styles.heading}`}>
-              <h1>Events</h1>
+              <h1>Investment Round</h1>
             </div>
             <div className="w-full grid">
               <EventCard data={allEvents[0]} />

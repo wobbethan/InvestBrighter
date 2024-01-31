@@ -7,6 +7,8 @@ const Order = require("../model/order");
 const Shop = require("../model/shop");
 const Product = require("../model/product");
 const User = require("../model/user");
+const Section = require("../model/section");
+
 // create new order
 router.post(
   "/create-order",
@@ -29,7 +31,6 @@ router.post(
       await userObj.save();
       await companyObj.save();
       await productObj.save();
-
       //Create Order
       const order = await Order.create({
         company: company,
@@ -90,12 +91,15 @@ router.get(
 
 // admin all orders
 router.get(
-  "/admin-all-orders",
+  "/admin-all-orders/:id",
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const orders = await Order.find().sort({
-        createdAt: -1,
+      const adminSections = await Section.find({ "admin.id": req.params.id });
+      const sectionNames = adminSections.map((section) => section.name);
+
+      const orders = await Order.find({
+        "user.section": { $in: sectionNames },
       });
       res.status(201).json({
         success: true,

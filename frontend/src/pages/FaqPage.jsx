@@ -6,9 +6,7 @@ import styles from "../styles/styles";
 const FaqPage = () => {
   return (
     <div>
-      <Header activeHeading={5}></Header>
       <Faq />
-      <Footer></Footer>
     </div>
   );
 };

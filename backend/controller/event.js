@@ -3,10 +3,12 @@ const router = express.Router();
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
+const User = require("../model/user");
 const Shop = require("../model/shop");
 const Event = require("../model/event");
 const { isSeller } = require("../middleware/auth");
 const fs = require("fs");
+const axios = require("axios");
 
 //create event
 router.post(
@@ -14,24 +16,89 @@ router.post(
   upload.array("images"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const shopId = req.body.shopId;
-      const shop = await Shop.findById(shopId);
-      if (!shop) {
-        return next(new ErrorHandler("Shop ID invalid", 400));
+      const userID = req.body.adminId;
+      const user = await User.findById(userID);
+      if (user.role !== "admin") {
+        return next(new ErrorHandler("User is not an admin", 400));
       } else {
         const files = req.files;
         const imageUrls = files.map((file) => `${file.filename}`);
 
         const eventData = req.body;
         eventData.images = imageUrls;
-        eventData.shop = shop;
         const event = await Event.create(eventData);
+        //create product
+        await axios.post(
+          `http://localhost:8000/api/v2/event/create-event-products/${event._id}`,
+          eventData
+        );
 
         res.status(201).json({
           success: true,
           event,
         });
       }
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+//Creating all products within round and giving balance to users
+
+router.post(
+  "/create-event-products/:id",
+  upload.array("images"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      //For each section
+      sections = req.body.sections.slice(1);
+      sections.forEach(async (i) => {
+        //Get users within section
+        const users = await User.find({ section: i });
+        //Update account balances
+        users.forEach(async (user) => {
+          const userObj = await User.findById(user._id);
+          userObj.accountBalance = req.body.numChecks * req.body.checkPrice;
+          userObj.save();
+        });
+        //Get companies in section
+        const companies = await Shop.find({ section: i });
+
+        companies.forEach(async (company) => {
+          const companyObj = await Shop.findById(company._id);
+          //Create product using company + event info
+          const config = { headers: { "Content-Type": "multipart/form-data" } };
+          const newForm = new FormData();
+          //images
+
+          let files = [companyObj.avatar, ...req.body.images];
+
+          // Remove new line characters and trim each file name
+          const sanitizedFiles = files.map((file) => file.trim());
+
+          //form
+          sanitizedFiles.forEach((image) => {
+            newForm.append("images", image);
+          });
+          newForm.append("eventId", req.params.id);
+          newForm.append("name", companyObj.name + " - " + req.body.name);
+          newForm.append("description", companyObj.description);
+          newForm.append("section", companyObj.section);
+          newForm.append("price", req.body.checkPrice);
+          newForm.append("stock", req.body.maxInvestmentsRound);
+          newForm.append("eventID", req.body.name);
+          newForm.append("shopId", companyObj._id);
+          newForm.append("shop", companyObj);
+          await axios
+            .post(
+              `http://localhost:8000/api/v2/product/create-product`,
+              newForm,
+              config
+            )
+            .catch((err) => console.log(err));
+        });
+      });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
     }
@@ -71,7 +138,6 @@ router.get(
 
 router.delete(
   "/delete-shop-event/:id",
-  isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
       const eventId = req.params.id;
@@ -99,6 +165,22 @@ router.delete(
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// all events by admin
+router.get(
+  "/admin-all-events/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const events = await Event.find({ adminId: req.params.id });
+      res.status(201).json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );

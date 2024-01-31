@@ -18,7 +18,6 @@ const AllOrders = () => {
   }, [dispatch]);
 
   const columns = [
-    { field: "id", headerName: "Investment ID", minWidth: 150, flex: 0.7 },
     {
       field: "investor",
       headerName: "Investor",

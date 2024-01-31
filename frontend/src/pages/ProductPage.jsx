@@ -10,7 +10,7 @@ import Loader from "../components/Layout/Loader";
 function ProductPage() {
   const { allProducts, isLoading } = useSelector((state) => state.products);
   const [searchParams] = useSearchParams();
-  const categoryData = searchParams.get("category");
+  const categoryData = searchParams.get("section");
   const [data, setData] = useState([]);
 
   useEffect(() => {

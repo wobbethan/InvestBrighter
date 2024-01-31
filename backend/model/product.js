@@ -7,20 +7,13 @@ const productSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, "Please enter your product description!"],
   },
-  category: {
+  section: {
     type: String,
-    required: [true, "Please enter your product category!"],
+    required: [true, "Please enter section!"],
   },
-  tags: {
-    type: String,
-    required: [true, "Please enter your product tags!"],
-  },
-  originalPrice: {
-    type: Number,
-  },
-  discountPrice: {
+
+  price: {
     type: Number,
     required: [true, "Please enter your product discount price!"],
   },
@@ -36,6 +29,9 @@ const productSchema = new mongoose.Schema({
   shopId: {
     type: String,
     required: true,
+  },
+  eventId: {
+    type: String,
   },
   shop: {
     type: Object,

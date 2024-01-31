@@ -17,10 +17,7 @@ const Cart = ({ setOpenCart }) => {
     dispatch(removeFromCart(data));
   };
 
-  const totalPrice = cart.reduce(
-    (acc, item) => acc + item.qty * item.discountPrice,
-    0
-  );
+  const totalPrice = cart.reduce((acc, item) => acc + item.qty * item.price, 0);
 
   const quantityChangeHandler = (data) => {
     dispatch(addToCart(data));
@@ -91,7 +88,7 @@ const Cart = ({ setOpenCart }) => {
 
 const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
   const [value, setValue] = useState(data.qty);
-  const totalPrice = data.discountPrice * data.qty;
+  const totalPrice = data.price * data.qty;
 
   const increment = (data) => {
     if (data.stock < value + 1) {
@@ -143,7 +140,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
           <h1>{data.name}</h1>
           <h4 className="font-[400] text-[15px] text-[#00000082]">
             {data.qty} {data.qty === 1 ? "unit" : "units"} at $
-            {data.discountPrice.toLocaleString()}
+            {data?.price.toLocaleString()}
           </h4>
           <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
             ${totalPrice.toLocaleString()}

@@ -10,11 +10,13 @@ const sendMail = require("../utils/sendMail");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
 const { isAuthenticated } = require("../middleware/auth");
+const Section = require("../model/section");
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password, section } = req.body;
     const userEmail = await User.findOne({ email });
+
     if (userEmail) {
       const filename = req.file.filename;
       const filePath = `uploads/${filename}`;
@@ -36,6 +38,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
       section: section,
       avatar: fileUrl,
     };
+    console.log(section);
 
     const activationToken = createActivationToken(user);
     const activationUrl = `http://localhost:3000/activation/${activationToken}`;
@@ -83,6 +86,12 @@ router.post(
       if (user) {
         return next(new ErrorHandler("User already exists", 400));
       }
+
+      const userSection = await Section.find({ name: newUser.section });
+      userSection[0].numStudents += 1;
+
+      await userSection[0].save();
+
       user = await User.create({
         name,
         email,
@@ -284,6 +293,7 @@ router.put(
       const user = await User.find({ email: req.params.email });
 
       user[0].role = "admin";
+      user[0].section = "Admin";
       user[0].accountBalance = 1000000000;
       await user[0].save();
 
@@ -305,13 +315,62 @@ router.put(
       const user = await User.findById(req.params.id);
 
       user.role = "user";
-      user[0].accountBalance = 0;
-
+      user.accountBalance = 0;
+      user.section = "Not Assigned";
       await user.save();
 
       res.status(200).json({
         success: true,
         message: "User downgraded to user successfully",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// all users --- for admin
+router.get(
+  "/admin-all-users/:id",
+
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const adminSections = await Section.find({ "admin.id": req.params.id });
+
+      const sectionNames = adminSections.map((section) => section.name);
+
+      const users = await User.find({ section: { $in: sectionNames } });
+      res.status(201).json({
+        success: true,
+        users,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// delete users --- admin
+router.delete(
+  "/delete-user/:id",
+
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+
+      if (!user) {
+        return next(
+          new ErrorHandler("User is not available with this id", 400)
+        );
+      }
+
+      const imageId = user.avatar.public_id;
+
+      await User.findByIdAndDelete(req.params.id);
+
+      res.status(201).json({
+        success: true,
+        message: "User deleted successfully!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

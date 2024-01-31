@@ -1,25 +1,51 @@
 import React from "react";
-import styles from "../../../styles/styles";
-import { Link } from "react-router-dom";
+import bg from "../../../assets/investbg.png";
+import animationData from "../../../assets/animations/transBulb.json";
+import Lottie from "react-lottie";
+import { motion } from "framer-motion";
+
 function Hero() {
+  const title = "Invest Brighter".split("");
+  const defaultOptions = {
+    loop: false,
+    autoplay: true,
+    animationData: animationData,
+    renderSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
   return (
     <div
-      className={`relative min-h-[70vh] 800px:min-h-[80vh] w-full bg-no-repeat ${styles.normalFlex}`}
+      className={`z-[999] flex flex-col h-[100vh] self-center bg-no-repeat bg-fixed bg-cover items-center p-[100px]`}
       style={{
-        backgroundImage:
-          "url(https://themes.rslahmed.dev/rafcart/assets/images/banner-2.jpg)",
+        backgroundImage: `url(${bg})`,
       }}
     >
-      <div className={`${styles.section} w-[90%] 800px:w-[60%]`}>
-        <h1 className="text-[35px] leading-[1.2] 800px:text-[60px] text-[#3d3a3a] font-[600] capitalize">
-          Best Collection for <br></br> home Decoration
-        </h1>
-        <p className="pt-5 text-[16px] font-[Poppins] font-[400] text-[#000000ba]">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae,
-          assumenda? Quisquam itaque <br /> exercitationem labore vel, dolore
-          quidem asperiores, laudantium temporibus soluta optio consequatur{" "}
-          <br /> aliquam deserunt officia. Dolorum saepe nulla provident.
-        </p>
+      <Lottie options={defaultOptions} width={300} height={300}></Lottie>
+
+      <div className="800px:text-[6.4rem] 600px:text-[5rem] text-[4rem] text-center text-black">
+        {title.map((el, i) => (
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: 0.25,
+              delay: i / 20,
+            }}
+            key={i}
+            className="font-Poppins mb-0"
+          >
+            {el}
+          </motion.span>
+        ))}
+        <motion.p
+          initial={{ opacity: 0, y: "100%" }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 2 }}
+          className="800px:text-[3rem] 600px:text-[2rem] text-[2.5rem] font-Poppins"
+        >
+          Your Investment solution
+        </motion.p>
       </div>
     </div>
   );

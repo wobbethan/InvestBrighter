@@ -23,6 +23,7 @@ const ProductDetails = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { products } = useSelector((state) => state.products);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
 
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
@@ -40,10 +41,6 @@ const ProductDetails = ({ data }) => {
     }
   }, [wishlist, data]);
 
-  const handleMessageSubmit = () => {
-    navigate("/inbox?conversation=50gjhg8g87g6fghvjhgvjytd");
-  };
-
   const decrementCount = () => {
     if (count > 1) {
       setCount(count - 1);
@@ -54,17 +51,21 @@ const ProductDetails = ({ data }) => {
   };
 
   const addToCartHandler = (id) => {
-    const isItemExists = cart && cart.find((i) => i._id === id);
-    if (isItemExists) {
-      toast.error("Item already in cart");
-    } else {
-      if (data.stock < count) {
-        toast.error("Product stock limited");
+    if (isAuthenticated) {
+      const isItemExists = cart && cart.find((i) => i._id === id);
+      if (isItemExists) {
+        toast.error("Item already in cart");
       } else {
-        const cartData = { ...data, qty: count };
-        dispatch(addToCart(cartData));
-        toast.success("Item added to cart");
+        if (data.stock < count) {
+          toast.error("Product stock limited");
+        } else {
+          const cartData = { ...data, qty: count };
+          dispatch(addToCart(cartData));
+          toast.success("Item added to cart");
+        }
       }
+    } else {
+      toast.error("Please sign in to add to cart");
     }
   };
   const removeFromWishlistHandler = (data) => {
@@ -72,8 +73,12 @@ const ProductDetails = ({ data }) => {
     dispatch(removeFromWishlist(data));
   };
   const addToWishlistHandler = (data) => {
-    setClick(!click);
-    dispatch(addToWishlist(data));
+    if (isAuthenticated) {
+      setClick(!click);
+      dispatch(addToWishlist(data));
+    } else {
+      toast.error("Please sign in to add to wishlist");
+    }
   };
   return (
     <div className="bg-white">
@@ -107,11 +112,11 @@ const ProductDetails = ({ data }) => {
                 </div>
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
-                <h1 className={`${styles.productTitle}`}>{data.name}</h1>
-                <p>{data.description}</p>
+                <h1 className={`${styles.productTitle}`}>{data?.name}</h1>
+                <p>{data?.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    ${data.discountPrice.toLocaleString()}
+                    ${data?.price.toLocaleString()}
                   </h4>
                 </div>
                 <div className="flex items-center mt-12 justify-between pr-3">
@@ -175,14 +180,6 @@ const ProductDetails = ({ data }) => {
                         {data.shop.name}
                       </h3>
                     </Link>
-                    <h5 className="pb-3 text=[15px]"> (4/5) Ratings</h5>
-                  </div>
-                  <div
-                    className={`${styles.button} bg-[#6443d1] mt-4 rounded h-11`}
-                  >
-                    <span className="text-white flex items-center">
-                      Send Message <AiOutlineMessage className="ml-1" />
-                    </span>
                   </div>
                 </div>
               </div>
@@ -201,7 +198,7 @@ const ProductDetailsInfo = ({ data, products }) => {
   const [active, setActive] = useState(1);
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
-      <div className="w-full flex justify-between border-b pt-10 pb-2">
+      <div className="w-full flex justify-evenly border-b pt-10 pb-2">
         <div className="relative">
           <h5
             className="text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
@@ -213,17 +210,7 @@ const ProductDetailsInfo = ({ data, products }) => {
             <div className={`${styles.active_indicator}`}></div>
           ) : null}
         </div>
-        <div className="relative">
-          <h5
-            className="text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
-            onClick={() => setActive(2)}
-          >
-            Product Reviews
-          </h5>
-          {active === 2 ? (
-            <div className={`${styles.active_indicator}`}></div>
-          ) : null}
-        </div>
+
         <div className="relative">
           <h5
             className="text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
@@ -259,10 +246,6 @@ const ProductDetailsInfo = ({ data, products }) => {
               />
               <div className="pl-3">
                 <h3 className={`${styles.shop_name}`}> {data.shop.name}</h3>
-                <h5 className="pb-2 text-[15px]">
-                  {" "}
-                  ({data.shop.ratings}) Ratings
-                </h5>
               </div>
             </div>
             <p className="pt-2">{data.shop.description}</p>
@@ -281,9 +264,7 @@ const ProductDetailsInfo = ({ data, products }) => {
                   {products && products.length}
                 </span>
               </h5>
-              <h5 className="font-[600] pt-3">
-                Total Reviews: <span className="font-[500]">432</span>
-              </h5>
+
               <Link to={`/shop/preview/${data?.shop._id}`}>
                 <div
                   className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}

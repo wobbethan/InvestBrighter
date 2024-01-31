@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
 import { categoriesData, productData } from "../../static/data";
@@ -13,10 +13,11 @@ import DropDown from "./DropDown.jsx";
 import Navbar from "./Navbar.jsx";
 import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
-import { backend_url } from "../../Server.js";
+import { backend_url, server } from "../../Server.js";
 import Cart from "../cart/Cart.jsx";
 import Wishlist from "../wishlist/Wishlist.jsx";
 import { RxCross1 } from "react-icons/rx";
+import axios from "axios";
 
 function Header({ activeHeading }) {
   const { cart } = useSelector((state) => state.cart);
@@ -32,18 +33,15 @@ function Header({ activeHeading }) {
   const [open, setOpen] = useState(false);
   const searchInput = React.useRef(null);
   const { allProducts } = useSelector((state) => state.products);
+  const [sections, setSections] = useState();
 
-  const handleSearchChange = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term);
-
-    const filterProducts =
-      allProducts &&
-      allProducts.filter((product) =>
-        product.name.toLowerCase().includes(term.toLowerCase())
-      );
-    setSearchData(filterProducts);
-  };
+  useEffect(() => {
+    if (user?.role === "admin") {
+      axios.get(`${server}/section/get-sections/${user._id}`).then((res) => {
+        setSections(res.data.sections);
+      });
+    }
+  }, [isAuthenticated]);
 
   window.addEventListener("scroll", () => {
     if (window.scrollY > 70) {
@@ -55,101 +53,43 @@ function Header({ activeHeading }) {
 
   return (
     <>
-      <div className={`${styles.section}`}>
-        <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
-          <div>
-            <Link to="/">
-              <img
-                src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-                alt=""
-              />
-            </Link>
-          </div>
-
-          {/* Search Box */}
-          <div className="w-[50%] relative">
-            <input
-              ref={searchInput}
-              type="text"
-              placeholder="Search Product..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
-            />
-            <AiOutlineSearch
-              size={30}
-              className="absolute right-2 top-1.5 cursor-pointer"
-            ></AiOutlineSearch>
-            {searchData && searchData.length && searchTerm.length !== 0 ? (
-              <div className="absolute bg-slate-50 shadow-sm-2 z-[9] p-4 w-full">
-                {searchData &&
-                  searchData.map((i, index) => {
-                    const d = i.name;
-                    const Product_name = d.replace(/\s+/g, "-");
-                    return (
-                      <Link to={`/product/${i._id}`}>
-                        <div className="w-full flex items-start py-3">
-                          <img
-                            className="w-[40px] h-[40px] mr-[10px]"
-                            src={`${backend_url}${i.images[0]}`}
-                            alt=""
-                          />
-                          <h1>{i.name}</h1>
-                        </div>
-                      </Link>
-                    );
-                  })}
-              </div>
-            ) : null}
-          </div>
-
-          {/* Seller Button */}
-          <div className={`${styles.button}`}>
-            <Link to="/shop-create">
-              <h1 className="text-[#fff] flex items-center">
-                Become Seller{" "}
-                <IoIosArrowForward className="ml-1"></IoIosArrowForward>
-              </h1>
-            </Link>
-          </div>
-        </div>
-      </div>
       <div
         className={`${
           active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
-        } transition hidden 800px:flex items-center justify-between w-full h-[70px] bg-[#3321c8]`}
+        } transition hidden 800px:flex items-center ${
+          user?.role === "admin" ? "justify-between" : "justify-end"
+        } w-full h-[70px] bg-[#3321c8]`}
       >
-        {/* Categories */}
-        <div onClick={() => setDropDown(!dropDown)}>
-          <div
-            className={`${styles.section} relative ${styles.normalFlex} justify-between`}
-          >
-            <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
-              <BiMenuAltLeft
-                size={30}
-                className="absolute top-3 left-2 cursor-pointer"
-              />
-              <button className="h-[100%] w-full flex justify-normal items-center pl-10 bg-white font-sans text-lg font[500] select-none rounded-t-md">
-                All Categories
-              </button>
-              <IoIosArrowDown
-                size={20}
-                className="absolute top-4 right-2 cursor-pointer"
-                onClick={() => setDropDown(!dropDown)}
-              ></IoIosArrowDown>
-              {dropDown ? (
-                <DropDown
-                  categoriesData={categoriesData}
-                  setDropDown={setDropDown}
+        {user?.role === "admin" && (
+          <div onClick={() => setDropDown(!dropDown)}>
+            <div
+              className={`${styles.section} relative ${styles.normalFlex} justify-between`}
+            >
+              <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
+                <BiMenuAltLeft
+                  size={30}
+                  className="absolute top-3 left-2 cursor-pointer"
                 />
-              ) : null}
+                <button className="h-[100%] w-full flex justify-normal items-center pl-10 bg-white font-sans text-lg font[500] select-none rounded-t-md">
+                  All Sections
+                </button>
+                <IoIosArrowDown
+                  size={20}
+                  className="absolute top-4 right-2 cursor-pointer"
+                  onClick={() => setDropDown(!dropDown)}
+                ></IoIosArrowDown>
+                {dropDown ? (
+                  <DropDown
+                    categoriesData={sections}
+                    setDropDown={setDropDown}
+                  />
+                ) : null}
+              </div>
             </div>
           </div>
-        </div>
+        )}
         {/* Nav items */}
-        <div>
-          <Navbar active={activeHeading}></Navbar>
-        </div>
+
         <div className="flex">
           {isAuthenticated && user.role == "user" ? (
             <div className="items-center justify-center text-white mr-[15px] text-lg">
@@ -289,36 +229,8 @@ function Header({ activeHeading }) {
                   onClick={() => setOpen(false)}
                 />
               </div>
-              <div className="my-8 w-[92%] m-auto h-[40px]">
-                <input
-                  type="text"
-                  placeholder="Search Product..."
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
-                />
-              </div>
-              {searchData && searchData.length && searchTerm.length !== 0 ? (
-                <div className="absolute bg-slate-50 shadow-sm-2 z-[9] p-4 w-full">
-                  {searchData &&
-                    searchData.map((i, index) => {
-                      const d = i.name;
-                      const Product_name = d.replace(/\s+/g, "-");
-                      return (
-                        <Link to={`/product/${Product_name}`}>
-                          <div className="w-full flex items-start py-3">
-                            <img
-                              className="w-[40px] h-[40px] mr-[10px]"
-                              src={i.image_Url[0].url}
-                              alt=""
-                            />
-                            <h1>{i.name}</h1>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                </div>
-              ) : null}
+              <div className="my-8 w-[92%] m-auto h-[30px]"></div>
+
               {/* Navigation */}
               <Navbar active={activeHeading}></Navbar>
               <div className={`${styles.button} ml-3 !rounded-[4px]`}>

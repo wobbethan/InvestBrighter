@@ -7,15 +7,16 @@ import FeaturedProduct from "../components/Route/FeaturedProduct/FeaturedProduct
 import Events from "../components/Route/Events/Events.jsx";
 import Sponsored from "../components/Route/Sponsored.jsx";
 import Footer from "../components/Layout/Footer.jsx";
+import FaqPage from "./FaqPage.jsx";
 
 function HomePage() {
   return (
     <div>
       <Header activeHeading={1}></Header>
       <Hero />
-      <BestDeals />
       <Events />
       <FeaturedProduct />
+      <FaqPage></FaqPage>
       <Footer />
     </div>
   );
