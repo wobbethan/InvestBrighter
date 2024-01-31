@@ -14,18 +14,17 @@ function Signup() {
   const [visible, setVisible] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmVisible, setConfirmVisible] = useState(false);
-  const [selectedSection, setSelectedSection] = useState(12575);
+  const [selectedSection, setSelectedSection] = useState();
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    const getSections = async () => {
-      await axios.get(`${server}/section/get-sections`).then((res) => {
-        setSections(res.data.sections);
-      });
-    };
-    getSections();
+    axios.get(`${server}/section/get-sections`).then((res) => {
+      setSections(res.data.sections);
+      setSelectedSection(res.data.sections[0].name);
+    });
+
     setLoading(false);
   }, []);
 
@@ -130,7 +129,6 @@ function Signup() {
                     onChange={(e) => setSelectedSection(e.target.value)}
                     className="w-full mt-2 border h-[35px] rounded-[5px]"
                   >
-                    {console.log(sections)}
                     {sections &&
                       sections.map((i, index) => (
                         <option value={i.name} key={index}>

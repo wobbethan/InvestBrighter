@@ -14,7 +14,6 @@ router.post(
       }
       const newSection = await Section.create({
         name: req.params.name,
-        numStudents: 0,
         admin: { id: req.params.id, name: req.params.adminName },
       });
       res.status(200).json({

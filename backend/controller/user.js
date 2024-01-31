@@ -15,7 +15,9 @@ const Section = require("../model/section");
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password, section } = req.body;
+    console.log("create user " + section);
     const userEmail = await User.findOne({ email });
+
     if (userEmail) {
       const filename = req.file.filename;
       const filePath = `uploads/${filename}`;
@@ -37,6 +39,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
       section: section,
       avatar: fileUrl,
     };
+    console.log(section);
 
     const activationToken = createActivationToken(user);
     const activationUrl = `http://localhost:3000/activation/${activationToken}`;
@@ -85,7 +88,9 @@ router.post(
         return next(new ErrorHandler("User already exists", 400));
       }
 
+      console.log("Here " + section);
       const userSection = await Section.find({ name: newUser.section });
+      console.log(userSection[0]);
       userSection[0].numStudents += 1;
 
       await userSection[0].save();

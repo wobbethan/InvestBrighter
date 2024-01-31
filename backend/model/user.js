@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "Not Assigned",
   },
+  companyInvestment: {
+    type: Number,
+    default: 0,
+  },
   companyId: {
     type: String,
     default: "Not Assigned",
