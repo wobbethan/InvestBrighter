@@ -24,35 +24,38 @@ const Payment = () => {
 
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
-    cart.forEach((item) => {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+    for (const item of cart) {
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
 
-      let order = {
-        company: item,
-        user: user && user,
-        totalPrice: item.qty * item.price,
-        quantity: item.qty,
-      };
+        let order = {
+          company: item,
+          user: user && user,
+          totalPrice: item.qty * item.price,
+          quantity: item.qty,
+        };
 
-      const sendOrder = async (order, config) => {
-        await axios
-          .post(`${server}/order/create-order`, order, config)
-          .then((res) => {
-            setOpen(false);
-            navigate("/order/success");
-            toast.success("Order successful!");
-            localStorage.setItem("cartItems", JSON.stringify([]));
-            localStorage.setItem("latestOrder", JSON.stringify([]));
-            window.location.reload();
-          });
-      };
+        const res = await axios.post(
+          `${server}/order/create-order`,
+          order,
+          config
+        );
+        setOpen(false);
 
-      sendOrder(order, config);
-    });
+        localStorage.setItem("cartItems", JSON.stringify([]));
+        localStorage.setItem("latestOrder", JSON.stringify([]));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    navigate("/order/success");
+    window.location.reload();
+
+    toast.success("Order successful!");
   };
 
   return (

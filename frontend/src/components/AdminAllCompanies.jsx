@@ -13,12 +13,13 @@ import { getAllSellers } from "../redux/actions/seller";
 
 const AdminAllCompanies = () => {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const { sellers } = useSelector((state) => state.seller);
   const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    dispatch(getAllSellers());
+    dispatch(getAllSellers(user._id));
   }, [dispatch]);
 
   const handleDelete = async (id) => {
@@ -32,8 +33,12 @@ const AdminAllCompanies = () => {
   };
 
   const columns = [
-    { field: "id", headerName: "Company ID", minWidth: 150, flex: 0.7 },
-
+    {
+      field: "section",
+      headerName: "Section",
+      minWidth: 130,
+      flex: 0.7,
+    },
     {
       field: "name",
       headerName: "name",
@@ -98,6 +103,7 @@ const AdminAllCompanies = () => {
     sellers.forEach((item) => {
       row.push({
         id: item._id,
+        section: item.section,
         name: item?.name,
         email: item?.email,
         joinedAt: item.createdAt.slice(0, 10),

@@ -11,6 +11,7 @@ const { upload } = require("../multer");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const User = require("../model/user");
+const Section = require("../model/section");
 
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
@@ -284,13 +285,14 @@ router.get(
 
 // all sellers --- for admin
 router.get(
-  "/admin-all-sellers",
+  "/admin-all-sellers/:id",
 
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const sellers = await Shop.find().sort({
-        createdAt: -1,
-      });
+      const adminSections = await Section.find({ "admin.id": req.params.id });
+      const sectionNames = adminSections.map((section) => section.name);
+
+      const sellers = await Shop.find({ section: { $in: sectionNames } });
       res.status(201).json({
         success: true,
         sellers,

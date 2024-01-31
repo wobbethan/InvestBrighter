@@ -13,12 +13,12 @@ import { getAllUsers } from "../redux/actions/user";
 
 const AdminAllUsers = () => {
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.user);
+  const { users, user } = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    dispatch(getAllUsers());
+    dispatch(getAllUsers(user._id));
   }, [dispatch]);
 
   const handleDelete = async (id) => {

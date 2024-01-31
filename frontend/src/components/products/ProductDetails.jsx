@@ -23,6 +23,7 @@ const ProductDetails = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { products } = useSelector((state) => state.products);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
 
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
@@ -40,10 +41,6 @@ const ProductDetails = ({ data }) => {
     }
   }, [wishlist, data]);
 
-  const handleMessageSubmit = () => {
-    navigate("/inbox?conversation=50gjhg8g87g6fghvjhgvjytd");
-  };
-
   const decrementCount = () => {
     if (count > 1) {
       setCount(count - 1);
@@ -54,17 +51,21 @@ const ProductDetails = ({ data }) => {
   };
 
   const addToCartHandler = (id) => {
-    const isItemExists = cart && cart.find((i) => i._id === id);
-    if (isItemExists) {
-      toast.error("Item already in cart");
-    } else {
-      if (data.stock < count) {
-        toast.error("Product stock limited");
+    if (isAuthenticated) {
+      const isItemExists = cart && cart.find((i) => i._id === id);
+      if (isItemExists) {
+        toast.error("Item already in cart");
       } else {
-        const cartData = { ...data, qty: count };
-        dispatch(addToCart(cartData));
-        toast.success("Item added to cart");
+        if (data.stock < count) {
+          toast.error("Product stock limited");
+        } else {
+          const cartData = { ...data, qty: count };
+          dispatch(addToCart(cartData));
+          toast.success("Item added to cart");
+        }
       }
+    } else {
+      toast.error("Please sign in to add to cart");
     }
   };
   const removeFromWishlistHandler = (data) => {
@@ -72,8 +73,12 @@ const ProductDetails = ({ data }) => {
     dispatch(removeFromWishlist(data));
   };
   const addToWishlistHandler = (data) => {
-    setClick(!click);
-    dispatch(addToWishlist(data));
+    if (isAuthenticated) {
+      setClick(!click);
+      dispatch(addToWishlist(data));
+    } else {
+      toast.error("Please sign in to add to wishlist");
+    }
   };
   return (
     <div className="bg-white">
@@ -175,14 +180,6 @@ const ProductDetails = ({ data }) => {
                         {data.shop.name}
                       </h3>
                     </Link>
-                    <h5 className="pb-3 text=[15px]"> (4/5) Ratings</h5>
-                  </div>
-                  <div
-                    className={`${styles.button} bg-[#6443d1] mt-4 rounded h-11`}
-                  >
-                    <span className="text-white flex items-center">
-                      Send Message <AiOutlineMessage className="ml-1" />
-                    </span>
                   </div>
                 </div>
               </div>
@@ -201,7 +198,7 @@ const ProductDetailsInfo = ({ data, products }) => {
   const [active, setActive] = useState(1);
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
-      <div className="w-full flex justify-between border-b pt-10 pb-2">
+      <div className="w-full flex justify-evenly border-b pt-10 pb-2">
         <div className="relative">
           <h5
             className="text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
@@ -213,17 +210,7 @@ const ProductDetailsInfo = ({ data, products }) => {
             <div className={`${styles.active_indicator}`}></div>
           ) : null}
         </div>
-        <div className="relative">
-          <h5
-            className="text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
-            onClick={() => setActive(2)}
-          >
-            Product Reviews
-          </h5>
-          {active === 2 ? (
-            <div className={`${styles.active_indicator}`}></div>
-          ) : null}
-        </div>
+
         <div className="relative">
           <h5
             className="text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"

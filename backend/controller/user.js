@@ -334,13 +334,15 @@ router.put(
 
 // all users --- for admin
 router.get(
-  "/admin-all-users",
+  "/admin-all-users/:id",
 
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const users = await User.find().sort({
-        createdAt: -1,
-      });
+      const adminSections = await Section.find({ "admin.id": req.params.id });
+
+      const sectionNames = adminSections.map((section) => section.name);
+
+      const users = await User.find({ section: { $in: sectionNames } });
       res.status(201).json({
         success: true,
         users,

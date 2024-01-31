@@ -15,13 +15,13 @@ import { getAllOrdersOfAdmin } from "../../redux/actions/order";
 
 const AdminAllOrdersPage = () => {
   const dispatch = useDispatch();
-
+  const { user } = useSelector((state) => state.user);
   const { adminOrders, adminOrderLoading } = useSelector(
     (state) => state.order
   );
 
   useEffect(() => {
-    dispatch(getAllOrdersOfAdmin());
+    dispatch(getAllOrdersOfAdmin(user._id));
   }, []);
 
   const columns = [

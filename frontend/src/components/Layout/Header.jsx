@@ -71,7 +71,7 @@ function Header({ activeHeading }) {
                   className="absolute top-3 left-2 cursor-pointer"
                 />
                 <button className="h-[100%] w-full flex justify-normal items-center pl-10 bg-white font-sans text-lg font[500] select-none rounded-t-md">
-                  All Categories
+                  All Sections
                 </button>
                 <IoIosArrowDown
                   size={20}
