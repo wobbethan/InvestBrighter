@@ -97,6 +97,7 @@ router.get(
     try {
       const adminSections = await Section.find({ "admin.id": req.params.id });
       const sectionNames = adminSections.map((section) => section.name);
+      console.log(req.params.id);
 
       const orders = await Order.find({
         "user.section": { $in: sectionNames },
