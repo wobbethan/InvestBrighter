@@ -34,17 +34,6 @@ function Header({ activeHeading }) {
   const searchInput = React.useRef(null);
   const { allProducts } = useSelector((state) => state.products);
   const [sections, setSections] = useState();
-  const handleSearchChange = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term);
-
-    const filterProducts =
-      allProducts &&
-      allProducts.filter((product) =>
-        product.name.toLowerCase().includes(term.toLowerCase())
-      );
-    setSearchData(filterProducts);
-  };
 
   useEffect(() => {
     if (user?.role === "admin") {
@@ -67,7 +56,9 @@ function Header({ activeHeading }) {
       <div
         className={`${
           active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
-        } transition hidden 800px:flex items-center justify-between w-full h-[70px] bg-[#3321c8]`}
+        } transition hidden 800px:flex items-center ${
+          user?.role === "admin" ? "justify-between" : "justify-end"
+        } w-full h-[70px] bg-[#3321c8]`}
       >
         {user?.role === "admin" && (
           <div onClick={() => setDropDown(!dropDown)}>
@@ -98,9 +89,7 @@ function Header({ activeHeading }) {
           </div>
         )}
         {/* Nav items */}
-        <div>
-          <Navbar active={activeHeading}></Navbar>
-        </div>
+
         <div className="flex">
           {isAuthenticated && user.role == "user" ? (
             <div className="items-center justify-center text-white mr-[15px] text-lg">

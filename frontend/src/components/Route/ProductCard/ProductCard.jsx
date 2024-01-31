@@ -26,7 +26,7 @@ function ProductCard({ data, isEvent }) {
   const { cart } = useSelector((state) => state.cart);
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
-
+  const { isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -42,22 +42,30 @@ function ProductCard({ data, isEvent }) {
     dispatch(removeFromWishlist(data));
   };
   const addToWishlistHandler = (data) => {
-    setClick(!click);
-    dispatch(addToWishlist(data));
+    if (isAuthenticated) {
+      setClick(!click);
+      dispatch(addToWishlist(data));
+    } else {
+      toast.error("Please sign in to add to wishlist");
+    }
   };
 
   const addToCartHandler = (id) => {
-    const isItemExists = cart && cart.find((i) => i._id === id);
-    if (isItemExists) {
-      toast.error("Item already in cart");
-    } else {
-      if (data.stock < 1) {
-        toast.error("Product stock limited");
+    if (isAuthenticated) {
+      const isItemExists = cart && cart.find((i) => i._id === id);
+      if (isItemExists) {
+        toast.error("Item already in cart");
       } else {
-        const cartData = { ...data, qty: 1 };
-        dispatch(addToCart(cartData));
-        toast.success("Item added to cart");
+        if (data.stock < 1) {
+          toast.error("Product stock limited");
+        } else {
+          const cartData = { ...data, qty: 1 };
+          dispatch(addToCart(cartData));
+          toast.success("Item added to cart");
+        }
       }
+    } else {
+      toast.error("Please sign in to add to cart");
     }
   };
 
