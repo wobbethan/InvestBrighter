@@ -15,16 +15,14 @@ function ShopCreate() {
   const [avatar, setAvatar] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmVisible, setConfirmVisible] = useState(false);
-  const [selectedSection, setSelectedSection] = useState(12575);
+  const [selectedSection, setSelectedSection] = useState();
   const [sections, setSections] = useState([]);
 
   useEffect(() => {
-    const getSections = async () => {
-      await axios.get(`${server}/section/get-sections`).then((res) => {
-        setSections(res.data.sections);
-      });
-    };
-    getSections();
+    axios.get(`${server}/section/get-sections`).then((res) => {
+      setSections(res.data.sections);
+      setSelectedSection(res.data.sections[0].name);
+    });
   }, []);
 
   const navigate = useNavigate();
@@ -59,7 +57,6 @@ function ShopCreate() {
           setPassword("");
           setConfirmPassword("");
           setAvatar();
-          setSelectedSection(12575);
         })
         .catch((err) => {
           console.log(err.response.data.message);

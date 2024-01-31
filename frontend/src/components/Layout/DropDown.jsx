@@ -5,7 +5,7 @@ import styles from "../../styles/styles";
 const DropDown = ({ categoriesData, setDropDown }) => {
   const navigate = useNavigate();
   const submitHandle = (i) => {
-    navigate(`/products?category=${i.title}`);
+    // navigate(`/products?category=${i.title}`);
     setDropDown(false);
     window.location.reload();
   };
@@ -18,18 +18,7 @@ const DropDown = ({ categoriesData, setDropDown }) => {
             className={`${styles.normalFlex}`}
             onClick={() => submitHandle(i)}
           >
-            <img
-              src={i.image_Url}
-              style={{
-                width: "25px",
-                height: "25px",
-                objectFit: "contain",
-                marginLeft: "10px",
-                userSelect: "none",
-              }}
-              alt=""
-            />
-            <h3 className="m-3 cursor-pointer select-none">{i.title}</h3>
+            <h3 className="m-3 cursor-pointer select-none">{i.name}</h3>
           </div>
         ))}
     </div>
