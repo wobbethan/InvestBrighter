@@ -12,10 +12,9 @@ import { getAllMembersShop } from "../../redux/actions/seller.js";
 import axios from "axios";
 
 const ShopProfileData = ({ isOwner }) => {
-  const { seller } = useSelector((state) => state.seller);
+  const { seller, members } = useSelector((state) => state.seller);
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
-  const [members, setMembers] = useState([]);
   const { id } = useParams();
   const dispatch = useDispatch();
   const [active, setActive] = useState(1);
@@ -23,18 +22,7 @@ const ShopProfileData = ({ isOwner }) => {
   useEffect(() => {
     dispatch(getAllProductsShop(id));
     dispatch(getAllEventsShop(id));
-
-    const getMembers = async () => {
-      await axios
-        .get(`${server}/shop/get-all-members-shop/${id}`)
-        .then((response) => {
-          setMembers(response.data.members);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    getMembers();
+    dispatch(getAllMembersShop(id));
   }, [active]);
 
   return (
@@ -47,16 +35,7 @@ const ShopProfileData = ({ isOwner }) => {
                 active === 1 ? "text-red-500" : "text-[#333]"
               } cursor-pointer pr-[20px]`}
             >
-              Shop Products
-            </h5>
-          </div>
-          <div className="flex items-center" onClick={() => setActive(2)}>
-            <h5
-              className={`font-[600] text-[20px] ${
-                active === 2 ? "text-red-500" : "text-[#333]"
-              } cursor-pointer pr-[20px]`}
-            >
-              Running Events
+              Active Investments
             </h5>
           </div>
 
@@ -116,16 +95,16 @@ const ShopProfileData = ({ isOwner }) => {
 
       {active === 3 && (
         <div className="w-full">
-          {seller.teamMembers.length === 0 ? (
-            <div className="w-full text-center py-5 text-[25px]">
-              This company currently has not added any team members
-            </div>
-          ) : (
+          {members ? (
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:gap-[20px] mb-12 border-0">
               {members &&
                 members.map((i, index) => (
                   <TeamMemberCard member={members[index]} />
                 ))}
+            </div>
+          ) : (
+            <div className="w-full text-center py-5 text-[25px]">
+              This company currently has not added any team members
             </div>
           )}
         </div>
@@ -145,6 +124,11 @@ const TeamMemberCard = ({ member }) => {
         />
       </div>
       <div className="text-2xl text-bold">{member.name}</div>
+      {member.companyRole !== "Not Assigned" && (
+        <div className="text-xl italic text-slate-400">
+          {member.companyRole}
+        </div>
+      )}{" "}
     </div>
   );
 };

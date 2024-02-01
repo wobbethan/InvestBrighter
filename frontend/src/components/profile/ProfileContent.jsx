@@ -218,7 +218,7 @@ const ProfileContent = ({ active }) => {
           <div className="flex flex-col justify-center w-full items-center">
             <img
               src={`${backend_url}${shopInfo.avatar}`}
-              className="w-[350px] h-[250px] object-cover border-[3px] border-[#3ad132] justify-center items-center "
+              className="w-[350px] h-[250px] object-cover justify-center items-center "
             />
             <div className="flex justify-center w-full text-4xl text-bold mb-4 mt-4">
               {shopInfo.name}
@@ -421,6 +421,11 @@ const TeamMemberCard = ({ member }) => {
         />
       </div>
       <div className="text-2xl text-bold">{member.name}</div>
+      {member.companyRole !== "Not Assigned" && (
+        <div className="text-xl italic text-slate-400">
+          {member.companyRole}
+        </div>
+      )}
     </div>
   );
 };

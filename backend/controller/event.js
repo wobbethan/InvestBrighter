@@ -142,8 +142,7 @@ router.delete(
   "/delete-shop-event/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const eventId = req.params.id;
-      const eventData = await Event.findById(eventId);
+      const eventData = await Event.findById(req.params.id);
 
       // eventData.images.forEach((imageUrl) => {
       //   const filename = imageUrl;
@@ -160,20 +159,20 @@ router.delete(
       const products = await Product.find({
         eventId: req.params.id,
       });
-
+      console.log(products);
       if (products) {
-        products.forEach((product) => {
-          axios
-            .delete(`/delete-shop-product/${product._id}`)
+        products.forEach(async (product) => {
+          await axios
+            .delete(`/delete-shop-product/${product.shop.email}`)
             .catch((err) => console.log(err));
         });
       }
 
-      const event = await Event.findByIdAndDelete(eventId);
+      // const event = await Event.findByIdAndDelete(eventId);
 
-      if (!event) {
-        return next(new ErrorHandler("Event not found", 500));
-      }
+      // if (!event) {
+      //   return next(new ErrorHandler("Event not found", 500));
+      // }
 
       res.status(201).json({
         success: true,

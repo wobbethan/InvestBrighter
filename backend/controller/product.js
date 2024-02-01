@@ -56,11 +56,10 @@ router.get(
 //delete product
 
 router.delete(
-  "/delete-shop-product/:id",
+  "/delete-shop-product/:email",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const productId = req.params.id;
-      const productData = await Product.findById(productId);
+      // const productData = await Product.findById(req.params.id);
 
       // productData.images.forEach((imageUrl) => {
       //   const filename = imageUrl;
@@ -74,11 +73,14 @@ router.delete(
       //   } catch (error) {}
       // });
 
-      const product = await Product.findByIdAndDelete(productId);
+      const product = await Product.find({
+        "shop.email": req.params.email,
+      });
 
-      if (!product) {
-        return next(new ErrorHandler("Product not found", 500));
-      }
+      console.log(product);
+      // if (!product) {
+      //   return next(new ErrorHandler("Product not found", 500));
+      // }
       res.status(201).json({
         success: true,
         message: "Product successfully deleted!",
@@ -136,6 +138,22 @@ router.get(
       res.status(201).json({
         success: true,
         products,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+//Getting shop from product
+router.get(
+  "/get-product/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const product = await Product.findById(req.params.id);
+      res.status(201).json({
+        success: true,
+        product,
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));

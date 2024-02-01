@@ -201,6 +201,10 @@ router.get(
 
       if (!user) {
         //not returning
+        res.status(400).json({
+          success: false,
+          message: "User does not exist",
+        });
         return next(new ErrorHandler("User doesn't exist", 400));
       }
       if (!shop) {
@@ -237,27 +241,100 @@ router.get(
   })
 );
 
-// remove user to shop
+// remove member of shop
 router.get(
-  "/shop-remove-member/:index/:id",
+  "/shop-remove-member/:id/:shop",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const shop = await Shop.findById(req.params.id);
+      const user = await User.findById(req.params.id);
+      const shop = await Shop.findById(req.params.shop);
 
+      if (!user) {
+        return next(new ErrorHandler("User doesn't exist", 400));
+      }
       if (!shop) {
         return next(new ErrorHandler("Shop doesn't exist", 400));
       }
 
-      const userEmail = shop.teamMembers[req.params.index].email;
-
-      const user = User.find({ email: userEmail });
       user.companyId = "Not Assigned";
-      shop.teamMembers.splice(req.params.index, 1);
+      user.companyRole = "Not Assigned";
+      user.companyInvestment = 0;
 
-      await shop.save();
+      const index = shop.teamMembers.findIndex(
+        (member) => member._id.toString() === req.params.id
+      );
+      shop.teamMembers.splice(index, 1);
+
       await user.save();
+      await shop.save();
 
       res.status(200).json({
+        success: true,
+        message: "Successfully removed user",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// modify member
+router.put(
+  "/shop-update-member/:id/:role/:ownership/:shop",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+
+      if (!user) {
+        return next(new ErrorHandler("User doesn't exist", 400));
+      }
+
+      user.companyRole = req.params.role;
+      user.companyInvestment = req.params.ownership;
+
+      const shop = await Shop.findById(req.params.shop);
+      const index = shop.teamMembers.findIndex(
+        (member) => member._id.toString() === req.params.id
+      );
+      shop.teamMembers.splice(index, 1);
+
+      shop.teamMembers.push(user);
+
+      await user.save();
+      await shop.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Successfully updated user",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// update seller info
+router.put(
+  "/update-seller-info",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { name, description, valuation, finalAq } = req.body;
+
+      const shop = await Shop.findOne(req.seller._id);
+
+      if (!shop) {
+        return next(new ErrorHandler("User not found", 400));
+      }
+
+      shop.name = name;
+      shop.description = description;
+      shop.valuation = valuation;
+      shop.finalAcquisition = finalAq;
+
+      await shop.save();
+
+      res.status(201).json({
         success: true,
         shop,
       });

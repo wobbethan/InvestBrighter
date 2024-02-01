@@ -6,6 +6,7 @@ import { MdOutlineLocalOffer } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { backend_url } from "../../../Server";
+import { IoHomeOutline } from "react-icons/io5";
 const AdminHeader = () => {
   const { user } = useSelector((state) => state.user);
 
@@ -13,10 +14,7 @@ const AdminHeader = () => {
     <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
         <Link to="/">
-          <img
-            src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-            alt=""
-          />
+          <IoHomeOutline size={30} />
         </Link>
       </div>
       <div className="flex items-center">

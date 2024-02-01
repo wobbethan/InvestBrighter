@@ -9,11 +9,11 @@ import {
 } from "../../../redux/actions/product";
 
 const FeaturedProduct = () => {
-  const [data, setData] = useState([]);
   const { allProducts, allProductsAdmin, allProductsSection } = useSelector(
     (state) => state.products
   );
   const { user, isAuthenticated } = useSelector((state) => state.user);
+  const [data, setData] = useState();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,8 +23,6 @@ const FeaturedProduct = () => {
       } else {
         dispatch(getAllProductsSection(user?.section));
       }
-    } else {
-      setData(allProducts);
     }
   }, [isAuthenticated]);
   return (
@@ -32,9 +30,11 @@ const FeaturedProduct = () => {
       {!isAuthenticated && (
         <div>
           <div className={`${styles.section}`}>
-            <div className={`${styles.heading}`}>
-              <h1>Available Companies</h1>
-            </div>
+            {allProducts && allProducts.length !== 0 && (
+              <div className={`${styles.heading}`}>
+                <h1>Available Companies</h1>
+              </div>
+            )}
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[10px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl-gap-[30px] mb-12 border-0">
               {allProducts && allProducts.length !== 0 && (
                 <>
@@ -51,9 +51,11 @@ const FeaturedProduct = () => {
       {user?.role === "admin" && (
         <div>
           <div className={`${styles.section}`}>
-            <div className={`${styles.heading}`}>
-              <h1>Available Companies</h1>
-            </div>
+            {allProductsAdmin && allProductsAdmin.length !== 0 && (
+              <div className={`${styles.heading}`}>
+                <h1>Available Companies</h1>
+              </div>
+            )}
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[10px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl-gap-[30px] mb-12 border-0">
               {allProductsAdmin && allProductsAdmin.length !== 0 && (
                 <>
@@ -70,9 +72,11 @@ const FeaturedProduct = () => {
       {user?.role === "user" && (
         <div>
           <div className={`${styles.section}`}>
-            <div className={`${styles.heading}`}>
-              <h1>Available Companies</h1>
-            </div>
+            {allProductsSection && allProductsSection.length !== 0 && (
+              <div className={`${styles.heading}`}>
+                <h1>Available Companies</h1>
+              </div>
+            )}
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[10px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl-gap-[30px] mb-12 border-0">
               {allProductsSection && allProductsSection.length !== 0 && (
                 <>

@@ -52,20 +52,24 @@ const ShopInfo = ({ isOwner }) => {
             </div>
             <h3 className="text-center py-2 text-[20px]">{data.name}</h3>
             <p className="text-[16px] text-[#000000a6] p-[10px] flex items-center">
-              {data.description}
+              {data?.description}
             </p>
           </div>
           <div className="p-3">
             <h5 className="font-[600]">Valuation</h5>
-            <h4 className="text-[#000000a6]">{data.valuation}</h4>
+            <h4 className="text-[#000000a6]">
+              ${data.valuation?.toLocaleString()}
+            </h4>
           </div>
-          <div className="p-3">
+          {/* <div className="p-3">
             <h5 className="font-[600]">Founding Share Price</h5>
             <h4 className="text-[#000000a6]">{data.foundingSharePrice}</h4>
-          </div>
+          </div> */}
           <div className="p-3">
             <h5 className="font-[600]">Final Acquisition</h5>
-            <h4 className="text-[#000000a6]">{data.finalAcquisition}</h4>
+            <h4 className="text-[#000000a6]">
+              ${data.finalAcquisition?.toLocaleString()}
+            </h4>
           </div>
 
           <div className="p-3">

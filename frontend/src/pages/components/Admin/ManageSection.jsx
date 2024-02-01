@@ -179,7 +179,7 @@ const ManageSection = () => {
       </div>
       {/* Section grid */}
       <div className="w-full min-h-[45vh] pt-5 rounded flex justify-center">
-        <div className="w-[97%] flex justify-center">
+        <div className="w-[97%] flex justify-center bg-white">
           <DataGrid
             rows={row}
             columns={columns}

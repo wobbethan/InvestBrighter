@@ -13,20 +13,21 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import Ratings from "../../products/Ratings.jsx";
-import { backend_url } from "../../../Server.js";
+import { backend_url, server } from "../../../Server.js";
 import {
   addToWishlist,
   removeFromWishlist,
 } from "../../../redux/actions/wishlist.js";
 import { addToCart } from "../../../redux/actions/cart.js";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 function ProductCard({ data, isEvent }) {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,6 +42,7 @@ function ProductCard({ data, isEvent }) {
     setClick(!click);
     dispatch(removeFromWishlist(data));
   };
+
   const addToWishlistHandler = (data) => {
     if (isAuthenticated) {
       setClick(!click);
@@ -50,18 +52,26 @@ function ProductCard({ data, isEvent }) {
     }
   };
 
-  const addToCartHandler = (id) => {
+  const addToCartHandler = async (id) => {
     if (isAuthenticated) {
-      const isItemExists = cart && cart.find((i) => i._id === id);
-      if (isItemExists) {
-        toast.error("Item already in cart");
+      let product;
+      await axios.get(`${server}/product/get-product/${id}`).then((res) => {
+        product = res.data.product;
+      });
+      if (user.companyId === product.shopId) {
+        toast.error("Cannot Invest in your own company");
       } else {
-        if (data.stock < 1) {
-          toast.error("Product stock limited");
+        const isItemExists = cart && cart.find((i) => i._id === id);
+        if (isItemExists) {
+          toast.error("Item already in cart");
         } else {
-          const cartData = { ...data, qty: 1 };
-          dispatch(addToCart(cartData));
-          toast.success("Item added to cart");
+          if (data.stock < 1) {
+            toast.error("Product stock limited");
+          } else {
+            const cartData = { ...data, qty: 1 };
+            dispatch(addToCart(cartData));
+            toast.success("Item added to cart");
+          }
         }
       }
     } else {
