@@ -61,6 +61,13 @@ const AdminAllCompanies = () => {
       flex: 0.8,
     },
     {
+      field: "mems",
+      headerName: "Members",
+      type: "number",
+      minWidth: 130,
+      flex: 0.8,
+    },
+    {
       field: "  ",
       flex: 1,
       minWidth: 150,
@@ -106,6 +113,10 @@ const AdminAllCompanies = () => {
         section: item.section,
         name: item?.name,
         email: item?.email,
+        mems:
+          item?.teamMembers && item?.teamMembers.length > 0
+            ? item?.teamMembers.length
+            : 0,
         joinedAt: item.createdAt.slice(0, 10),
       });
     });

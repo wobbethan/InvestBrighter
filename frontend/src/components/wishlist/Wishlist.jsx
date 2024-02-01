@@ -13,15 +13,21 @@ import { toast } from "react-toastify";
 
 const Wishlist = ({ setOpenWishlist }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
+  const { user } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
 
   const removeFromWishlistHandler = (data) => {
     dispatch(removeFromWishlist(data));
   };
   const addToCartHandler = (data) => {
-    const newData = { ...data, qty: 1 };
-    dispatch(addToCart(newData));
-    toast.success("Added to cart");
+    if (data.shopId === user.companyId) {
+      toast.error("Cannot Invest in your own company");
+    } else {
+      const newData = { ...data, qty: 1 };
+      dispatch(addToCart(newData));
+      toast.success("Added to cart");
+    }
   };
   return (
     <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">

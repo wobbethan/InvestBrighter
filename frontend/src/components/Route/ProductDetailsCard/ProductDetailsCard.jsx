@@ -8,7 +8,7 @@ import {
   AiFillHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { backend_url } from "../../../Server";
+import { backend_url, server } from "../../../Server";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addToCart } from "../../../redux/actions/cart";
@@ -16,11 +16,13 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../../redux/actions/wishlist";
+import axios from "axios";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { isAuthenticated } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
@@ -44,18 +46,26 @@ const ProductDetailsCard = ({ setOpen, data }) => {
     setCount(count + 1);
   };
 
-  const addToCartHandler = (id) => {
+  const addToCartHandler = async (id) => {
     if (isAuthenticated) {
-      const isItemExists = cart && cart.find((i) => i._id === id);
-      if (isItemExists) {
-        toast.error("Item already in cart");
+      let product;
+      await axios.get(`${server}/product/get-product/${id}`).then((res) => {
+        product = res.data.product;
+      });
+      if (user.companyId === product.shopId) {
+        toast.error("Cannot Invest in your own company");
       } else {
-        if (data.stock < count) {
-          toast.error("Product stock limited");
+        const isItemExists = cart && cart.find((i) => i._id === id);
+        if (isItemExists) {
+          toast.error("Item already in cart");
         } else {
-          const cartData = { ...data, qty: count };
-          dispatch(addToCart(cartData));
-          toast.success("Item added to cart");
+          if (data.stock < 1) {
+            toast.error("Product stock limited");
+          } else {
+            const cartData = { ...data, qty: 1 };
+            dispatch(addToCart(cartData));
+            toast.success("Item added to cart");
+          }
         }
       }
     } else {

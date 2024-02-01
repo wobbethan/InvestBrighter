@@ -9,7 +9,7 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { backend_url } from "../../Server";
+import { backend_url, server } from "../../Server";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../redux/actions/product";
 import { toast } from "react-toastify";
@@ -18,8 +18,9 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../redux/actions/wishlist";
+import axios from "axios";
 
-const ProductDetails = ({ data }) => {
+const ProductDetails = ({ data, id }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { products } = useSelector((state) => state.products);
@@ -50,24 +51,33 @@ const ProductDetails = ({ data }) => {
     setCount(count + 1);
   };
 
-  const addToCartHandler = (id) => {
+  const addToCartHandler = async () => {
     if (isAuthenticated) {
-      const isItemExists = cart && cart.find((i) => i._id === id);
-      if (isItemExists) {
-        toast.error("Item already in cart");
+      let product;
+      await axios.get(`${server}/product/get-product/${id}`).then((res) => {
+        product = res.data.product;
+      });
+      if (user.companyId === product.shopId) {
+        toast.error("Cannot Invest in your own company");
       } else {
-        if (data.stock < count) {
-          toast.error("Product stock limited");
+        const isItemExists = cart && cart.find((i) => i._id === id);
+        if (isItemExists) {
+          toast.error("Item already in cart");
         } else {
-          const cartData = { ...data, qty: count };
-          dispatch(addToCart(cartData));
-          toast.success("Item added to cart");
+          if (data.stock < 1) {
+            toast.error("Product stock limited");
+          } else {
+            const cartData = { ...data, qty: 1 };
+            dispatch(addToCart(cartData));
+            toast.success("Item added to cart");
+          }
         }
       }
     } else {
       toast.error("Please sign in to add to cart");
     }
   };
+
   const removeFromWishlistHandler = (data) => {
     setClick(!click);
     dispatch(removeFromWishlist(data));
@@ -204,7 +214,7 @@ const ProductDetailsInfo = ({ data, products }) => {
             className="text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
             onClick={() => setActive(1)}
           >
-            Product Details
+            Details
           </h5>
           {active === 1 ? (
             <div className={`${styles.active_indicator}`}></div>
@@ -216,7 +226,7 @@ const ProductDetailsInfo = ({ data, products }) => {
             className="text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
             onClick={() => setActive(3)}
           >
-            Seller Information{" "}
+            Company Information{" "}
           </h5>
           {active === 3 ? (
             <div className={`${styles.active_indicator}`}></div>
@@ -254,7 +264,7 @@ const ProductDetailsInfo = ({ data, products }) => {
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Total Products:{" "}
+                Rounds participated:{" "}
                 <span className="font-[500]">
                   {products && products.length}
                 </span>
@@ -264,7 +274,7 @@ const ProductDetailsInfo = ({ data, products }) => {
                 <div
                   className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}
                 >
-                  <h4 className="text-white">Visit Shop</h4>
+                  <h4 className="text-white">Visit Company</h4>
                 </div>
               </Link>
             </div>

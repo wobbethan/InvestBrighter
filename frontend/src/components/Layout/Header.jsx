@@ -18,7 +18,8 @@ import Cart from "../cart/Cart.jsx";
 import Wishlist from "../wishlist/Wishlist.jsx";
 import { RxCross1 } from "react-icons/rx";
 import axios from "axios";
-
+import { IoHomeOutline } from "react-icons/io5";
+import { FaRegBuilding } from "react-icons/fa";
 function Header({ activeHeading }) {
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -53,41 +54,58 @@ function Header({ activeHeading }) {
 
   return (
     <>
+      {/* ${
+          user?.role === "admin" ? "justify-between" : "justify-end"
+        } */}
       <div
         className={`${
           active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
-        } transition hidden 800px:flex items-center ${
-          user?.role === "admin" ? "justify-between" : "justify-end"
-        } w-full h-[70px] bg-[#3321c8]`}
+        } transition hidden 800px:flex items-center justify-between w-full h-[70px] bg-[#3321c8]`}
       >
-        {user?.role === "admin" && (
-          <div onClick={() => setDropDown(!dropDown)}>
-            <div
-              className={`${styles.section} relative ${styles.normalFlex} justify-between`}
-            >
-              <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
-                <BiMenuAltLeft
-                  size={30}
-                  className="absolute top-3 left-2 cursor-pointer"
-                />
-                <button className="h-[100%] w-full flex justify-normal items-center pl-10 bg-white font-sans text-lg font[500] select-none rounded-t-md">
-                  All Sections
-                </button>
-                <IoIosArrowDown
-                  size={20}
-                  className="absolute top-4 right-2 cursor-pointer"
-                  onClick={() => setDropDown(!dropDown)}
-                ></IoIosArrowDown>
-                {dropDown ? (
-                  <DropDown
-                    categoriesData={sections}
-                    setDropDown={setDropDown}
+        <div className="flex">
+          {user?.role === "admin" && (
+            <div onClick={() => setDropDown(!dropDown)}>
+              <div
+                className={`${styles.section} relative ${styles.normalFlex} justify-between`}
+              >
+                <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
+                  <BiMenuAltLeft
+                    size={30}
+                    className="absolute top-3 left-2 cursor-pointer"
                   />
-                ) : null}
+                  <button className="h-[100%] w-full flex justify-normal items-center pl-10 bg-white font-sans text-lg font[500] select-none rounded-t-md">
+                    All Sections
+                  </button>
+                  <IoIosArrowDown
+                    size={20}
+                    className="absolute top-4 right-2 cursor-pointer"
+                    onClick={() => setDropDown(!dropDown)}
+                  ></IoIosArrowDown>
+                  {dropDown ? (
+                    <DropDown
+                      categoriesData={sections}
+                      setDropDown={setDropDown}
+                    />
+                  ) : null}
+                </div>
               </div>
             </div>
+          )}
+          <div className={`${styles.normalFlex}`}>
+            <div className={`items-center justify-center m-5`}>
+              <Link to={"/"}>
+                <IoHomeOutline size={30} color="rgb(255 255 255 / 83%)" />
+              </Link>
+            </div>
+            {user?.role !== "admin" && (
+              <div className={`items-center justify-center`}>
+                <Link to={"/company-login"}>
+                  <FaRegBuilding size={30} color="rgb(255 255 255 / 83%)" />
+                </Link>
+              </div>
+            )}
           </div>
-        )}
+        </div>
         {/* Nav items */}
 
         <div className="flex">

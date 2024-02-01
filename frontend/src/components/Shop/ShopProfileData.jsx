@@ -47,7 +47,7 @@ const ShopProfileData = ({ isOwner }) => {
                 active === 1 ? "text-red-500" : "text-[#333]"
               } cursor-pointer pr-[20px]`}
             >
-              Shop Products
+              Active Investments
             </h5>
           </div>
 
@@ -136,7 +136,11 @@ const TeamMemberCard = ({ member }) => {
         />
       </div>
       <div className="text-2xl text-bold">{member.name}</div>
-      <div className="text-xl italic text-slate-400">{member.companyRole}</div>
+      {member.companyRole !== "Not Assigned" && (
+        <div className="text-xl italic text-slate-400">
+          {member.companyRole}
+        </div>
+      )}{" "}
     </div>
   );
 };

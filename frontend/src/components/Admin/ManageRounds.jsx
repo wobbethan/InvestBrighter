@@ -18,6 +18,7 @@ const ManageRounds = () => {
       })
       .then(() => {
         toast.success("Round Deleted");
+        window.location.reload();
       });
   };
 

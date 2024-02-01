@@ -20,7 +20,7 @@ const ProductDetailsPage = () => {
   return (
     <div>
       <Header />
-      <ProductDetails data={data} />
+      <ProductDetails data={data} id={id} />
       <Footer />
     </div>
   );
