@@ -20,22 +20,6 @@ const DashboardHeader = () => {
       </div>
       <div className="flex items-center">
         <div className="flex items-center mr-4">
-          <Link to={"/dashboard/coupons"} className="800px:block hidden">
-            <AiOutlineGift
-              color="#555"
-              size={30}
-              className="mx-5 cursor-pointer"
-              title="Coupons"
-            />
-          </Link>
-          <Link to={"/dashboard-events"} className="800px:block hidden">
-            <MdOutlineLocalOffer
-              color="#555"
-              size={30}
-              className="mx-5 cursor-pointer"
-              title="Events"
-            />
-          </Link>
           <Link to={"/dashboard-products"} className="800px:block hidden">
             <FiShoppingBag
               color="#555"
@@ -52,14 +36,7 @@ const DashboardHeader = () => {
               title="Orders"
             />
           </Link>
-          <Link to={"/dashboard-messages"} className="800px:block hidden">
-            <BiMessageSquareDetail
-              color="#555"
-              size={30}
-              className="mx-5 cursor-pointer"
-              title="Messages"
-            />
-          </Link>
+
           <Link to={`/shop/${seller._id}`}>
             <img
               src={`${backend_url}${seller.avatar}`}

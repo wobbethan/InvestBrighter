@@ -26,7 +26,7 @@ function ProductCard({ data, isEvent }) {
   const { cart } = useSelector((state) => state.cart);
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -51,7 +51,11 @@ function ProductCard({ data, isEvent }) {
   };
 
   const addToCartHandler = (id) => {
-    if (isAuthenticated) {
+    console.log("Company: " + user.companyId);
+    console.log("id: " + id);
+    if (user.companyId === id) {
+      toast.error("Cannot Invest in your own company");
+    } else if (isAuthenticated) {
       const isItemExists = cart && cart.find((i) => i._id === id);
       if (isItemExists) {
         toast.error("Item already in cart");

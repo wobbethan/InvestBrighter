@@ -23,7 +23,6 @@ const AllProducts = () => {
   }, [dispatch]);
 
   const columns = [
-    { field: "id", headerName: "Product ID", minWidth: 150, flex: 0.7 },
     {
       field: "name",
       headerName: "Name",
@@ -62,28 +61,11 @@ const AllProducts = () => {
         const product_name = d.replace(/\s+/g, "-");
         return (
           <>
-            <Link to={`/product/${product_name}`}>
+            <Link to={`/product/${params.row.id}`}>
               <Button>
                 <AiOutlineEye size={20} />
               </Button>
             </Link>
-          </>
-        );
-      },
-    },
-    {
-      field: "Delete",
-      headerName: "",
-      type: "number",
-      minWidth: 120,
-      flex: 0.8,
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Button onClick={() => handleDelete(params.id)}>
-              <AiOutlineDelete size={20} />
-            </Button>
           </>
         );
       },
@@ -97,7 +79,7 @@ const AllProducts = () => {
       row.push({
         id: item._id,
         name: item.name,
-        price: "$" + item.discountPrice,
+        price: "$" + item?.price.toLocaleString(),
         stock: item.stock,
         sold: item.sold,
       });

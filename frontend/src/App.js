@@ -40,6 +40,7 @@ import {
   AdminAllUsersPage,
   AdminInvestmentRoundPage,
   AdminManageRoundPage,
+  ShopSettingsPage,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -86,7 +87,14 @@ function App() {
             </SellerProtectedRoute>
           }
         />
-
+        <Route
+          path="/dashboard-settings"
+          element={
+            <SellerProtectedRoute>
+              <ShopSettingsPage />
+            </SellerProtectedRoute>
+          }
+        />
         <Route
           path="/dashboard"
           element={

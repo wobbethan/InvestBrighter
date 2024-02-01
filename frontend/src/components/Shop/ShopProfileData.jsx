@@ -50,15 +50,6 @@ const ShopProfileData = ({ isOwner }) => {
               Shop Products
             </h5>
           </div>
-          <div className="flex items-center" onClick={() => setActive(2)}>
-            <h5
-              className={`font-[600] text-[20px] ${
-                active === 2 ? "text-red-500" : "text-[#333]"
-              } cursor-pointer pr-[20px]`}
-            >
-              Running Events
-            </h5>
-          </div>
 
           <div className="flex items-center" onClick={() => setActive(3)}>
             <h5
@@ -116,16 +107,16 @@ const ShopProfileData = ({ isOwner }) => {
 
       {active === 3 && (
         <div className="w-full">
-          {seller.teamMembers.length === 0 ? (
-            <div className="w-full text-center py-5 text-[25px]">
-              This company currently has not added any team members
-            </div>
-          ) : (
+          {seller.teamMembers.length > 0 ? (
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:gap-[20px] mb-12 border-0">
               {members &&
                 members.map((i, index) => (
                   <TeamMemberCard member={members[index]} />
                 ))}
+            </div>
+          ) : (
+            <div className="w-full text-center py-5 text-[25px]">
+              This company currently has not added any team members
             </div>
           )}
         </div>
@@ -145,6 +136,7 @@ const TeamMemberCard = ({ member }) => {
         />
       </div>
       <div className="text-2xl text-bold">{member.name}</div>
+      <div className="text-xl italic text-slate-400">{member.companyRole}</div>
     </div>
   );
 };
