@@ -58,6 +58,32 @@ export const productReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
+  // get all admin
+  getAllProductsAdminRequest: (state) => {
+    state.isLoading = true;
+  },
+  getAllProductsAdminSuccess: (state, action) => {
+    state.isLoading = false;
+    state.allProductsAdmin = action.payload;
+  },
+  getAllProductsAdminFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // get all section
+  getAllProductsSectionRequest: (state) => {
+    state.isLoading = true;
+  },
+  getAllProductsSectionSuccess: (state, action) => {
+    state.isLoading = false;
+    state.allProductsSection = action.payload;
+  },
+  getAllProductsSectionFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
   clearErrors: (state) => {
     state.error = null;
   },

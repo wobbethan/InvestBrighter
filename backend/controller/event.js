@@ -6,6 +6,8 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const User = require("../model/user");
 const Shop = require("../model/shop");
 const Event = require("../model/event");
+const Product = require("../model/product");
+
 const { isSeller } = require("../middleware/auth");
 const fs = require("fs");
 const axios = require("axios");
@@ -143,15 +145,29 @@ router.delete(
       const eventId = req.params.id;
       const eventData = await Event.findById(eventId);
 
-      eventData.images.forEach((imageUrl) => {
-        const filename = imageUrl;
-        const filePath = `uploads/${filename}`;
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
+      // eventData.images.forEach((imageUrl) => {
+      //   const filename = imageUrl;
+      //   const filePath = `uploads/${filename}`;
+      //   try {
+      //     fs.unlink(filePath, (err) => {
+      //       if (err) {
+      //         console.log(err);
+      //       }
+      //     });
+      //   } catch (error) {}
+      // });
+
+      const products = await Product.find({
+        eventId: req.params.id,
       });
+
+      if (products) {
+        products.forEach((product) => {
+          axios
+            .delete(`/delete-shop-product/${product._id}`)
+            .catch((err) => console.log(err));
+        });
+      }
 
       const event = await Event.findByIdAndDelete(eventId);
 

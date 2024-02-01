@@ -3,6 +3,7 @@ import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import { useState } from "react";
 import styles from "../styles/styles";
+import { Link } from "react-router-dom";
 const FaqPage = () => {
   return (
     <div>
@@ -32,7 +33,7 @@ const Faq = () => {
             onClick={() => toggleTab(2)}
           >
             <span className="text-lg font-medium text-gray-900">
-              What is your return policy?
+              Why is my account balance $0?
             </span>
             {activeTab === 2 ? (
               <svg
@@ -67,10 +68,12 @@ const Faq = () => {
           {activeTab === 2 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-                If you're not satisfied with your purchase, we accept returns
-                within 30 days of delivery. To initiate a return, please email
-                us at support@myecommercestore.com with your order number and a
-                brief explanation of why you're returning the item.
+                Your account balance is updated with each investment round. When
+                an investment round is created, your instructor will issue you
+                capital to invest in other companies. This capital is equivalent
+                to the number of checks multiplied by the price per check. At
+                the end of the investment round your account balance will return
+                to $0
               </p>
             </div>
           )}
@@ -82,7 +85,7 @@ const Faq = () => {
             onClick={() => toggleTab(3)}
           >
             <span className="text-lg font-medium text-gray-900">
-              How do I track my order?
+              What does my company need to do when creating our account?
             </span>
             {activeTab === 3 ? (
               <svg
@@ -117,9 +120,15 @@ const Faq = () => {
           {activeTab === 3 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-                You can track your order by clicking the tracking link in your
-                shipping confirmation email, or by logging into your account on
-                our website and viewing the order details.
+                After the creation of your company account{" "}
+                <span>
+                  <Link
+                    to={"/create-company"}
+                    className="underline text-blue-500"
+                  >
+                    here
+                  </Link>
+                </span>
               </p>
             </div>
           )}

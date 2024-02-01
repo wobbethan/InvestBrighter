@@ -234,7 +234,7 @@ function Header({ activeHeading }) {
               {/* Navigation */}
               <Navbar active={activeHeading}></Navbar>
               <div className={`${styles.button} ml-3 !rounded-[4px]`}>
-                <Link to="/shop-create">
+                <Link to="/create-company">
                   <h1 className="text-[#fff] flex items-center">
                     Become Seller{" "}
                     <IoIosArrowForward className="ml-1"></IoIosArrowForward>

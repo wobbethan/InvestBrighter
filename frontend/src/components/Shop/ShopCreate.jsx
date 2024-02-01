@@ -69,7 +69,7 @@ function ShopCreate() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Register as Seller
+          Create Company
         </h2>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
@@ -81,7 +81,7 @@ function ShopCreate() {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-                Shop Name
+                Company Name
               </label>
               <div className="mt-1">
                 <input
@@ -102,7 +102,7 @@ function ShopCreate() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Shop Email Address
+                Company Email Address
               </label>
               <div className="mt-1">
                 <input
@@ -245,7 +245,7 @@ function ShopCreate() {
 
             <div className="flex items-center w-full">
               <h4>Already have an account?</h4>
-              <Link to="/shop-login" className="text-blue-600 pl-2">
+              <Link to="/company-login" className="text-blue-600 pl-2">
                 Login
               </Link>
             </div>

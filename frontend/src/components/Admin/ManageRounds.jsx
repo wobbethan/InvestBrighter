@@ -17,7 +17,6 @@ const ManageRounds = () => {
         withCredentials: true,
       })
       .then(() => {
-        window.location.reload();
         toast.success("Round Deleted");
       });
   };
@@ -61,23 +60,23 @@ const ManageRounds = () => {
       minWidth: 130,
       flex: 0.8,
     },
-    // {
-    //   field: " ",
-    //   flex: 1,
-    //   minWidth: 150,
-    //   headerName: "Delete Event",
-    //   type: "number",
-    //   sortable: false,
-    //   renderCell: (params) => {
-    //     return (
-    //       <>
-    //         <Button onClick={() => removeEvent(params.row.id)}>
-    //           <AiOutlineDelete size={20} />
-    //         </Button>
-    //       </>
-    //     );
-    //   },
-    // },
+    {
+      field: " ",
+      flex: 1,
+      minWidth: 150,
+      headerName: "Delete Event",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button onClick={() => removeEvent(params.row.id)}>
+              <AiOutlineDelete size={20} />
+            </Button>
+          </>
+        );
+      },
+    },
   ];
 
   const row = [];
