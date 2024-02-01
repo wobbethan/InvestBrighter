@@ -12,10 +12,9 @@ import { getAllMembersShop } from "../../redux/actions/seller.js";
 import axios from "axios";
 
 const ShopProfileData = ({ isOwner }) => {
-  const { seller } = useSelector((state) => state.seller);
+  const { seller, members } = useSelector((state) => state.seller);
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
-  const [members, setMembers] = useState([]);
   const { id } = useParams();
   const dispatch = useDispatch();
   const [active, setActive] = useState(1);
@@ -23,18 +22,7 @@ const ShopProfileData = ({ isOwner }) => {
   useEffect(() => {
     dispatch(getAllProductsShop(id));
     dispatch(getAllEventsShop(id));
-
-    const getMembers = async () => {
-      await axios
-        .get(`${server}/shop/get-all-members-shop/${id}`)
-        .then((response) => {
-          setMembers(response.data.members);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    getMembers();
+    dispatch(getAllMembersShop(id));
   }, [active]);
 
   return (
@@ -107,7 +95,7 @@ const ShopProfileData = ({ isOwner }) => {
 
       {active === 3 && (
         <div className="w-full">
-          {seller.teamMembers.length > 0 ? (
+          {members ? (
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:gap-[20px] mb-12 border-0">
               {members &&
                 members.map((i, index) => (

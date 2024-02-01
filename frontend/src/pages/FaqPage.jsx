@@ -71,9 +71,10 @@ const Faq = () => {
                 Your account balance is updated with each investment round. When
                 an investment round is created, your instructor will issue you
                 capital to invest in other companies. This capital is equivalent
-                to the number of checks multiplied by the price per check. At
-                the end of the investment round your account balance will return
-                to $0
+                to the number of checks multiplied by the price per check (e.g.
+                if you're given 3 checks and each is worth $20,000, then you
+                have $60,000 worth of capital to invest). At the end of the
+                investment round your account balance will return to $0
               </p>
             </div>
           )}
@@ -126,9 +127,11 @@ const Faq = () => {
                     to={"/create-company"}
                     className="underline text-blue-500"
                   >
-                    here
+                    {`here`}
                   </Link>
                 </span>
+                . Once you've created the account, add the students in your
+                group as team members and fill out the company description.
               </p>
             </div>
           )}
@@ -140,7 +143,7 @@ const Faq = () => {
             onClick={() => toggleTab(4)}
           >
             <span className="text-lg font-medium text-gray-900">
-              How do I contact customer support?
+              Example FAQ
             </span>
             {activeTab === 4 ? (
               <svg
@@ -175,9 +178,13 @@ const Faq = () => {
           {activeTab === 4 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-                You can contact our customer support team by emailing us at
-                support@myecommercestore.com, or by calling us at (555) 123-4567
-                between the hours of 9am and 5pm EST, Monday through Friday.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum
+                accusamus molestiae, nisi eaque veritatis maiores, autem aut
+                perferendis repellat provident magni nam consectetur accusantium
+                est numquam quasi deserunt non similique natus possimus
+                recusandae ab nesciunt! Molestias incidunt asperiores veritatis
+                accusamus a soluta id culpa voluptate corporis suscipit!
+                Cupiditate, asperiores nisi.
               </p>
             </div>
           )}
@@ -186,12 +193,12 @@ const Faq = () => {
         <div className="border-b border-gray-200 pb-4">
           <button
             className="flex items-center justify-between w-full"
-            onClick={() => toggleTab(5)}
+            onClick={() => toggleTab(4)}
           >
             <span className="text-lg font-medium text-gray-900">
-              Can I change or cancel my order?
+              Example FAQ
             </span>
-            {activeTab === 5 ? (
+            {activeTab === 4 ? (
               <svg
                 className="h-6 w-6 text-gray-500"
                 fill="none"
@@ -221,13 +228,16 @@ const Faq = () => {
               </svg>
             )}
           </button>
-          {activeTab === 5 && (
+          {activeTab === 4 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-                Unfortunately, once an order has been placed, we are not able to
-                make changes or cancellations. If you no longer want the items
-                you've ordered, you can return them for a refund within 30 days
-                of delivery.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum
+                accusamus molestiae, nisi eaque veritatis maiores, autem aut
+                perferendis repellat provident magni nam consectetur accusantium
+                est numquam quasi deserunt non similique natus possimus
+                recusandae ab nesciunt! Molestias incidunt asperiores veritatis
+                accusamus a soluta id culpa voluptate corporis suscipit!
+                Cupiditate, asperiores nisi.
               </p>
             </div>
           )}
@@ -236,12 +246,12 @@ const Faq = () => {
         <div className="border-b border-gray-200 pb-4">
           <button
             className="flex items-center justify-between w-full"
-            onClick={() => toggleTab(6)}
+            onClick={() => toggleTab(4)}
           >
             <span className="text-lg font-medium text-gray-900">
-              Do you offer international shipping?
+              Example FAQ
             </span>
-            {activeTab === 6 ? (
+            {activeTab === 4 ? (
               <svg
                 className="h-6 w-6 text-gray-500"
                 fill="none"
@@ -271,10 +281,16 @@ const Faq = () => {
               </svg>
             )}
           </button>
-          {activeTab === 6 && (
+          {activeTab === 4 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-                Currently, we only offer shipping within the United States.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum
+                accusamus molestiae, nisi eaque veritatis maiores, autem aut
+                perferendis repellat provident magni nam consectetur accusantium
+                est numquam quasi deserunt non similique natus possimus
+                recusandae ab nesciunt! Molestias incidunt asperiores veritatis
+                accusamus a soluta id culpa voluptate corporis suscipit!
+                Cupiditate, asperiores nisi.
               </p>
             </div>
           )}
@@ -283,12 +299,12 @@ const Faq = () => {
         <div className="border-b border-gray-200 pb-4">
           <button
             className="flex items-center justify-between w-full"
-            onClick={() => toggleTab(7)}
+            onClick={() => toggleTab(4)}
           >
             <span className="text-lg font-medium text-gray-900">
-              What payment methods do you accept?
+              Example FAQ
             </span>
-            {activeTab === 7 ? (
+            {activeTab === 4 ? (
               <svg
                 className="h-6 w-6 text-gray-500"
                 fill="none"
@@ -318,11 +334,16 @@ const Faq = () => {
               </svg>
             )}
           </button>
-          {activeTab === 7 && (
+          {activeTab === 4 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-                We accept visa,mastercard,paypal payment method also we have
-                cash on delivery system.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum
+                accusamus molestiae, nisi eaque veritatis maiores, autem aut
+                perferendis repellat provident magni nam consectetur accusantium
+                est numquam quasi deserunt non similique natus possimus
+                recusandae ab nesciunt! Molestias incidunt asperiores veritatis
+                accusamus a soluta id culpa voluptate corporis suscipit!
+                Cupiditate, asperiores nisi.
               </p>
             </div>
           )}

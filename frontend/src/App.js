@@ -41,6 +41,7 @@ import {
   AdminInvestmentRoundPage,
   AdminManageRoundPage,
   ShopSettingsPage,
+  NotFound,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -64,6 +65,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="*" Component={NotFound} />
         <Route path="/" Component={HomePage} />
         <Route path="/login" Component={LoginPage} />
         <Route path="/sign-up" Component={SignupPage} />
