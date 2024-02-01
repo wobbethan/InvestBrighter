@@ -21,7 +21,6 @@ const ProductDetailsPage = () => {
     <div>
       <Header />
       <ProductDetails data={data} />
-      {data && <SuggestedProduct data={data} />}
       <Footer />
     </div>
   );

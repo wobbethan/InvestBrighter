@@ -113,7 +113,7 @@ const ProductDetails = ({ data }) => {
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
                 <h1 className={`${styles.productTitle}`}>{data?.name}</h1>
-                <p>{data?.description}</p>
+                <p>{data.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
                     ${data?.price.toLocaleString()}
@@ -229,11 +229,6 @@ const ProductDetailsInfo = ({ data, products }) => {
             {data.description}
           </p>
         </>
-      ) : null}
-      {active === 2 ? (
-        <div className="w-full justify-center min-h-[40vh] flex items-center">
-          <p>No reviews yet!</p>
-        </div>
       ) : null}
       {active === 3 ? (
         <div className="w-full block 800px:flex p-5">
