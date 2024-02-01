@@ -35,7 +35,7 @@ const ProductDetails = ({ data, id }) => {
 
   useEffect(() => {
     dispatch(getAllProductsShop(data && data.shop._id));
-    if (wishlist && wishlist.find((i) => i._id === data._id)) {
+    if (wishlist && wishlist.find((i) => i?._id === data?._id)) {
       setClick(true);
     } else {
       setClick(false);
@@ -60,7 +60,7 @@ const ProductDetails = ({ data, id }) => {
       if (user.companyId === product.shopId) {
         toast.error("Cannot Invest in your own company");
       } else {
-        const isItemExists = cart && cart.find((i) => i._id === id);
+        const isItemExists = cart && cart.find((i) => i?._id === id);
         if (isItemExists) {
           toast.error("Item already in cart");
         } else {
