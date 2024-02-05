@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
+import { useDispatch } from "react-redux";
 
 const DropDown = ({ categoriesData, setDropDown }) => {
   const navigate = useNavigate();
@@ -9,6 +10,8 @@ const DropDown = ({ categoriesData, setDropDown }) => {
     setDropDown(false);
     window.location.reload();
   };
+
+  useEffect(() => {}, []);
   return (
     <div className="pb-4 w-[248px] bg-[#fff] absolute z-30 rounded-b-md shadow-sm">
       {categoriesData &&

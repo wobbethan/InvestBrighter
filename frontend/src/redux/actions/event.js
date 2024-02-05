@@ -96,3 +96,25 @@ export const getAllEvents = () => async (dispatch) => {
     });
   }
 };
+
+// get all events section
+export const getAllEventsSection = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllEventsSectionRequest",
+    });
+
+    const { data } = await axios.get(
+      `${server}/event/get-all-events-section/${id}`
+    );
+    dispatch({
+      type: "getAllEventsSectionSuccess",
+      payload: data.events,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllEventsSectionFailed",
+      payload: error.response.data.message,
+    });
+  }
+};

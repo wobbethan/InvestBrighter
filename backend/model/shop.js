@@ -56,6 +56,10 @@ const shopSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  sharePrice: {
+    type: Number,
+    default: 0,
+  },
   teamMembers: [
     {
       type: Object,

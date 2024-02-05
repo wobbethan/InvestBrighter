@@ -21,8 +21,18 @@ const Wishlist = ({ setOpenWishlist }) => {
     dispatch(removeFromWishlist(data));
   };
   const addToCartHandler = (data) => {
+    const currentDate = new Date();
+    const startDate = new Date(data.start_Date);
+    const endDate = new Date(data.finish_Date);
+    const roundStarted = currentDate > startDate;
+    const roundEnded = currentDate > endDate;
+
     if (data.shopId === user.companyId) {
       toast.error("Cannot Invest in your own company");
+    } else if (roundEnded) {
+      toast.error("The round has concluded");
+    } else if (!roundStarted) {
+      toast.error("Unable to invest until round has started");
     } else {
       const newData = { ...data, qty: 1 };
       dispatch(addToCart(newData));

@@ -58,6 +58,19 @@ export const eventReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
+  // get all section
+  getAllEventsSectionRequest: (state) => {
+    state.isLoading = true;
+  },
+  getAllEventsSectionSuccess: (state, action) => {
+    state.isLoading = false;
+    state.allEventsSection = action.payload;
+  },
+  getAllEventsSectionFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
   clearErrors: (state) => {
     state.error = null;
   },

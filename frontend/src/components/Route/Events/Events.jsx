@@ -1,15 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import EventCard from "./EventCard.jsx";
 import styles from "../../../styles/styles.js";
 import Footer from "../../Layout/Footer.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllEventsSection } from "../../../redux/actions/event.js";
 
 const Events = () => {
-  const { allEvents, isLoading } = useSelector((state) => state.events);
+  const [data, setData] = useState(null);
+  const dispatch = useDispatch;
+  const { allEvents, isLoading, allEventsSection } = useSelector(
+    (state) => state.events
+  );
+  const { user } = useSelector((state) => state.user);
 
-  // useEffect(() => {
-  //   const data = allEvents && allEvents.find((a, b) => a.sold_out - b.sold_out);
-  // }, [allEvents]);
+  useEffect(() => {
+    const eventData =
+      allEvents &&
+      allEvents.filter((event) => event.sections.includes(user?.section));
+    setData(eventData);
+    console.log(eventData);
+  }, [allEvents]);
 
   return (
     <>
@@ -20,7 +30,13 @@ const Events = () => {
               <h1>Investment Round</h1>
             </div>
             <div className="w-full grid">
-              <EventCard data={allEvents[0]} />
+              <EventCard
+                data={
+                  allEvents?.filter((event) =>
+                    event.sections.includes(user?.section)
+                  )[0]
+                }
+              />
             </div>
           </div>
         </div>

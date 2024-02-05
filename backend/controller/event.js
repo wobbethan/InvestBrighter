@@ -92,6 +92,9 @@ router.post(
           newForm.append("eventID", req.body.name);
           newForm.append("shopId", companyObj._id);
           newForm.append("shop", companyObj);
+          newForm.append("start_Date", req.body.start_Date);
+          newForm.append("finish_Date", req.body.finish_Date);
+
           await axios
             .post(
               `http://localhost:8000/api/v2/product/create-product`,
@@ -119,6 +122,25 @@ router.get("/get-all-events", async (req, res, next) => {
     return next(new ErrorHandler(error, 400));
   }
 });
+
+// get all events section
+router.get(
+  "/get-all-events-section/:section",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const events = await Event.find({
+        sections: { $in: [req.params.section] },
+      });
+
+      res.status(201).json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
 
 //Getting all events of shop
 router.get(

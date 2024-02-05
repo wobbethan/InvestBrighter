@@ -26,7 +26,8 @@ const EventCard = ({ active, data }) => {
             {data?.numChecks} Investment Checks
           </span>
         </div>
-        <CountDown data={data} />
+        {data?.start_Date !== "undefined" &&
+          data?.finish_Date !== "undefined" && <CountDown data={data} />}
       </div>
     </div>
   );

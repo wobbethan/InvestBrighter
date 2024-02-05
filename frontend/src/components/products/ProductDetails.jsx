@@ -52,13 +52,24 @@ const ProductDetails = ({ data, id }) => {
   };
 
   const addToCartHandler = async () => {
+    let roundStarted = null;
+    let roundEnded = null;
     if (isAuthenticated) {
       let product;
       await axios.get(`${server}/product/get-product/${id}`).then((res) => {
         product = res.data.product;
+        const currentDate = new Date();
+        const startDate = new Date(product.start_Date);
+        const endDate = new Date(product.finish_Date);
+        roundStarted = currentDate > startDate;
+        roundEnded = currentDate > endDate;
       });
       if (user.companyId === product.shopId) {
         toast.error("Cannot Invest in your own company");
+      } else if (roundEnded) {
+        toast.error("The round has concluded");
+      } else if (!roundStarted) {
+        toast.error("Unable to invest until round has started");
       } else {
         const isItemExists = cart && cart.find((i) => i?._id === id);
         if (isItemExists) {
