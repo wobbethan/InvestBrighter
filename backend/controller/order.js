@@ -8,6 +8,7 @@ const Shop = require("../model/shop");
 const Product = require("../model/product");
 const User = require("../model/user");
 const Section = require("../model/section");
+const Event = require("../model/event");
 
 // create new order
 router.post(
@@ -20,17 +21,22 @@ router.post(
       const userObj = await User.findById(user._id);
       const companyObj = await Shop.findById(company.shop._id);
       const productObj = await Product.findById(company._id);
+      const eventObj = await Event.findById(productObj.eventId);
 
       //Update OBJ vars
       userObj.accountBalance -= totalPrice;
       companyObj.balance += totalPrice;
+      companyObj.totalInvestments += quantity;
       productObj.stock -= quantity;
       productObj.sold += quantity;
+      eventObj.numInvestments += quantity;
 
       //Save
       await userObj.save();
       await companyObj.save();
       await productObj.save();
+      await eventObj.save();
+
       //Create Order
       const order = await Order.create({
         company: company,

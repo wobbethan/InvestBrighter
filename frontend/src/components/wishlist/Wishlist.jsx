@@ -22,16 +22,20 @@ const Wishlist = ({ setOpenWishlist }) => {
   };
   const addToCartHandler = (data) => {
     const currentDate = new Date();
-    const startDate = new Date(data.start_Date);
-    const endDate = new Date(data.finish_Date);
-    const roundStarted = currentDate > startDate;
-    const roundEnded = currentDate > endDate;
+    let roundStarted = null;
+    let roundEnded = null;
+    if (data.start_Date !== "undefined" && data.finish_Date !== "undefined") {
+      const startDate = new Date(data.start_Date);
+      const endDate = new Date(data.finish_Date);
+      roundStarted = currentDate > startDate;
+      roundEnded = currentDate > endDate;
+    }
 
     if (data.shopId === user.companyId) {
       toast.error("Cannot Invest in your own company");
-    } else if (roundEnded) {
+    } else if (roundEnded === true) {
       toast.error("The round has concluded");
-    } else if (!roundStarted) {
+    } else if (roundStarted === false) {
       toast.error("Unable to invest until round has started");
     } else {
       const newData = { ...data, qty: 1 };

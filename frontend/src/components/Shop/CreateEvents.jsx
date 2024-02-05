@@ -227,7 +227,7 @@ const CreateEvents = () => {
         </div>
         <br />
         <div>
-          <label className="pb-2">Round End Date</label>
+          <label className="pb-2">Round End Date (12AM)</label>
           <input
             type="date"
             name="date"

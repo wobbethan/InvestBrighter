@@ -87,7 +87,7 @@ const ManageRounds = () => {
       row.push({
         id: item._id,
         name: item.name,
-        start: item?.start_Date.slice(0, 10),
+        start: item?.start_Date === item?.start_Date.slice(0, 10),
         end: item?.finish_Date.slice(0, 10),
         numInvestments: item.numInvestments,
       });

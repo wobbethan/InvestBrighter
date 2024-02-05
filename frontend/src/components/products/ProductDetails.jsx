@@ -59,16 +59,21 @@ const ProductDetails = ({ data, id }) => {
       await axios.get(`${server}/product/get-product/${id}`).then((res) => {
         product = res.data.product;
         const currentDate = new Date();
-        const startDate = new Date(product.start_Date);
-        const endDate = new Date(product.finish_Date);
-        roundStarted = currentDate > startDate;
-        roundEnded = currentDate > endDate;
+        if (
+          product.start_Date !== "undefined" &&
+          product.finish_Date !== "undefined"
+        ) {
+          const startDate = new Date(product.start_Date);
+          const endDate = new Date(product.finish_Date);
+          roundStarted = currentDate > startDate;
+          roundEnded = currentDate > endDate;
+        }
       });
       if (user.companyId === product.shopId) {
         toast.error("Cannot Invest in your own company");
-      } else if (roundEnded) {
+      } else if (roundEnded === true) {
         toast.error("The round has concluded");
-      } else if (!roundStarted) {
+      } else if (!roundStarted === false) {
         toast.error("Unable to invest until round has started");
       } else {
         const isItemExists = cart && cart.find((i) => i?._id === id);

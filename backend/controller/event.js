@@ -88,7 +88,19 @@ router.post(
           newForm.append("description", companyObj.description);
           newForm.append("section", companyObj.section);
           newForm.append("price", req.body.checkPrice);
-          newForm.append("stock", req.body.maxInvestmentsRound);
+
+          //determine stock
+          let stock = 0;
+          let maxRound = req.body.maxInvestmentsRound;
+          let maxCompany = req.body.maxInvestmentsCompany;
+          let companyInvestments = companyObj.totalInvestments;
+          if (maxCompany - companyInvestments > maxRound) {
+            stock = maxRound;
+          } else {
+            stock = maxCompany - companyInvestments;
+          }
+
+          newForm.append("stock", stock);
           newForm.append("eventID", req.body.name);
           newForm.append("shopId", companyObj._id);
           newForm.append("shop", companyObj);
