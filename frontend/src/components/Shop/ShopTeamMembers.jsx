@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
 import { getAllMembersShop } from "../../redux/actions/seller";
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid, GridToolbar } from "@material-ui/data-grid";
 import { Button } from "@material-ui/core";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
@@ -79,7 +79,7 @@ const ShopTeamMembers = () => {
     {
       field: "ownership",
       headerName: "Ownership",
-      type: "number",
+      type: "string",
       minWidth: 130,
       flex: 0.8,
     },
@@ -138,7 +138,7 @@ const ShopTeamMembers = () => {
         id: member._id,
         role: member.companyRole,
         member: member.name,
-        ownership: member.companyInvestment,
+        ownership: "$" + member.companyInvestment.toLocaleString(),
       });
     });
 
@@ -179,17 +179,18 @@ const ShopTeamMembers = () => {
           </div>
         </form>
       </div>
-      <div className="w-[90%] mx-8 pt-1 mt-10">
+      <div className="w-[90%] mx-8 pt-1 mt-10 bg-white">
         <DataGrid
           rows={row}
           columns={columns}
-          pageSize={10}
+          pageSizeOptions={[10, 20, 50]}
           disableSelectionOnClick
           autoHeight
+          components={{ Toolbar: GridToolbar }}
         />
       </div>
       {open && (
-        <div className="fixed top-0 left-0 w-full h-screen bg-[#00000062] z-[2000] flex items-center justify-center">
+        <div className="fixed top-0 left-0 w-full h-full bg-[#00000062] z-[2000] flex items-center justify-center">
           <div className="w-[90%] 800px:w-[40%] h-[40vh] bg-white rounded-md shadow p-3">
             <div className="w-full flex justify-end">
               <RxCross1
@@ -226,7 +227,7 @@ const ShopTeamMembers = () => {
                   value={ownership}
                   className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   onChange={(e) => setOwnership(e.target.value)}
-                  placeholder="Enter your coupon code value..."
+                  placeholder="Enter ownership..."
                 />
               </div>
               <div>
@@ -242,7 +243,7 @@ const ShopTeamMembers = () => {
         </div>
       )}
       {confirmOpen && (
-        <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
+        <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-full">
           <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">
             <div className="w-full flex justify-end cursor-pointer">
               <RxCross1 size={25} onClick={() => setConfirmOpen(false)} />

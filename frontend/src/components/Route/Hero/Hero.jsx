@@ -21,7 +21,14 @@ function Hero() {
         backgroundImage: `url(${bg})`,
       }}
     >
-      <Lottie options={defaultOptions} width={300} height={300}></Lottie>
+      <div className="!cursor-default">
+        <Lottie
+          options={defaultOptions}
+          width={300}
+          height={300}
+          className="!cursor-default"
+        ></Lottie>
+      </div>
 
       <div className="800px:text-[6.4rem] 600px:text-[5rem] text-[4rem] text-center text-black">
         {title.map((el, i) => (
@@ -42,7 +49,7 @@ function Hero() {
           initial={{ opacity: 0, y: "100%" }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut", delay: 2 }}
-          className="800px:text-[3rem] 600px:text-[2rem] text-[2.5rem] font-Poppins"
+          className="800px:block hidden text-[3rem] font-Poppins"
         >
           Your Investment solution
         </motion.p>

@@ -61,6 +61,7 @@ router.post(
         //Update account balances
         users.forEach(async (user) => {
           const userObj = await User.findById(user._id);
+          //Sets account balance, two rounds at the same time will not have an accurate account balance
           userObj.accountBalance = req.body.numChecks * req.body.checkPrice;
           userObj.save();
         });
@@ -176,37 +177,17 @@ router.delete(
   "/delete-shop-event/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const eventData = await Event.findById(req.params.id);
+      const event = await Event.findByIdAndDelete(req.params.id);
 
-      // eventData.images.forEach((imageUrl) => {
-      //   const filename = imageUrl;
-      //   const filePath = `uploads/${filename}`;
-      //   try {
-      //     fs.unlink(filePath, (err) => {
-      //       if (err) {
-      //         console.log(err);
-      //       }
-      //     });
-      //   } catch (error) {}
-      // });
-
-      const products = await Product.find({
-        eventId: req.params.id,
-      });
-      console.log(products);
-      if (products) {
-        products.forEach(async (product) => {
-          await axios
-            .delete(`/delete-shop-product/${product.shop.email}`)
-            .catch((err) => console.log(err));
-        });
+      if (!event) {
+        return next(new ErrorHandler("Event not found", 500));
       }
 
-      // const event = await Event.findByIdAndDelete(eventId);
-
-      // if (!event) {
-      //   return next(new ErrorHandler("Event not found", 500));
-      // }
+      await axios
+        .delete(
+          `http://localhost:8000/api/v2/product/delete-company-products/${req.params.id}`
+        )
+        .catch((err) => console.log(err));
 
       res.status(201).json({
         success: true,

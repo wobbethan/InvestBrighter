@@ -220,7 +220,7 @@ const ProfileContent = ({ active }) => {
               src={`${backend_url}${shopInfo.avatar}`}
               className="w-[350px] h-[250px] object-cover justify-center items-center "
             />
-            <div className="flex justify-center w-full text-4xl text-bold mb-4 mt-4">
+            <div className="flex justify-center w-full text-4xl text-bold mb-4 mt-4 text-center">
               {shopInfo.name}
             </div>
           </div>
@@ -271,26 +271,6 @@ const AllOrders = () => {
       type: "number",
       minWidth: 130,
       flex: 0.8,
-    },
-
-    {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/user/order/${params.id}`}>
-              <Button>
-                <AiOutlineArrowRight size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
     },
   ];
 

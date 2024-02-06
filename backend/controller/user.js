@@ -11,11 +11,28 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
 const { isAuthenticated } = require("../middleware/auth");
 const Section = require("../model/section");
+const Event = require("../model/event");
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password, section } = req.body;
     const userEmail = await User.findOne({ email });
+
+    //Outlook needed to test security of link, may get flagged as spam
+
+    // if (!email.endsWith("ufl.edu")) {
+    //   return next(new ErrorHandler("Email must be a 'ufl.edu' email", 400));
+    // }
+
+    let accountBalance = 0;
+    const events = await Event.find({
+      sections: { $in: [section] },
+    });
+    if (events.length > 0) {
+      events.forEach((event) => {
+        accountBalance += event.numChecks * event.checkPrice;
+      });
+    }
 
     if (userEmail) {
       const filename = req.file.filename;
@@ -28,7 +45,6 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
       });
       return next(new ErrorHandler("User already exists", 400));
     }
-
     const filename = req.file.filename;
     const fileUrl = path.join(filename);
     const user = {
@@ -37,6 +53,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
       password: password,
       section: section,
       avatar: fileUrl,
+      accountBalance: accountBalance,
     };
 
     const activationToken = createActivationToken(user);
@@ -62,7 +79,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
 //creating activation token
 const createActivationToken = (user) => {
   return jwt.sign(user, process.env.ACTIVATION_SECRET, {
-    expiresIn: "55m",
+    expiresIn: "5m",
   });
 };
 
@@ -79,7 +96,8 @@ router.post(
       if (!newUser) {
         return next(new ErrorHandler("Invalid token", 400));
       }
-      const { name, email, password, avatar, section } = newUser;
+      const { name, email, password, avatar, section, accountBalance } =
+        newUser;
 
       let user = await User.findOne({ email });
       if (user) {
@@ -97,6 +115,7 @@ router.post(
         avatar,
         password,
         section,
+        accountBalance,
       });
 
       sendToken(user, 201, res, "token");

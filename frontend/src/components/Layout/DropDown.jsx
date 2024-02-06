@@ -18,10 +18,10 @@ const DropDown = ({ categoriesData, setDropDown }) => {
         categoriesData.map((i, index) => (
           <div
             key={index}
-            className={`${styles.normalFlex}`}
+            className={`${styles.normalFlex} cursor-pointer`}
             onClick={() => submitHandle(i)}
           >
-            <h3 className="m-3 cursor-pointer select-none">{i.name}</h3>
+            <h3 className="m-3 select-none">{i.name}</h3>
           </div>
         ))}
     </div>

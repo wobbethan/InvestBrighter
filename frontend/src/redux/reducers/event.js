@@ -59,14 +59,14 @@ export const eventReducer = createReducer(initialState, {
   },
 
   // get all section
-  getAllEventsSectionRequest: (state) => {
+  getAllEventsAdminRequest: (state) => {
     state.isLoading = true;
   },
-  getAllEventsSectionSuccess: (state, action) => {
+  getAllEventsAdminSuccess: (state, action) => {
     state.isLoading = false;
-    state.allEventsSection = action.payload;
+    state.allEventsAdmin = action.payload;
   },
-  getAllEventsSectionFailed: (state, action) => {
+  getAllEventsAdminFailed: (state, action) => {
     state.isLoading = false;
     state.error = action.payload;
   },

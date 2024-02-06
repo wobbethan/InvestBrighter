@@ -9,6 +9,8 @@ import { getAllProductsShop } from "../../redux/actions/product";
 import { Button } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 import { GiReceiveMoney } from "react-icons/gi";
+import { SlRefresh } from "react-icons/sl";
+import { FaTable } from "react-icons/fa";
 
 const DashboardMain = () => {
   const dispatch = useDispatch();
@@ -77,7 +79,7 @@ const DashboardMain = () => {
 
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5 flex flex-col items-center">
           <div className="flex items-center self-start">
-            <MdBorderClear size={30} className="mr-2" fill="#00000085" />
+            <FaTable size={30} className="mr-2" fill="#00000085" />
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >
@@ -94,7 +96,7 @@ const DashboardMain = () => {
 
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5 flex flex-col items-center">
           <div className="flex items-center self-start">
-            <MdBorderClear size={30} className="mr-2" fill="#00000085" />
+            <SlRefresh size={30} className="mr-2" fill="#00000085" />
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >

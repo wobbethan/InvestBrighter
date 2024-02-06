@@ -5,11 +5,13 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { server } from "../../Server";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { getAllEventsAdmin } from "../../redux/actions/event";
 const ManageRounds = () => {
+  const { allEventsAdmin } = useSelector((state) => state.events);
   const { user } = useSelector((state) => state.user);
-  const [events, setEvents] = useState([]);
+  const dispatch = useDispatch();
 
   const removeEvent = async (id) => {
     axios
@@ -23,13 +25,7 @@ const ManageRounds = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`${server}/event/admin-all-events/${user._id}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setEvents(res.data.events);
-      });
+    dispatch(getAllEventsAdmin(user._id));
   }, []);
 
   const columns = [
@@ -82,13 +78,19 @@ const ManageRounds = () => {
 
   const row = [];
 
-  events &&
-    events.forEach((item) => {
+  allEventsAdmin &&
+    allEventsAdmin.forEach((item) => {
       row.push({
         id: item._id,
         name: item.name,
-        start: item?.start_Date === item?.start_Date.slice(0, 10),
-        end: item?.finish_Date.slice(0, 10),
+        start:
+          item?.start_Date === "undefined"
+            ? "N/A"
+            : item?.start_Date.slice(0, 10),
+        end:
+          item?.finish_Date === "undefined"
+            ? "N/A"
+            : item?.finish_Date.slice(0, 10),
         numInvestments: item.numInvestments,
       });
     });

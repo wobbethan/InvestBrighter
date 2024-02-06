@@ -18,7 +18,6 @@ const Events = () => {
       allEvents &&
       allEvents.filter((event) => event.sections.includes(user?.section));
     setData(eventData);
-    console.log(eventData);
   }, [allEvents]);
 
   return (
