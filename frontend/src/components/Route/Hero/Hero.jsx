@@ -16,7 +16,7 @@ function Hero() {
   };
   return (
     <div
-      className={`z-[999] flex flex-col h-[100vh] self-center bg-no-repeat bg-fixed bg-cover items-center p-[100px]`}
+      className={`z-[999] flex flex-col h-[100vh] self-center bg-no-repeat bg-fixed bg-cover items-center p-[100px] mb-5`}
       style={{
         backgroundImage: `url(${bg})`,
       }}

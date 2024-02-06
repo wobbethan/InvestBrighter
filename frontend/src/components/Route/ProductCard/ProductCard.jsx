@@ -97,7 +97,7 @@ function ProductCard({ data, isEvent }) {
 
   return (
     <>
-      <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
+      <div className="w-full h-[400px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <div className="flex justify-end"></div>
         <Link
           to={`${
@@ -112,6 +112,12 @@ function ProductCard({ data, isEvent }) {
             className="w-full h-[170px] object-contain p-6"
           />
         </Link>
+        <div className="w-full items-center text-center">
+          <h5 className={`${styles.productDiscountPrice} !text-lg`}>
+            {" "}
+            Valuation: ${data.shop.valuation.toLocaleString()}
+          </h5>
+        </div>
         <Link to={`/shop/preview/${data?.shop._id}`}>
           <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
         </Link>
@@ -126,7 +132,9 @@ function ProductCard({ data, isEvent }) {
           <h4 className="pb-3 font-[500]">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
-          <h5 className="text-[16px] text-[red]">{data.stock} remaining</h5>
+          <h5 className="text-[16px] text-[red] justify-end">
+            {data.stock} remaining
+          </h5>
 
           <div className="py-2 flex items-center justify-between mt-3">
             <div className="flex">
