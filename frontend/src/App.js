@@ -42,6 +42,7 @@ import {
   AdminManageRoundPage,
   ShopSettingsPage,
   NotFound,
+  ForgotPasswordPage,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -78,6 +79,7 @@ function App() {
           Component={SellerActivationPage}
         />
         <Route path="/shop/preview/:id" Component={ShopPreviewPage} />
+        <Route path="/forgot-password" Component={ForgotPasswordPage} />
         {/* Shop Routes */}
         <Route path="/create-company" Component={ShopCreatePage} />
         <Route path="/company-login" Component={ShopLoginPage} />

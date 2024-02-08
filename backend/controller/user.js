@@ -396,4 +396,57 @@ router.delete(
   })
 );
 
+router.post(
+  "/forgot-password/:email",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.find({ email: req.params.email });
+
+      if (!user[0]) {
+        return next(new ErrorHandler("User does not exist", 400));
+      }
+
+      const resetCode = Math.floor(100000 + Math.random() * 900000);
+
+      try {
+        await sendMail({
+          email: user[0].email,
+          subject: "Password Rest",
+          message: `Hello ${user[0].name}, please use the following reset code to reset your account password: ${resetCode}`,
+        });
+        res.status(201).json({
+          success: true,
+          message: `please check ${user[0].email} for reset code`,
+          code: resetCode,
+        });
+      } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+      }
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+router.put(
+  "/password-reset/:email/:password",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.find({ email: req.params.email });
+
+      if (!user[0]) {
+        return next(new ErrorHandler("User does not exist", 400));
+      }
+      user[0].password = req.params.password;
+      await user[0].save();
+      res.status(201).json({
+        success: true,
+        message: `password changed`,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;
