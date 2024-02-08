@@ -12,31 +12,29 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const User = require("../model/user");
 const Section = require("../model/section");
+const cloudinary = require("cloudinary");
 
-router.post("/create-shop", upload.single("file"), async (req, res, next) => {
+router.post("/create-shop", async (req, res, next) => {
   try {
     const { email } = req.body;
     const sellerEmail = await Shop.findOne({ email });
 
     if (sellerEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ message: "Error deleting file" });
-        }
-      });
       return next(new ErrorHandler("User already exists", 400));
     }
 
-    const filename = req.file.filename;
-    const fileUrl = path.join(filename);
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "avatars",
+    });
+
     const seller = {
       name: req.body.name,
       email: email,
       password: req.body.password,
-      avatar: fileUrl,
+      avatar: {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      },
       section: req.body.section,
     };
 
@@ -344,6 +342,40 @@ router.put(
   })
 );
 
+// update shop profile picture
+router.put(
+  "/update-shop-avatar",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      let existsSeller = await Shop.findById(req.seller._id);
+
+      const imageId = existsSeller.avatar.public_id;
+
+      await cloudinary.v2.uploader.destroy(imageId);
+
+      const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "avatars",
+        width: 150,
+      });
+
+      existsSeller.avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
+
+      await existsSeller.save();
+
+      res.status(200).json({
+        success: true,
+        seller: existsSeller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 //getting all members of a shop
 router.get(
   "/get-all-members-shop/:id",
@@ -393,6 +425,10 @@ router.delete(
           new ErrorHandler("Seller is not available with this id", 400)
         );
       }
+
+      const imageId = seller.avatar.public_id;
+
+      await cloudinary.v2.uploader.destroy(imageId);
 
       await Shop.findByIdAndDelete(req.params.id);
 

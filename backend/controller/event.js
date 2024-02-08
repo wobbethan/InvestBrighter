@@ -7,6 +7,7 @@ const User = require("../model/user");
 const Shop = require("../model/shop");
 const Event = require("../model/event");
 const Product = require("../model/product");
+const cloudinary = require("cloudinary");
 
 const { isSeller } = require("../middleware/auth");
 const fs = require("fs");
@@ -15,7 +16,6 @@ const axios = require("axios");
 //create event
 router.post(
   "/create-event",
-  upload.array("images"),
   catchAsyncErrors(async (req, res, next) => {
     try {
       const userID = req.body.adminId;
@@ -23,12 +23,31 @@ router.post(
       if (user.role !== "admin") {
         return next(new ErrorHandler("User is not an admin", 400));
       } else {
-        const files = req.files;
-        const imageUrls = files.map((file) => `${file.filename}`);
+        let images = [];
+
+        if (typeof req.body.images === "string") {
+          images.push(req.body.images);
+        } else {
+          images = req.body.images;
+        }
+
+        const imagesLinks = [];
+
+        for (let i = 0; i < images.length; i++) {
+          const result = await cloudinary.v2.uploader.upload(images[i], {
+            folder: "products",
+          });
+
+          imagesLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+          });
+        }
 
         const eventData = req.body;
-        eventData.images = imageUrls;
+        eventData.images = imagesLinks;
         const event = await Event.create(eventData);
+
         //create product
         await axios.post(
           `http://localhost:8000/api/v2/event/create-event-products/${event._id}`,
@@ -188,6 +207,13 @@ router.delete(
           `http://localhost:8000/api/v2/product/delete-company-products/${req.params.id}`
         )
         .catch((err) => console.log(err));
+
+      for (let i = 0; 1 < event.images.length; i++) {
+        const result = await cloudinary.v2.uploader.destroy(
+          event.images[i].public_id
+        );
+      }
+      await event.remove();
 
       res.status(201).json({
         success: true,
