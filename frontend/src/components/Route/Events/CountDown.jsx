@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 const CountDown = ({ data }) => {
+  const currentDate = new Date();
+  const startDate = new Date(data.start_Date);
+  const endDate = new Date(data.finish_Date);
+  const roundStarted = currentDate > startDate;
+  const roundEnded = currentDate > endDate;
+
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -36,11 +42,14 @@ const CountDown = ({ data }) => {
 
   return (
     <div>
-      {}
-      {timerComponents.length ? (
+      {roundEnded ? (
+        <span className="text-[red] text-[25px]"> Round Over!</span>
+      ) : roundStarted ? (
         timerComponents
       ) : (
-        <span className="text-[red] text-[25px]"> Time's up!</span>
+        <span className="text-[blue] text-[25px]">
+          Round will begin {data.start_Date.slice(0, 10)}
+        </span>
       )}
     </div>
   );

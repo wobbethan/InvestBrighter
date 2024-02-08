@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema({
   },
   accountBalance: {
     type: Number,
-    default: 0,
   },
   section: {
     type: String,

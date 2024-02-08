@@ -83,18 +83,22 @@ const ShopSettings = () => {
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
             <div className="w-full pl-[3%]">
               <label className="block pb-2">Shop description</label>
+              <textarea
+                cols="28"
+                rows="8"
+                type="text"
+                required
+                name="description"
+                value={description}
+                className="mt-2 appearance-none block w-full pt-3 px-3  border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder={`${
+                  seller?.description
+                    ? seller.description
+                    : "Enter your shop description"
+                }`}
+              />
             </div>
-            <input
-              type="name"
-              placeholder={`${
-                seller?.description
-                  ? seller.description
-                  : "Enter your shop description"
-              }`}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-            />
           </div>
 
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
@@ -103,7 +107,7 @@ const ShopSettings = () => {
             </div>
             <input
               type="valuation"
-              placeholder={`${seller.valuation}`}
+              placeholder={`${seller.valuation.toLocaleString()}`}
               value={valuation}
               onChange={(e) => setValuation(e.target.value)}
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}

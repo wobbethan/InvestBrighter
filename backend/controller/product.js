@@ -56,31 +56,17 @@ router.get(
 //delete product
 
 router.delete(
-  "/delete-shop-product/:email",
+  "/delete-company-products/:eventId",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      // const productData = await Product.findById(req.params.id);
-
-      // productData.images.forEach((imageUrl) => {
-      //   const filename = imageUrl;
-      //   const filePath = `uploads/${filename}`;
-      //   try {
-      //     fs.unlink(filePath, (err) => {
-      //       if (err) {
-      //         console.log(err);
-      //       }
-      //     });
-      //   } catch (error) {}
-      // });
-
-      const product = await Product.find({
-        "shop.email": req.params.email,
+      const products = await Product.find({
+        eventId: req.params.eventId,
       });
-
-      console.log(product);
-      // if (!product) {
-      //   return next(new ErrorHandler("Product not found", 500));
-      // }
+      if (products.length > 0) {
+        products.forEach(async (product) => {
+          const deleteProduct = await Product.findByIdAndDelete(product._id);
+        });
+      }
       res.status(201).json({
         success: true,
         message: "Product successfully deleted!",

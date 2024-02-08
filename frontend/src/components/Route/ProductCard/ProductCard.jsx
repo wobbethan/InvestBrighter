@@ -53,13 +53,29 @@ function ProductCard({ data, isEvent }) {
   };
 
   const addToCartHandler = async (id) => {
+    let roundStarted = null;
+    let roundEnded = null;
     if (isAuthenticated) {
       let product;
       await axios.get(`${server}/product/get-product/${id}`).then((res) => {
         product = res.data.product;
+        const currentDate = new Date();
+        if (
+          product.start_Date !== "undefined" &&
+          product.finish_Date !== "undefined"
+        ) {
+          const startDate = new Date(product.start_Date);
+          const endDate = new Date(product.finish_Date);
+          roundStarted = currentDate > startDate;
+          roundEnded = currentDate > endDate;
+        }
       });
       if (user.companyId === product.shopId) {
         toast.error("Cannot Invest in your own company");
+      } else if (roundEnded == true) {
+        toast.error("The round has concluded");
+      } else if (roundStarted == false) {
+        toast.error("Unable to invest until round has started");
       } else {
         const isItemExists = cart && cart.find((i) => i._id === id);
         if (isItemExists) {
@@ -81,7 +97,7 @@ function ProductCard({ data, isEvent }) {
 
   return (
     <>
-      <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
+      <div className="w-full h-[400px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <div className="flex justify-end"></div>
         <Link
           to={`${
@@ -96,6 +112,12 @@ function ProductCard({ data, isEvent }) {
             className="w-full h-[170px] object-contain p-6"
           />
         </Link>
+        <div className="w-full items-center text-center">
+          <h5 className={`${styles.productDiscountPrice} !text-lg`}>
+            {" "}
+            Valuation: ${data.shop.valuation.toLocaleString()}
+          </h5>
+        </div>
         <Link to={`/shop/preview/${data?.shop._id}`}>
           <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
         </Link>
@@ -110,7 +132,9 @@ function ProductCard({ data, isEvent }) {
           <h4 className="pb-3 font-[500]">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
-          <h5 className="text-[16px] text-[red]">{data.stock} remaining</h5>
+          <h5 className="text-[16px] text-[red] justify-end">
+            {data.stock} remaining
+          </h5>
 
           <div className="py-2 flex items-center justify-between mt-3">
             <div className="flex">

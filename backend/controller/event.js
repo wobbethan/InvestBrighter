@@ -61,6 +61,7 @@ router.post(
         //Update account balances
         users.forEach(async (user) => {
           const userObj = await User.findById(user._id);
+          //Sets account balance, two rounds at the same time will not have an accurate account balance
           userObj.accountBalance = req.body.numChecks * req.body.checkPrice;
           userObj.save();
         });
@@ -88,10 +89,25 @@ router.post(
           newForm.append("description", companyObj.description);
           newForm.append("section", companyObj.section);
           newForm.append("price", req.body.checkPrice);
-          newForm.append("stock", req.body.maxInvestmentsRound);
+
+          //determine stock
+          let stock = 0;
+          let maxRound = req.body.maxInvestmentsRound;
+          let maxCompany = req.body.maxInvestmentsCompany;
+          let companyInvestments = companyObj.totalInvestments;
+          if (maxCompany - companyInvestments > maxRound) {
+            stock = maxRound;
+          } else {
+            stock = maxCompany - companyInvestments;
+          }
+
+          newForm.append("stock", stock);
           newForm.append("eventID", req.body.name);
           newForm.append("shopId", companyObj._id);
           newForm.append("shop", companyObj);
+          newForm.append("start_Date", req.body.start_Date);
+          newForm.append("finish_Date", req.body.finish_Date);
+
           await axios
             .post(
               `http://localhost:8000/api/v2/product/create-product`,
@@ -120,6 +136,25 @@ router.get("/get-all-events", async (req, res, next) => {
   }
 });
 
+// get all events section
+router.get(
+  "/get-all-events-section/:section",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const events = await Event.find({
+        sections: { $in: [req.params.section] },
+      });
+
+      res.status(201).json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
 //Getting all events of shop
 router.get(
   "/get-all-events-shop/:id",
@@ -142,37 +177,17 @@ router.delete(
   "/delete-shop-event/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const eventData = await Event.findById(req.params.id);
+      const event = await Event.findByIdAndDelete(req.params.id);
 
-      // eventData.images.forEach((imageUrl) => {
-      //   const filename = imageUrl;
-      //   const filePath = `uploads/${filename}`;
-      //   try {
-      //     fs.unlink(filePath, (err) => {
-      //       if (err) {
-      //         console.log(err);
-      //       }
-      //     });
-      //   } catch (error) {}
-      // });
-
-      const products = await Product.find({
-        eventId: req.params.id,
-      });
-      console.log(products);
-      if (products) {
-        products.forEach(async (product) => {
-          await axios
-            .delete(`/delete-shop-product/${product.shop.email}`)
-            .catch((err) => console.log(err));
-        });
+      if (!event) {
+        return next(new ErrorHandler("Event not found", 500));
       }
 
-      // const event = await Event.findByIdAndDelete(eventId);
-
-      // if (!event) {
-      //   return next(new ErrorHandler("Event not found", 500));
-      // }
+      await axios
+        .delete(
+          `http://localhost:8000/api/v2/product/delete-company-products/${req.params.id}`
+        )
+        .catch((err) => console.log(err));
 
       res.status(201).json({
         success: true,

@@ -196,15 +196,7 @@ function Header({ activeHeading }) {
               onClick={() => setOpen(true)}
             />
           </div>
-          <div>
-            <Link to="/">
-              <img
-                src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-                alt=""
-                className="mt-3 cursor-pointer"
-              />
-            </Link>
-          </div>
+
           <div>
             <div className="relative mr-[20px]">
               <AiOutlineShoppingCart
@@ -251,14 +243,6 @@ function Header({ activeHeading }) {
 
               {/* Navigation */}
               <Navbar active={activeHeading}></Navbar>
-              <div className={`${styles.button} ml-3 !rounded-[4px]`}>
-                <Link to="/create-company">
-                  <h1 className="text-[#fff] flex items-center">
-                    Become Seller{" "}
-                    <IoIosArrowForward className="ml-1"></IoIosArrowForward>
-                  </h1>
-                </Link>
-              </div>
               <br />
               <br />
               <br />
@@ -272,7 +256,7 @@ function Header({ activeHeading }) {
                       Login{" "}
                     </Link>
                     <Link
-                      to={"/login"}
+                      to={"/sign-up"}
                       className="text-[18px] text-[#000000b7]"
                     >
                       Sign up

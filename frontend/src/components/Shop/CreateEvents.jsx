@@ -29,7 +29,7 @@ const CreateEvents = () => {
 
   const handleStartDateChange = (e) => {
     const startDate = new Date(e.target.value);
-    const minEndDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
+    const minEndDate = new Date(startDate.getTime() + 1 * 24 * 60 * 60 * 1000);
     setStartDate(startDate);
     setEndDate(null);
     document.getElementById("end-date").min = minEndDate
@@ -74,7 +74,7 @@ const CreateEvents = () => {
 
   const today = new Date().toISOString().slice(0, 10);
   const minEndDate = startDate
-    ? new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000)
+    ? new Date(startDate.getTime() + 1 * 24 * 60 * 60 * 1000)
         .toISOString()
         .slice(0, 10)
     : today;
@@ -96,8 +96,8 @@ const CreateEvents = () => {
       newForm.append("maxInvestmentsRound", investRound);
       newForm.append("numChecks", numChecks);
       newForm.append("checkPrice", priceCheck);
-      newForm.append("start_Date", startDate.toISOString());
-      newForm.append("finish_Date", endDate.toISOString());
+      newForm.append("start_Date", startDate?.toISOString());
+      newForm.append("finish_Date", endDate?.toISOString());
 
       dispatch(createEvent(newForm));
       toast.success("New event created!");
@@ -109,7 +109,7 @@ const CreateEvents = () => {
     <div className="800px:w-[50%] w-[90%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
       <h5 className="text-[30px] font-Poppins text-center">Create Round</h5>
       {/* Form */}
-      <form onSubmit={handleSubmit} aria-required={true}>
+      <form onSubmit={handleSubmit}>
         <br />
         <div>
           <label className="pb-2">Name</label>
@@ -214,13 +214,12 @@ const CreateEvents = () => {
         </div>
         <br />
         <div>
-          <label className="pb-2">Event Start Date</label>
+          <label className="pb-2">Round Start Date</label>
           <input
-            required
             type="date"
             name="date"
             id="start-date"
-            value={startDate ? startDate.toISOString().slice(0, 10) : ""}
+            value={startDate ? startDate.toISOString().slice(0, 10) : null}
             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             onChange={handleStartDateChange}
             min={today}
@@ -228,13 +227,12 @@ const CreateEvents = () => {
         </div>
         <br />
         <div>
-          <label className="pb-2">Event End Date</label>
+          <label className="pb-2">Round End Date (12AM)</label>
           <input
-            required
             type="date"
             name="date"
             id="end-date"
-            value={endDate ? endDate.toISOString().slice(0, 10) : ""}
+            value={endDate ? endDate.toISOString().slice(0, 10) : null}
             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             onChange={handleEndDateChange}
             min={minEndDate}

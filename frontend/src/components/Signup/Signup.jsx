@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
-import { server } from "../../Server";
+import { backend_url, server } from "../../Server";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Loader from "../Layout/Loader";
@@ -39,7 +39,7 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(avatar);
     if (confirmPassword !== password) {
       toast.error("Passwords do not match");
     } else {
@@ -51,7 +51,7 @@ function Signup() {
       newForm.append("password", password);
       newForm.append("section", selectedSection);
 
-      axios
+      await axios
         .post(`${server}/user/create-user`, newForm, config)
         .then((res) => {
           toast.success(res.data.message);
@@ -60,6 +60,7 @@ function Signup() {
           setPassword("");
           setConfirmPassword("");
           setAvatar();
+          navigate("/login");
         })
         .catch((err) => {
           console.log(err.response.data.message);
@@ -230,6 +231,7 @@ function Signup() {
                         accept=".jpg,.jpeg,.png"
                         onChange={handleFileInputChange}
                         className="sr-only cursor-pointer"
+                        required
                       />
                     </label>
                   </div>
