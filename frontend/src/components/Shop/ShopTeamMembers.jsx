@@ -148,7 +148,7 @@ const ShopTeamMembers = () => {
         <div className="flex flex-col justify-center w-full">
           <div className="relative">
             <img
-              src={`${backend_url}${seller.avatar}`}
+              src={`${seller.avatar.url}`}
               className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
               alt=""
             />

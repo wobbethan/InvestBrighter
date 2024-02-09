@@ -14,50 +14,53 @@ const User = require("../model/user");
 const Section = require("../model/section");
 const cloudinary = require("cloudinary");
 
-router.post("/create-shop", async (req, res, next) => {
-  try {
-    const { email } = req.body;
-    const sellerEmail = await Shop.findOne({ email });
-
-    if (sellerEmail) {
-      return next(new ErrorHandler("User already exists", 400));
-    }
-
-    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-      folder: "avatars",
-    });
-
-    const seller = {
-      name: req.body.name,
-      email: email,
-      password: req.body.password,
-      avatar: {
-        public_id: myCloud.public_id,
-        url: myCloud.secure_url,
-      },
-      section: req.body.section,
-    };
-
-    const activationToken = createActivationToken(seller);
-    const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
-
+router.post(
+  "/create-shop",
+  catchAsyncErrors(async (req, res, next) => {
     try {
-      await sendMail({
-        email: seller.email,
-        subject: "Shop Account Activation",
-        message: `Hello ${seller.name}, please click the link to activate your shop account \n${activationUrl}`,
+      const { email } = req.body;
+      const sellerEmail = await Shop.findOne({ email });
+
+      if (sellerEmail) {
+        return next(new ErrorHandler("User already exists", 400));
+      }
+
+      const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "avatars",
       });
-      res.status(201).json({
-        success: true,
-        message: `please check your email: ${seller.email} to activate your shop account`,
-      });
+
+      const seller = {
+        name: req.body.name,
+        email: email,
+        password: req.body.password,
+        avatar: {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        },
+        section: req.body.selectedSection,
+      };
+
+      const activationToken = createActivationToken(seller);
+      const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
+
+      try {
+        await sendMail({
+          email: seller.email,
+          subject: "Company Account Activation",
+          message: `Hello ${seller.name}, please click the link to activate your company account \n${activationUrl}`,
+        });
+        res.status(201).json({
+          success: true,
+          message: `please check your email: ${seller.email} to activate your company account`,
+        });
+      } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+      }
     } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+      return next(new ErrorHandler(error.message, 400));
     }
-  } catch (error) {
-    return next(new ErrorHandler(error.message, 400));
-  }
-});
+  })
+);
 
 //creating activation token
 const createActivationToken = (seller) => {
@@ -435,6 +438,59 @@ router.delete(
       res.status(201).json({
         success: true,
         message: "Company deleted successfully!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+router.post(
+  "/forgot-password/:email",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const company = await Shop.find({ email: req.params.email });
+
+      if (!Shop[0]) {
+        return next(new ErrorHandler("User does not exist", 400));
+      }
+
+      const resetCode = Math.floor(100000 + Math.random() * 900000);
+
+      try {
+        await sendMail({
+          email: Shop[0].email,
+          subject: "Password Rest",
+          message: `Hello ${Shop[0].name}, please use the following reset code to reset your account password: ${resetCode}`,
+        });
+        res.status(201).json({
+          success: true,
+          message: `please check ${Shop[0].email} for reset code`,
+          code: resetCode,
+        });
+      } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+      }
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+router.put(
+  "/password-reset/:email/:password",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const Shop = await Shop.find({ email: req.params.email });
+
+      if (!Shop[0]) {
+        return next(new ErrorHandler("Company does not exist", 400));
+      }
+      Shop[0].password = req.params.password;
+      await Shop[0].save();
+      res.status(201).json({
+        success: true,
+        message: `password changed`,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

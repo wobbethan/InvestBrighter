@@ -120,7 +120,7 @@ const TeamMemberCard = ({ member }) => {
         <img
           draggable={false}
           className="w-[150px] h-[150px] object-contain rounded-3xl m-[10px]"
-          src={`${backend_url}${member.avatar}`}
+          src={`${member.avatar.url}`}
         />
       </div>
       <div className="text-2xl text-bold">{member.name}</div>

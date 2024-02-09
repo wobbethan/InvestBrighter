@@ -55,9 +55,20 @@ const CreateEvents = () => {
   }, [dispatch, error, success]);
 
   const handleImageChange = (e) => {
-    e.preventDefault();
-    let files = Array.from(e.target.files);
-    setImages((prevImages) => [...prevImages, ...files]);
+    const files = Array.from(e.target.files);
+
+    setImages([]);
+
+    files.forEach((file) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImages((old) => [...old, reader.result]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleButtonClick = (option) => {
@@ -258,7 +269,7 @@ const CreateEvents = () => {
               images.map((i) => (
                 <img
                   className="h-[120px] w-[120px] m-2 object-cover"
-                  src={URL.createObjectURL(i)}
+                  src={i}
                   key={i}
                 ></img>
               ))}

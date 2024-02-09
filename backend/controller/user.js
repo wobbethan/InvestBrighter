@@ -14,71 +14,74 @@ const Section = require("../model/section");
 const Event = require("../model/event");
 const cloudinary = require("cloudinary");
 
-router.post("/create-user", async (req, res, next) => {
-  try {
-    const { name, email, password, section, avatar } = req.body;
-    const userEmail = await User.findOne({ email });
-
-    //Outlook needed to test security of link, may get flagged as spam
-
-    // if (!email.endsWith("ufl.edu")) {
-    //   return next(new ErrorHandler("Email must be a 'ufl.edu' email", 400));
-    // }
-
-    let accountBalance = 0;
-    const events = await Event.find({
-      sections: { $in: [section] },
-    });
-    if (events.length > 0) {
-      events.forEach((event) => {
-        accountBalance += event.numChecks * event.checkPrice;
-      });
-    }
-
-    if (userEmail) {
-      return next(new ErrorHandler("User already exists", 400));
-    }
-
-    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-      folder: "avatars",
-    });
-
-    const user = {
-      name: name,
-      email: email,
-      password: password,
-      section: section,
-      accountBalance: accountBalance,
-      avatar: {
-        public_id: myCloud.public_id,
-        url: myCloud.secure_url,
-      },
-    };
-
-    const activationToken = createActivationToken(user);
-    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+router.post(
+  "/create-user",
+  catchAsyncErrors(async (req, res, next) => {
     try {
-      await sendMail({
-        email: user.email,
-        subject: "Account Activation",
-        message: `Hello ${user.name}, please click the link to activate your account \n${activationUrl}`,
+      const { name, email, password, selectedSection, avatar } = req.body;
+      const userEmail = await User.findOne({ email });
+
+      //Outlook needed to test security of link, may get flagged as spam
+
+      // if (!email.endsWith("ufl.edu")) {
+      //   return next(new ErrorHandler("Email must be a 'ufl.edu' email", 400));
+      // }
+
+      let accountBalance = 0;
+      const events = await Event.find({
+        sections: { $in: [selectedSection] },
       });
-      res.status(201).json({
-        success: true,
-        message: `please check your email: ${user.email} to activate your account`,
+      if (events.length > 0) {
+        events.forEach((event) => {
+          accountBalance += event.numChecks * event.checkPrice;
+        });
+      }
+
+      if (userEmail) {
+        return next(new ErrorHandler("User already exists", 400));
+      }
+
+      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+        folder: "avatars",
       });
+
+      const user = {
+        name: name,
+        email: email,
+        password: password,
+        section: selectedSection,
+        accountBalance: accountBalance,
+        avatar: {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        },
+      };
+
+      const activationToken = createActivationToken(user);
+      const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+      try {
+        await sendMail({
+          email: user.email,
+          subject: "Account Activation",
+          message: `Hello ${user.name}, please click the link to activate your account \n${activationUrl}`,
+        });
+        res.status(201).json({
+          success: true,
+          message: `please check your email: ${user.email} to activate your account`,
+        });
+      } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+      }
     } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+      return next(new ErrorHandler(error.message), 400);
     }
-  } catch (error) {
-    return next(new ErrorHandler(error.message), 400);
-  }
-});
+  })
+);
 
 //creating activation token
 const createActivationToken = (user) => {
   return jwt.sign(user, process.env.ACTIVATION_SECRET, {
-    expiresIn: "5m",
+    expiresIn: "55m",
   });
 };
 
@@ -103,10 +106,10 @@ router.post(
         return next(new ErrorHandler("User already exists", 400));
       }
 
-      const userSection = await Section.find({ name: newUser.section });
-      userSection[0].numStudents += 1;
+      const userSection = await Section.findOne({ name: newUser.section });
+      userSection.numStudents += 1;
 
-      await userSection[0].save();
+      await userSection.save();
 
       user = await User.create({
         name,

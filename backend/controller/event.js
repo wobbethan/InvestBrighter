@@ -16,8 +16,10 @@ const axios = require("axios");
 //create event
 router.post(
   "/create-event",
+  upload.array("images"),
   catchAsyncErrors(async (req, res, next) => {
     try {
+      console.log(req.body);
       const userID = req.body.adminId;
       const user = await User.findById(userID);
       if (user.role !== "admin") {
@@ -94,13 +96,10 @@ router.post(
           const newForm = new FormData();
           //images
 
-          let files = [companyObj.avatar, ...req.body.images];
-
-          // Remove new line characters and trim each file name
-          const sanitizedFiles = files.map((file) => file.trim());
+          let files = [companyObj.avatar.url, ...req.body.images];
 
           //form
-          sanitizedFiles.forEach((image) => {
+          files.forEach((image) => {
             newForm.append("images", image);
           });
           newForm.append("eventId", req.params.id);
@@ -208,12 +207,15 @@ router.delete(
         )
         .catch((err) => console.log(err));
 
-      for (let i = 0; 1 < event.images.length; i++) {
-        const result = await cloudinary.v2.uploader.destroy(
-          event.images[i].public_id
-        );
+      try {
+        for (let i = 0; 1 < event.images.length; i++) {
+          const result = await cloudinary.v2.uploader.destroy(
+            event.images[i].public_id
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
-      await event.remove();
 
       res.status(201).json({
         success: true,

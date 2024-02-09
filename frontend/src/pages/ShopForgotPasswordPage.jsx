@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { server } from "../Server";
 import { RxCross1 } from "react-icons/rx";
-const ForgotPasswordPage = () => {
+
+const ShopForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState();
   const [generatedCode, setGeneratedCode] = useState();
@@ -22,7 +23,7 @@ const ForgotPasswordPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios
-      .post(`${server}/user/forgot-password/${email}`)
+      .post(`${server}/shop/forgot-password/${email}`)
       .then((res) => {
         toast.success(res.data.message);
         setGeneratedCode(res.data.code);
@@ -51,7 +52,7 @@ const ForgotPasswordPage = () => {
       toast.error("Passwords do not match");
     } else {
       await axios
-        .put(`${server}/user/password-reset/${email}/${password}`)
+        .put(`${server}/shop/password-reset/${email}/${password}`)
         .then((res) => {
           toast.success("password changed");
           navigate("/login");
@@ -244,4 +245,4 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ShopForgotPasswordPage;

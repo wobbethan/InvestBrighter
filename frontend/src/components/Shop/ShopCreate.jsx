@@ -28,8 +28,15 @@ function ShopCreate() {
   const navigate = useNavigate();
 
   const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    setAvatar(file);
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -37,18 +44,14 @@ function ShopCreate() {
     if (confirmPassword !== password) {
       toast.error("Passwords do not match");
     } else {
-      const config = { headers: { "Content-Type": "multipart/form-data" } };
-
-      const newForm = new FormData();
-
-      newForm.append("file", avatar);
-      newForm.append("name", name);
-      newForm.append("email", email);
-      newForm.append("password", password);
-      newForm.append("section", selectedSection);
-
-      axios
-        .post(`${server}/shop/create-shop`, newForm, config)
+      await axios
+        .post(`${server}/shop/create-shop`, {
+          name,
+          email,
+          password,
+          selectedSection,
+          avatar,
+        })
         .then((res) => {
           toast.success(res.data.message);
           setName("");
@@ -57,6 +60,7 @@ function ShopCreate() {
           setPassword("");
           setConfirmPassword("");
           setAvatar();
+          navigate("/dashboard");
         })
         .catch((err) => {
           console.log(err.response.data.message);
@@ -209,7 +213,7 @@ function ShopCreate() {
                 <span className="inline-block h-8 w-8 rounded-ull overflow-hidden">
                   {avatar ? (
                     <img
-                      src={URL.createObjectURL(avatar)}
+                      src={avatar}
                       alt="avatar"
                       className="h-full w-full object-cover rounded-full"
                     ></img>
@@ -221,7 +225,7 @@ function ShopCreate() {
                   htmlFor="file-input"
                   className=" cursor-pointer ml-5 flex items-end justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                 >
-                  <span>Upload a file</span>{" "}
+                  <span>Upload a file ({`<`} 100MB)</span>{" "}
                   <input
                     type="file"
                     name="avatar"
@@ -229,6 +233,7 @@ function ShopCreate() {
                     accept=".jpg,.jpeg,.png"
                     onChange={handleFileInputChange}
                     className="sr-only cursor-pointer"
+                    required
                   />
                 </label>
               </div>

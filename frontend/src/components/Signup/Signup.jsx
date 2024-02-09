@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
-import { backend_url, server } from "../../Server";
+import { server } from "../../Server";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Loader from "../Layout/Loader";
@@ -33,13 +33,19 @@ function Signup() {
   const navigate = useNavigate();
 
   const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    setAvatar(file);
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(avatar);
     if (confirmPassword !== password) {
       toast.error("Passwords do not match");
     } else {
@@ -52,7 +58,13 @@ function Signup() {
       newForm.append("section", selectedSection);
 
       await axios
-        .post(`${server}/user/create-user`, newForm, config)
+        .post(`${server}/user/create-user`, {
+          name,
+          email,
+          password,
+          selectedSection,
+          avatar,
+        })
         .then((res) => {
           toast.success(res.data.message);
           setName("");
@@ -211,7 +223,7 @@ function Signup() {
                     <span className="inline-block h-8 w-8 rounded-ull overflow-hidden">
                       {avatar ? (
                         <img
-                          src={URL.createObjectURL(avatar)}
+                          src={avatar}
                           alt="avatar"
                           className="h-full w-full object-cover rounded-full"
                         ></img>
@@ -223,7 +235,7 @@ function Signup() {
                       htmlFor="file-input"
                       className=" cursor-pointer ml-5 flex items-end justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                     >
-                      <span>Upload a file</span>{" "}
+                      <span>Upload a file ({`<`} 100MB)</span>{" "}
                       <input
                         type="file"
                         name="avatar"

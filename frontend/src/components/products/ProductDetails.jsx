@@ -115,7 +115,7 @@ const ProductDetails = ({ data, id }) => {
               <div className="w-full 800px:w-[50%]">
                 {" "}
                 <img
-                  src={`${backend_url}${data.images[select]}`}
+                  src={`${data.images[select].url}`}
                   alt=""
                   className="w-[80%]"
                 />
@@ -128,7 +128,7 @@ const ProductDetails = ({ data, id }) => {
                         } cursor-pointer`}
                       >
                         <img
-                          src={`${backend_url}${i}`}
+                          src={`${i.url}`}
                           alt=""
                           onClick={() => setSelect(index)}
                           className="h-[200px] overflow-hidden mr-3 mt-3"
@@ -194,7 +194,7 @@ const ProductDetails = ({ data, id }) => {
                 <div className="flex items-center pt-8">
                   <Link to={`/shop/preview/${data?.shop._id}`}>
                     <img
-                      src={`${backend_url}${data?.shop?.avatar}`}
+                      src={`${data?.shop?.avatar.url}`}
                       className="w-[50px] h-[50px] rounded-full mr-2"
                       alt=""
                     />
@@ -261,7 +261,7 @@ const ProductDetailsInfo = ({ data, products }) => {
           <div className="w-full 800px:w-[50%]">
             <div className="flex items-center">
               <img
-                src={`${backend_url}${data?.shop?.avatar}`}
+                src={`${data?.shop?.avatar.url}`}
                 alt=""
                 className="w-[50px] h-[50px] rounded-full"
               />

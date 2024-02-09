@@ -158,7 +158,7 @@ function Header({ activeHeading }) {
               {isAuthenticated ? (
                 <Link to="/profile">
                   <img
-                    src={`${backend_url}${user.avatar}`}
+                    src={`${user?.avatar?.url}`}
                     alt=""
                     className="w-[35px] h-[35px] rounded-full"
                   />
@@ -266,7 +266,7 @@ function Header({ activeHeading }) {
                   <div>
                     <Link to={"/profile"}>
                       <img
-                        src={`${backend_url}${user.avatar}`}
+                        src={`${user?.avatar.url}`}
                         alt=""
                         className="w-[60px] h-[60px] rounded-full border-[3px] border-[#3bc177]"
                       />
