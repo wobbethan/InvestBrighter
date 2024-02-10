@@ -5,7 +5,11 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "100mb",
+  })
+);
 app.use(cookieParser());
 app.use(
   cors({
@@ -13,7 +17,9 @@ app.use(
     credentials: true,
   })
 );
-app.use("/", express.static("uploads"));
+app.use("/", (req, res) => {
+  res.send("Hello world!");
+});
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 if (process.env.NODE_ENV !== "production") {

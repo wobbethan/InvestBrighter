@@ -7,9 +7,10 @@ import { Link } from "react-router-dom";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishlist } from "../../redux/actions/wishlist.js";
-import { backend_url } from "../../Server";
+import { backend_url, server } from "../../Server";
 import { addToCart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const Wishlist = ({ setOpenWishlist }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -20,10 +21,16 @@ const Wishlist = ({ setOpenWishlist }) => {
   const removeFromWishlistHandler = (data) => {
     dispatch(removeFromWishlist(data));
   };
-  const addToCartHandler = (data) => {
+  const addToCartHandler = async (data) => {
     const currentDate = new Date();
     let roundStarted = null;
     let roundEnded = null;
+    let status = null;
+    await axios
+      .get(`${server}/event/event-status/${data.eventId}`)
+      .then((res) => {
+        status = res.data.data;
+      });
     if (data.start_Date !== "undefined" && data.finish_Date !== "undefined") {
       const startDate = new Date(data.start_Date);
       const endDate = new Date(data.finish_Date);
@@ -37,6 +44,8 @@ const Wishlist = ({ setOpenWishlist }) => {
       toast.error("The round has concluded");
     } else if (roundStarted === false) {
       toast.error("Unable to invest until round has started");
+    } else if (status == "Locked") {
+      toast.error("The investment round has been locked");
     } else {
       const newData = { ...data, qty: 1 };
       dispatch(addToCart(newData));
@@ -108,7 +117,7 @@ const CartSingle = ({ data, removeFromWishlistHandler, addToCartHandler }) => {
           onClick={() => removeFromWishlistHandler(data)}
         />
         <img
-          src={`${backend_url}${data?.images[0]}`}
+          src={`${data?.shop?.avatar.url}`}
           alt=""
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px] select-none"
         />

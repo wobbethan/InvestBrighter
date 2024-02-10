@@ -50,10 +50,10 @@ const ProductDetails = ({ data, id }) => {
   const incrementCount = () => {
     setCount(count + 1);
   };
-
   const addToCartHandler = async () => {
     let roundStarted = null;
     let roundEnded = null;
+    let status = null;
     if (isAuthenticated) {
       let product;
       await axios.get(`${server}/product/get-product/${id}`).then((res) => {
@@ -69,14 +69,22 @@ const ProductDetails = ({ data, id }) => {
           roundEnded = currentDate > endDate;
         }
       });
+      await axios
+        .get(`${server}/event/event-status/${product.eventId}`)
+        .then((res) => {
+          status = res.data.data;
+        });
+
       if (user.companyId === product.shopId) {
         toast.error("Cannot Invest in your own company");
       } else if (roundEnded === true) {
         toast.error("The round has concluded");
-      } else if (!roundStarted === false) {
+      } else if (roundStarted === false) {
         toast.error("Unable to invest until round has started");
+      } else if (status == "Locked") {
+        toast.error("The investment round has been locked");
       } else {
-        const isItemExists = cart && cart.find((i) => i?._id === id);
+        const isItemExists = cart && cart.find((i) => i._id === id);
         if (isItemExists) {
           toast.error("Item already in cart");
         } else {
@@ -115,27 +123,10 @@ const ProductDetails = ({ data, id }) => {
               <div className="w-full 800px:w-[50%]">
                 {" "}
                 <img
-                  src={`${backend_url}${data.images[select]}`}
+                  src={`${data.shop?.avatar?.url}`}
                   alt=""
                   className="w-[80%]"
                 />
-                <div className="w-full flex flex-wrap">
-                  {data &&
-                    data.images.map((i, index) => (
-                      <div
-                        className={`${
-                          select === 1 ? "border" : "null"
-                        } cursor-pointer`}
-                      >
-                        <img
-                          src={`${backend_url}${i}`}
-                          alt=""
-                          onClick={() => setSelect(index)}
-                          className="h-[200px] overflow-hidden mr-3 mt-3"
-                        />
-                      </div>
-                    ))}
-                </div>
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
                 <h1 className={`${styles.productTitle}`}>{data?.name}</h1>
@@ -194,7 +185,7 @@ const ProductDetails = ({ data, id }) => {
                 <div className="flex items-center pt-8">
                   <Link to={`/shop/preview/${data?.shop._id}`}>
                     <img
-                      src={`${backend_url}${data?.shop?.avatar}`}
+                      src={`${data?.shop?.avatar.url}`}
                       className="w-[50px] h-[50px] rounded-full mr-2"
                       alt=""
                     />
@@ -261,7 +252,7 @@ const ProductDetailsInfo = ({ data, products }) => {
           <div className="w-full 800px:w-[50%]">
             <div className="flex items-center">
               <img
-                src={`${backend_url}${data?.shop?.avatar}`}
+                src={`${data?.shop?.avatar.url}`}
                 alt=""
                 className="w-[50px] h-[50px] rounded-full"
               />

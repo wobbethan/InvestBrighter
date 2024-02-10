@@ -8,6 +8,7 @@ import { server } from "../../Server";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { getAllEventsAdmin } from "../../redux/actions/event";
+import { FaLock, FaUnlock } from "react-icons/fa";
 const ManageRounds = () => {
   const { allEventsAdmin } = useSelector((state) => state.events);
   const { user } = useSelector((state) => state.user);
@@ -23,6 +24,24 @@ const ManageRounds = () => {
         window.location.reload();
       });
   };
+  const lockEvent = async (id) => {
+    axios
+      .put(`${server}/event/lock-shop-event/${id}`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        toast.success("Round Locked");
+      });
+  };
+  const unlockEvent = async (id) => {
+    axios
+      .put(`${server}/event/unlock-shop-event/${id}`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        toast.success("Round Unlocked");
+      });
+  };
 
   useEffect(() => {
     dispatch(getAllEventsAdmin(user._id));
@@ -32,8 +51,8 @@ const ManageRounds = () => {
     {
       field: "name",
       headerName: "Name",
-      minWidth: 180,
-      flex: 1.4,
+      minWidth: 130,
+      flex: 0.8,
     },
 
     {
@@ -47,20 +66,54 @@ const ManageRounds = () => {
       field: "start",
       headerName: "Start Date",
       type: "text",
-      minWidth: 130,
-      flex: 0.8,
+      minWidth: 70,
+      flex: 0.7,
     },
     {
       field: "end",
       headerName: "End Date",
       type: "text",
-      minWidth: 130,
-      flex: 0.8,
+      minWidth: 70,
+      flex: 0.7,
     },
     {
       field: " ",
-      flex: 1,
-      minWidth: 150,
+      flex: 0.7,
+      minWidth: 50,
+      headerName: "Lock Event",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button onClick={() => lockEvent(params.row.id)}>
+              <FaLock size={20} />
+            </Button>
+          </>
+        );
+      },
+    },
+    {
+      field: " s",
+      flex: 0.7,
+      minWidth: 50,
+      headerName: "Unlock Event",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button onClick={() => unlockEvent(params.row.id)}>
+              <FaUnlock size={20} />
+            </Button>
+          </>
+        );
+      },
+    },
+    {
+      field: " d",
+      flex: 0.7,
+      minWidth: 50,
       headerName: "Delete Event",
       type: "number",
       sortable: false,

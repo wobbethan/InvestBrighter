@@ -34,6 +34,14 @@ const AdminAllOrdersPage = () => {
     },
 
     {
+      field: "section",
+      headerName: "Section",
+      type: "string",
+      minWidth: 130,
+      flex: 0.7,
+    },
+
+    {
       field: "investor",
       headerName: "Investor",
       type: "string",

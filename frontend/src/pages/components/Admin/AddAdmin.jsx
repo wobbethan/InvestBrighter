@@ -109,7 +109,7 @@ const AdminCard = ({ admin }) => {
         <img
           draggable={false}
           className="w-full h-[150px] object-contain  m-[10px]"
-          src={`${backend_url}${admin.avatar}`}
+          src={`${admin.avatar.url}`}
         />
       </div>
       <div className="text-2xl text-bold">{admin.name}</div>

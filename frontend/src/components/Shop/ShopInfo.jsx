@@ -45,7 +45,7 @@ const ShopInfo = ({ isOwner }) => {
           <div className="w-full py-5">
             <div className="w-full flex item-center justify-center">
               <img
-                src={`${backend_url}${data.avatar}`}
+                src={`${data.avatar?.url}`}
                 alt=""
                 className="w-[150px] h-[150px] object-cover rounded-full"
               />
@@ -55,22 +55,26 @@ const ShopInfo = ({ isOwner }) => {
               {data?.description}
             </p>
           </div>
-          <div className="p-3">
-            <h5 className="font-[600]">Valuation</h5>
-            <h4 className="text-[#000000a6]">
-              ${data.valuation?.toLocaleString()}
-            </h4>
-          </div>
+          {data?.valuation !== 0 && (
+            <div className="p-3">
+              <h5 className="font-[600]">Valuation</h5>
+              <h4 className="text-[#000000a6]">
+                ${data.valuation?.toLocaleString()}
+              </h4>
+            </div>
+          )}
           {/* <div className="p-3">
             <h5 className="font-[600]">Founding Share Price</h5>
             <h4 className="text-[#000000a6]">{data.foundingSharePrice}</h4>
           </div> */}
-          <div className="p-3">
-            <h5 className="font-[600]">Final Acquisition</h5>
-            <h4 className="text-[#000000a6]">
-              ${data.finalAcquisition?.toLocaleString()}
-            </h4>
-          </div>
+          {data?.finalAcquisition !== 0 && (
+            <div className="p-3">
+              <h5 className="font-[600]">Final Acquisition</h5>
+              <h4 className="text-[#000000a6]">
+                ${data.finalAcquisition?.toLocaleString()}
+              </h4>
+            </div>
+          )}
 
           <div className="p-3">
             <h5 className="font-[600]">Joined On</h5>

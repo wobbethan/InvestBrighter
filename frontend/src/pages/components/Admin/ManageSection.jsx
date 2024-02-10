@@ -131,8 +131,12 @@ const ManageSection = () => {
       {/* Create section */}
       <div className="flex w-full">
         <div className=" flex m-5">
-          <div className="cursor-pointer mr-3">
-            <FaCirclePlus size={30} onClick={() => setOpenCreate(true)} />
+          <div
+            className="cursor-pointer mr-3 flex justify-center items-center"
+            onClick={() => setOpenCreate(true)}
+          >
+            <h1 className="text-[25px] mr-[10px]">Create Section</h1>
+            <FaCirclePlus size={30} />
           </div>
 
           {openCreate && (

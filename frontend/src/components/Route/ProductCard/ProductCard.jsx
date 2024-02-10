@@ -55,6 +55,7 @@ function ProductCard({ data, isEvent }) {
   const addToCartHandler = async (id) => {
     let roundStarted = null;
     let roundEnded = null;
+    let status = null;
     if (isAuthenticated) {
       let product;
       await axios.get(`${server}/product/get-product/${id}`).then((res) => {
@@ -70,12 +71,20 @@ function ProductCard({ data, isEvent }) {
           roundEnded = currentDate > endDate;
         }
       });
+      await axios
+        .get(`${server}/event/event-status/${product.eventId}`)
+        .then((res) => {
+          status = res.data.data;
+        });
+
       if (user.companyId === product.shopId) {
         toast.error("Cannot Invest in your own company");
-      } else if (roundEnded == true) {
+      } else if (roundEnded === true) {
         toast.error("The round has concluded");
-      } else if (roundStarted == false) {
+      } else if (roundStarted === false) {
         toast.error("Unable to invest until round has started");
+      } else if (status == "Locked") {
+        toast.error("The investment round has been locked");
       } else {
         const isItemExists = cart && cart.find((i) => i._id === id);
         if (isItemExists) {
@@ -107,7 +116,7 @@ function ProductCard({ data, isEvent }) {
           }`}
         >
           <img
-            src={`${backend_url}${data.images && data.images[0]}`}
+            src={`${data?.shop?.avatar && data?.shop?.avatar.url}`}
             alt=""
             className="w-full h-[170px] object-contain p-6"
           />

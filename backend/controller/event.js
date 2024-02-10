@@ -7,6 +7,7 @@ const User = require("../model/user");
 const Shop = require("../model/shop");
 const Event = require("../model/event");
 const Product = require("../model/product");
+const cloudinary = require("cloudinary");
 
 const { isSeller } = require("../middleware/auth");
 const fs = require("fs");
@@ -23,12 +24,31 @@ router.post(
       if (user.role !== "admin") {
         return next(new ErrorHandler("User is not an admin", 400));
       } else {
-        const files = req.files;
-        const imageUrls = files.map((file) => `${file.filename}`);
+        let images = [];
+
+        if (typeof req.body.images === "string") {
+          images.push(req.body.images);
+        } else {
+          images = req.body.images;
+        }
+
+        const imagesLinks = [];
+
+        for (let i = 0; i < images.length; i++) {
+          const result = await cloudinary.v2.uploader.upload(images[i], {
+            folder: "products",
+          });
+
+          imagesLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+          });
+        }
 
         const eventData = req.body;
-        eventData.images = imageUrls;
+        eventData.images = imagesLinks;
         const event = await Event.create(eventData);
+
         //create product
         await axios.post(
           `http://localhost:8000/api/v2/event/create-event-products/${event._id}`,
@@ -70,20 +90,13 @@ router.post(
 
         companies.forEach(async (company) => {
           const companyObj = await Shop.findById(company._id);
+
           //Create product using company + event info
           const config = { headers: { "Content-Type": "multipart/form-data" } };
           const newForm = new FormData();
-          //images
-
-          let files = [companyObj.avatar, ...req.body.images];
-
-          // Remove new line characters and trim each file name
-          const sanitizedFiles = files.map((file) => file.trim());
 
           //form
-          sanitizedFiles.forEach((image) => {
-            newForm.append("images", image);
-          });
+          newForm.append("images", companyObj.avatar);
           newForm.append("eventId", req.params.id);
           newForm.append("name", companyObj.name + " - " + req.body.name);
           newForm.append("description", companyObj.description);
@@ -189,6 +202,16 @@ router.delete(
         )
         .catch((err) => console.log(err));
 
+      try {
+        for (let i = 0; 0 < event.images.length; i++) {
+          const result = await cloudinary.v2.uploader.destroy(
+            event.images[i].public_id
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
       res.status(201).json({
         success: true,
         message: "Event successfully deleted!",
@@ -208,6 +231,59 @@ router.get(
       res.status(201).json({
         success: true,
         events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// lock event
+router.put(
+  "/lock-shop-event/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const event = await Event.findById(req.params.id);
+      event.status = "Locked";
+      await event.save();
+      res.status(201).json({
+        success: true,
+        message: "Round locked",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// unlock event
+router.put(
+  "/unlock-shop-event/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const event = await Event.findById(req.params.id);
+      event.status = "Running";
+      await event.save();
+      res.status(201).json({
+        success: true,
+        message: "Round unlocked",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// get event status
+router.get(
+  "/event-status/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const event = await Event.findById(req.params.id);
+      const status = event.status;
+      res.status(201).json({
+        success: true,
+        data: status,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

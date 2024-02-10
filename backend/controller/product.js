@@ -7,7 +7,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Shop = require("../model/shop.js");
 const Section = require("../model/section.js");
 const User = require("../model/user.js");
-
+const cloudinary = require("cloudinary");
 const { isSeller } = require("../middleware/auth");
 const fs = require("fs");
 
@@ -37,7 +37,7 @@ router.post(
   })
 );
 
-//Getting all products of shop
+//Getting all products of company
 router.get(
   "/get-all-products-shop/:id",
   catchAsyncErrors(async (req, res, next) => {
@@ -62,11 +62,11 @@ router.delete(
       const products = await Product.find({
         eventId: req.params.eventId,
       });
-      if (products.length > 0) {
-        products.forEach(async (product) => {
-          const deleteProduct = await Product.findByIdAndDelete(product._id);
-        });
-      }
+
+      products.forEach(async (product) => {
+        const deleteProduct = await Product.findByIdAndDelete(product._id);
+      });
+
       res.status(201).json({
         success: true,
         message: "Product successfully deleted!",

@@ -34,6 +34,8 @@ import AdminManageRoundPage from "../pages/admin/AdminManageRoundPage.jsx";
 import ShopSettingsPage from "../pages/Shop/ShopSettingsPage.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage.jsx";
+import ShopForgotPasswordPage from "../pages/ShopForgotPasswordPage.jsx";
+
 export {
   LoginPage,
   SignupPage,
@@ -71,4 +73,5 @@ export {
   ShopSettingsPage,
   NotFound,
   ForgotPasswordPage,
+  ShopForgotPasswordPage,
 };
