@@ -51,7 +51,7 @@ router.post(
 
         //create product
         await axios.post(
-          `http://localhost:8000/api/v2/event/create-event-products/${event._id}`,
+          `https://invest-brighter.vercel.app/api/v2/event/create-event-products/${event._id}`,
           eventData
         );
 
@@ -123,7 +123,7 @@ router.post(
 
           await axios
             .post(
-              `http://localhost:8000/api/v2/product/create-product`,
+              `https://invest-brighter.vercel.app/api/v2/product/create-product`,
               newForm,
               config
             )
@@ -198,7 +198,7 @@ router.delete(
 
       await axios
         .delete(
-          `http://localhost:8000/api/v2/product/delete-company-products/${req.params.id}`
+          `https://invest-brighter.vercel.app/api/v2/product/delete-company-products/${req.params.id}`
         )
         .catch((err) => console.log(err));
 
