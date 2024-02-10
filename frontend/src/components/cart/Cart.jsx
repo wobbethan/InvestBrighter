@@ -131,7 +131,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
           </div>
         </div>
         <img
-          src={`${data?.images[0].url}`}
+          src={`${data?.shop?.avatar?.url}`}
           alt=""
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px] select-none"
           draggable={false}

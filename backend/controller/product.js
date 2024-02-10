@@ -14,6 +14,7 @@ const fs = require("fs");
 //create product
 router.post(
   "/create-product",
+  upload.array("images"),
   catchAsyncErrors(async (req, res, next) => {
     try {
       const shopId = req.body.shopId;
@@ -21,27 +22,6 @@ router.post(
       if (!shop) {
         return next(new ErrorHandler("Shop ID invalid", 400));
       } else {
-        let images = [];
-
-        if (typeof req.body.images === "string") {
-          images.push(req.body.images);
-        } else {
-          images = req.body.images;
-        }
-
-        const imagesLinks = [];
-
-        for (let i = 0; i < images.length; i++) {
-          const result = await cloudinary.v2.uploader.upload(images[i], {
-            folder: "products",
-          });
-
-          imagesLinks.push({
-            public_id: result.public_id,
-            url: result.secure_url,
-          });
-        }
-
         const productData = req.body;
         productData.shop = shop;
         const product = await Product.create(productData);
@@ -82,17 +62,11 @@ router.delete(
       const products = await Product.find({
         eventId: req.params.eventId,
       });
-      if (products.length > 0) {
-        products.forEach(async (product) => {
-          for (let i = 0; 1 < product.images.length; i++) {
-            const result = await cloudinary.v2.uploader.destroy(
-              product.images[i].public_id
-            );
-          }
 
-          await product.remove();
-        });
-      }
+      products.forEach(async (product) => {
+        const deleteProduct = await Product.findByIdAndDelete(product._id);
+      });
+
       res.status(201).json({
         success: true,
         message: "Product successfully deleted!",

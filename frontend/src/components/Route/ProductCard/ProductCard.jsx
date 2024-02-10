@@ -107,7 +107,7 @@ function ProductCard({ data, isEvent }) {
           }`}
         >
           <img
-            src={`${data.images && data.images[0].url}`}
+            src={`${data?.shop?.avatar && data?.shop?.avatar.url}`}
             alt=""
             className="w-full h-[170px] object-contain p-6"
           />

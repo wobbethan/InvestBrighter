@@ -115,27 +115,10 @@ const ProductDetails = ({ data, id }) => {
               <div className="w-full 800px:w-[50%]">
                 {" "}
                 <img
-                  src={`${data.images[select].url}`}
+                  src={`${data.shop?.avatar?.url}`}
                   alt=""
                   className="w-[80%]"
                 />
-                <div className="w-full flex flex-wrap">
-                  {data &&
-                    data.images.map((i, index) => (
-                      <div
-                        className={`${
-                          select === 1 ? "border" : "null"
-                        } cursor-pointer`}
-                      >
-                        <img
-                          src={`${i.url}`}
-                          alt=""
-                          onClick={() => setSelect(index)}
-                          className="h-[200px] overflow-hidden mr-3 mt-3"
-                        />
-                      </div>
-                    ))}
-                </div>
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
                 <h1 className={`${styles.productTitle}`}>{data?.name}</h1>

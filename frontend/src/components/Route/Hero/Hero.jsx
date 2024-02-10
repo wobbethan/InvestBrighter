@@ -16,7 +16,7 @@ function Hero() {
   };
   return (
     <div
-      className={`z-[999] flex flex-col h-[100vh] self-center bg-no-repeat bg-fixed bg-cover items-center p-[100px] mb-5`}
+      className={`z-[999] flex flex-col h-[100vh] self-center bg-no-repeat bg-fixed bg-cover items-center p-[100px] mb-5 !cursor-default`}
       style={{
         backgroundImage: `url(${bg})`,
       }}
@@ -27,6 +27,7 @@ function Hero() {
           width={300}
           height={300}
           className="!cursor-default"
+          isClickToPauseDisabled={true}
         ></Lottie>
       </div>
 

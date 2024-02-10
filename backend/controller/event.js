@@ -19,7 +19,6 @@ router.post(
   upload.array("images"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      console.log(req.body);
       const userID = req.body.adminId;
       const user = await User.findById(userID);
       if (user.role !== "admin") {
@@ -91,17 +90,13 @@ router.post(
 
         companies.forEach(async (company) => {
           const companyObj = await Shop.findById(company._id);
+
           //Create product using company + event info
           const config = { headers: { "Content-Type": "multipart/form-data" } };
           const newForm = new FormData();
-          //images
-
-          let files = [companyObj.avatar.url, ...req.body.images];
 
           //form
-          files.forEach((image) => {
-            newForm.append("images", image);
-          });
+          newForm.append("images", companyObj.avatar);
           newForm.append("eventId", req.params.id);
           newForm.append("name", companyObj.name + " - " + req.body.name);
           newForm.append("description", companyObj.description);
@@ -208,7 +203,7 @@ router.delete(
         .catch((err) => console.log(err));
 
       try {
-        for (let i = 0; 1 < event.images.length; i++) {
+        for (let i = 0; 0 < event.images.length; i++) {
           const result = await cloudinary.v2.uploader.destroy(
             event.images[i].public_id
           );

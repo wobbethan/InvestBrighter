@@ -116,7 +116,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={`${data.images && data.images[0].url}`}
+                  src={`${data?.shop?.avatar && data?.shop?.avatar.url}`}
                   alt=""
                   className="p-2"
                 />
