@@ -238,4 +238,57 @@ router.get(
   })
 );
 
+// lock event
+router.put(
+  "/lock-shop-event/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const event = await Event.findById(req.params.id);
+      event.status = "Locked";
+      await event.save();
+      res.status(201).json({
+        success: true,
+        message: "Round locked",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// unlock event
+router.put(
+  "/unlock-shop-event/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const event = await Event.findById(req.params.id);
+      event.status = "Running";
+      await event.save();
+      res.status(201).json({
+        success: true,
+        message: "Round unlocked",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// get event status
+router.get(
+  "/event-status/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const event = await Event.findById(req.params.id);
+      const status = event.status;
+      res.status(201).json({
+        success: true,
+        data: status,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;

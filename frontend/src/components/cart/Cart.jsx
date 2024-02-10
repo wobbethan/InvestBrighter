@@ -10,6 +10,7 @@ import { addToCart, removeFromCart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
 
 const Cart = ({ setOpenCart }) => {
+  const { user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
@@ -71,13 +72,21 @@ const Cart = ({ setOpenCart }) => {
             </div>
             {/* Checkout */}
             <div className="px-5 mb-3">
-              <Link to="/checkout">
-                <div className="h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]">
+              {user.accountBalance > totalPrice ? (
+                <Link to="/checkout">
+                  <div className="h-[45px] flex items-center justify-center w-[100%] !bg-[#e44343] rounded-[5px]">
+                    <h1 className="text-white text-[18px] font-[600]">
+                      Checkout Now! (${totalPrice.toLocaleString()})
+                    </h1>
+                  </div>
+                </Link>
+              ) : (
+                <div className="h-[45px] flex items-center justify-center w-[100%] !bg-[#a3a0a0] !cursor-not-allowed rounded-[5px]">
                   <h1 className="text-white text-[18px] font-[600]">
-                    Checkout Now! (${totalPrice.toLocaleString()})
+                    Insufficient Funds (${totalPrice.toLocaleString()})
                   </h1>
                 </div>
-              </Link>
+              )}
             </div>
           </>
         )}
