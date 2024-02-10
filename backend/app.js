@@ -3,6 +3,7 @@ const ErrorHandler = require("./middleware/error.js");
 const app = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const path = require('path');
 const cors = require("cors");
 
 app.use(
@@ -17,9 +18,7 @@ app.use(
     credentials: true,
   })
 );
-app.use("/", (req, res) => {
-  res.send("Hello world!");
-});
+
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 if (process.env.NODE_ENV !== "production") {
@@ -43,6 +42,19 @@ app.use("/api/v2/event", event);
 app.use("/api/v2/coupon", coupon);
 app.use("/api/v2/order", order);
 app.use("/api/v2/section", section);
+
+// serve static client files in production
+if (process.env.NODE_ENV === 'production') {
+  // FIXME: should probably be env vars within cloud host
+  require("dotenv").config({
+    path: "backend/config/.env",
+  });
+
+  app.use(express.static(path.join(__dirname, './../frontend/build')))
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './../frontend/build/index.html'))
+  })
+}
 
 app.use(ErrorHandler);
 module.exports = app;
