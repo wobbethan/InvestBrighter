@@ -58,7 +58,7 @@ router.post(
       };
 
       const activationToken = createActivationToken(user);
-      const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+      const activationUrl = `https://invest-brighter.vercel.app/activation/${activationToken}`;
       try {
         await sendMail({
           email: user.email,
