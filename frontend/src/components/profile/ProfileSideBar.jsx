@@ -81,7 +81,7 @@ const ProfileSideBar = ({ setActive, active }) => {
         </span>
       </div>
       <div>
-        {user.role == "user" ? (
+        {user.role == "user" && user.companyId !== "Not Assigned" ? (
           <div
             className="flex items-center cursor-pointer w-full mb-8"
             onClick={() => setActive(5)}

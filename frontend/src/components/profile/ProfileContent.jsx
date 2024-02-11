@@ -222,11 +222,11 @@ const ProfileContent = ({ active }) => {
         <div className="flex flex-col justify-center w-full items-center">
           <div className="flex flex-col justify-center w-full items-center">
             <img
-              src={`${shopInfo.avatar.url}`}
+              src={`${shopInfo?.avatar?.url}`}
               className="w-[350px] h-[250px] object-cover justify-center items-center "
             />
             <div className="flex justify-center w-full text-4xl text-bold mb-4 mt-4 text-center">
-              {shopInfo.name}
+              {shopInfo?.name}
             </div>
           </div>
           <div>
