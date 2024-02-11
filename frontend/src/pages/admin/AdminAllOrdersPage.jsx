@@ -40,6 +40,13 @@ const AdminAllOrdersPage = () => {
       minWidth: 130,
       flex: 0.7,
     },
+    {
+      field: "event",
+      headerName: "Round",
+      type: "string",
+      minWidth: 130,
+      flex: 0.7,
+    },
 
     {
       field: "investor",
@@ -87,6 +94,7 @@ const AdminAllOrdersPage = () => {
       row.push({
         id: item._id,
         section: item.user.section,
+        event: item.event.name,
         investor: item.user.name,
         company: item.company.shop.name,
         itemsQty: item.quantity,

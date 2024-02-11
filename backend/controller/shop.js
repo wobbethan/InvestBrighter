@@ -220,6 +220,7 @@ router.get(
 
       if (userAlreadyMember === false) {
         user[0].companyId = req.params.id;
+        user[0].companyName = shop.name;
         shop.teamMembers.push(user[0]);
       } else {
         res.status(400).json({
@@ -259,6 +260,7 @@ router.get(
 
       user.companyId = "Not Assigned";
       user.companyRole = "Not Assigned";
+      user.companyName = "Not Assigned";
       user.companyInvestment = 0;
 
       const index = shop.teamMembers.findIndex(

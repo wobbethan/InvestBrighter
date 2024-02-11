@@ -51,17 +51,17 @@ const AdminAllUsers = () => {
       minWidth: 130,
       flex: 0.7,
     },
-    {
-      field: "role",
-      headerName: "User Role",
-      type: "text",
-      minWidth: 130,
-      flex: 0.7,
-    },
 
     {
       field: "joinedAt",
       headerName: "Created on",
+      type: "text",
+      minWidth: 130,
+      flex: 0.8,
+    },
+    {
+      field: "team",
+      headerName: "Team",
       type: "text",
       minWidth: 130,
       flex: 0.8,
@@ -94,8 +94,8 @@ const AdminAllUsers = () => {
         id: item?._id,
         name: item?.name,
         email: item?.email,
-        role: item?.role.charAt(0).toUpperCase() + item?.role.slice(1),
         joinedAt: item?.createdAt.slice(0, 10),
+        team: item.companyName,
       });
     });
 

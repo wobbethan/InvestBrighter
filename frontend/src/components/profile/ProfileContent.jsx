@@ -253,6 +253,13 @@ const AllOrders = () => {
 
   const columns = [
     {
+      field: "round",
+      headerName: "Round",
+      type: "string",
+      minWidth: 130,
+      flex: 0.7,
+    },
+    {
       field: "company",
       headerName: "Company",
       type: "string",
@@ -289,6 +296,7 @@ const AllOrders = () => {
     orders.forEach((item) => {
       row.push({
         id: item?._id,
+        round: item.event.name,
         company: item?.company.shop.name,
         quantity: item?.quantity,
         total: "$" + item?.totalPrice.toLocaleString(),

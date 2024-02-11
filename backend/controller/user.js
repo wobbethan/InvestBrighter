@@ -325,6 +325,8 @@ router.put(
       user[0].role = "admin";
       user[0].section = "Admin";
       user[0].accountBalance = 1000000000;
+      user[0].companyName = "Admins";
+
       await user[0].save();
 
       res.status(200).json({
@@ -347,6 +349,8 @@ router.put(
       user.role = "user";
       user.accountBalance = 0;
       user.section = "Not Assigned";
+      user[0].companyName = "Not Assigned";
+
       await user.save();
 
       res.status(200).json({

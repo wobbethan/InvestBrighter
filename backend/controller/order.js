@@ -43,6 +43,10 @@ router.post(
         user,
         totalPrice,
         quantity,
+        event: {
+          id: eventObj._id,
+          name: eventObj.name,
+        },
       });
 
       res.status(201).json({
