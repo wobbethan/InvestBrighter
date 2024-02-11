@@ -1,7 +1,7 @@
 import React from "react";
 import { AiOutlineFolderAdd, AiOutlineGift } from "react-icons/ai";
 import { FiPackage, FiShoppingBag } from "react-icons/fi";
-import { MdOutlineLocalOffer } from "react-icons/md";
+import { MdOutlineLocalOffer, MdOutlinePassword } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { VscNewFile } from "react-icons/vsc";
@@ -70,6 +70,24 @@ const DashboardSidebar = ({ active }) => {
             }`}
           >
             Company Members
+          </h5>
+        </Link>
+      </div>
+      <div className="w-full flex items-center p-4">
+        <Link
+          to="/dashboard-change-password"
+          className="w-full flex items-center"
+        >
+          <MdOutlinePassword
+            size={30}
+            color={`${active === 12 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 12 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Change password
           </h5>
         </Link>
       </div>

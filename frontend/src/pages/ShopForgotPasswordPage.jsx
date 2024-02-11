@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { server } from "../Server";
 import { RxCross1 } from "react-icons/rx";
+import { useSelector } from "react-redux";
 
 const ShopForgotPasswordPage = () => {
   const [email, setEmail] = useState("");

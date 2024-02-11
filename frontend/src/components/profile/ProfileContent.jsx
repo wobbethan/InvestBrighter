@@ -90,8 +90,6 @@ const ProfileContent = ({ active }) => {
     dispatch(
       updateUserInformation(user?.email, name, email, password, section)
     );
-    // toast.success("Inform");
-    // window.location.reload();
   };
 
   return (

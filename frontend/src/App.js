@@ -44,6 +44,7 @@ import {
   NotFound,
   ForgotPasswordPage,
   ShopForgotPasswordPage,
+  ShopPasswordPage,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -102,6 +103,14 @@ function App() {
           element={
             <SellerProtectedRoute>
               <ShopSettingsPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-change-password"
+          element={
+            <SellerProtectedRoute>
+              <ShopPasswordPage />
             </SellerProtectedRoute>
           }
         />
