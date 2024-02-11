@@ -87,7 +87,11 @@ const ProfileContent = ({ active }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateUserInformation(name, email, password, section));
+    dispatch(
+      updateUserInformation(user?.email, name, email, password, section)
+    );
+    // toast.success("Inform");
+    // window.location.reload();
   };
 
   return (

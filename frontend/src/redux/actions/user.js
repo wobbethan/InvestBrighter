@@ -1,5 +1,7 @@
 import axios from "axios";
 import { server } from "../../Server";
+import { toast } from "react-toastify";
+
 // load user
 export const loadUser = () => async (dispatch) => {
   try {
@@ -45,14 +47,14 @@ export const loadSeller = () => async (dispatch) => {
 //user update info
 
 export const updateUserInformation =
-  (name, email, password, section) => async (dispatch) => {
+  (oldEmail, name, email, password, section) => async (dispatch) => {
     try {
       dispatch({
         type: "updateUserRequest",
       });
 
       const { data } = await axios.put(
-        `${server}/user/update-user-info`,
+        `${server}/user/update-user-info/${oldEmail}`,
         {
           email,
           password,
@@ -68,6 +70,7 @@ export const updateUserInformation =
         type: "updateUserInfoSuccess",
         payload: data.user,
       });
+      toast.success("Profile updated");
     } catch (error) {
       dispatch({
         type: "updateUserInfoFail",

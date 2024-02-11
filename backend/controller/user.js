@@ -195,16 +195,22 @@ router.get(
 
 //update user info
 router.put(
-  "/update-user-info",
+  "/update-user-info/:oldEmail",
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { email, password, section, name } = req.body;
-      const user = await User.findOne({ email }).select("+password");
+      const user = await User.findOne({ email: req.params.oldEmail }).select(
+        "+password"
+      );
       if (!user) {
         return next(new ErrorHandler("User not found", 400));
       }
-
+      const newEmail = await User.findOne({ email: email });
+      console.log(newEmail);
+      if (newEmail !== user && newEmail !== null) {
+        return next(new ErrorHandler("Email already in use", 400));
+      }
       const isPasswordValid = await user.comparePassword(password);
 
       if (!isPasswordValid) {
