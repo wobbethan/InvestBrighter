@@ -48,7 +48,11 @@ const ProductDetails = ({ data, id }) => {
     }
   };
   const incrementCount = () => {
-    setCount(count + 1);
+    if (data.stock < count + 1) {
+      toast.error("Product stock limited");
+    } else {
+      setCount(count + 1);
+    }
   };
   const addToCartHandler = async () => {
     let roundStarted = null;
@@ -91,7 +95,7 @@ const ProductDetails = ({ data, id }) => {
           if (data.stock < 1) {
             toast.error("Product stock limited");
           } else {
-            const cartData = { ...data, qty: 1 };
+            const cartData = { ...data, qty: count };
             dispatch(addToCart(cartData));
             toast.success("Item added to cart");
           }

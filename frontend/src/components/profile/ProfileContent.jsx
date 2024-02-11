@@ -171,10 +171,10 @@ const ProfileContent = ({ active }) => {
                   <div className="w-full 800px:w-[50%]">
                     <label className="block pb-2">Class Section</label>
                     <input
-                      type="number"
-                      className={`${styles.input} !w-[95%] 800px:mb-0 mb-2`}
-                      value={section}
-                      onChange={(e) => setSection(e.target.value)}
+                      type="string"
+                      className={`${styles.input} !w-[95%] 800px:mb-0 mb-2 cursor-not-allowed`}
+                      value={user && user.section}
+                      disabled
                     />
                   </div>
                 ) : (
@@ -321,8 +321,8 @@ const ChangePassword = () => {
           withCredentials: true,
         }
       )
-      .then((res) => {
-        toast.success(res.data.success);
+      .then(() => {
+        toast.success("Password changed");
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");

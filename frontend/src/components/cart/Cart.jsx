@@ -72,7 +72,7 @@ const Cart = ({ setOpenCart }) => {
             </div>
             {/* Checkout */}
             <div className="px-5 mb-3">
-              {user.accountBalance > totalPrice ? (
+              {user.accountBalance >= totalPrice ? (
                 <Link to="/checkout">
                   <div className="h-[45px] flex items-center justify-center w-[100%] !bg-[#e44343] rounded-[5px]">
                     <h1 className="text-white text-[18px] font-[600]">

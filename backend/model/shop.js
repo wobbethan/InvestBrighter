@@ -23,6 +23,7 @@ const shopSchema = new mongoose.Schema({
   },
   description: {
     type: String,
+    default: "No description",
   },
   role: {
     type: String,
