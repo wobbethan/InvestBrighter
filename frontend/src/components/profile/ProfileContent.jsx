@@ -87,7 +87,9 @@ const ProfileContent = ({ active }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateUserInformation(name, email, password, section));
+    dispatch(
+      updateUserInformation(user?.email, name, email, password, section)
+    );
   };
 
   return (
@@ -222,11 +224,11 @@ const ProfileContent = ({ active }) => {
         <div className="flex flex-col justify-center w-full items-center">
           <div className="flex flex-col justify-center w-full items-center">
             <img
-              src={`${shopInfo.avatar.url}`}
+              src={`${shopInfo?.avatar?.url}`}
               className="w-[350px] h-[250px] object-cover justify-center items-center "
             />
             <div className="flex justify-center w-full text-4xl text-bold mb-4 mt-4 text-center">
-              {shopInfo.name}
+              {shopInfo?.name}
             </div>
           </div>
           <div>
@@ -248,6 +250,13 @@ const AllOrders = () => {
   }, []);
 
   const columns = [
+    {
+      field: "round",
+      headerName: "Round",
+      type: "string",
+      minWidth: 130,
+      flex: 0.7,
+    },
     {
       field: "company",
       headerName: "Company",
@@ -285,6 +294,7 @@ const AllOrders = () => {
     orders.forEach((item) => {
       row.push({
         id: item?._id,
+        round: item.event.name,
         company: item?.company.shop.name,
         quantity: item?.quantity,
         total: "$" + item?.totalPrice.toLocaleString(),

@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "Not Assigned",
   },
+  companyName: {
+    type: String,
+    default: "Not Assigned",
+  },
   avatar: {
     public_id: {
       type: String,

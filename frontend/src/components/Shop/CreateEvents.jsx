@@ -111,7 +111,6 @@ const CreateEvents = () => {
       newForm.append("finish_Date", endDate?.toISOString());
 
       dispatch(createEvent(newForm));
-      toast.success("New event created!");
     } else {
       toast.error("Please select a section");
     }

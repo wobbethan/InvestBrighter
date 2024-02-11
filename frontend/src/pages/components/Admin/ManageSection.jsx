@@ -27,22 +27,26 @@ const ManageSection = () => {
   }, [dispatch]);
 
   const handleCreateSubmit = async () => {
-    await axios
-      .post(
-        `${server}/section/create-section/${sectionName}/${user._id}/${user.name}`,
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        toast.success("Section Created!");
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
-    dispatch(getAllSectionsOfAdmin(user._id));
-    setOpenCreate(false);
-    setSectionName("");
+    if (sectionName && sectionName.includes(" ")) {
+      toast.error("Please do not include any spaces");
+    } else {
+      await axios
+        .post(
+          `${server}/section/create-section/${sectionName}/${user._id}/${user.name}`,
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          toast.success("Section Created!");
+        })
+        .catch((err) => {
+          toast.error(err.message);
+        });
+      dispatch(getAllSectionsOfAdmin(user._id));
+      setOpenCreate(false);
+      setSectionName("");
+    }
   };
 
   const handleRemoveSubmit = async () => {
@@ -201,7 +205,7 @@ const ManageSection = () => {
               <RxCross1 size={25} onClick={() => setOpen(false)} />
             </div>
             <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb]">
-              Are you sure you want to delete this company?
+              Are you sure you want to delete this section?
             </h3>
             <div className="w-full flex items-center justify-center">
               <div

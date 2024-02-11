@@ -28,6 +28,9 @@ const productSchema = new mongoose.Schema({
   eventId: {
     type: String,
   },
+  eventName: {
+    type: String,
+  },
   shop: {
     type: Object,
     required: true,

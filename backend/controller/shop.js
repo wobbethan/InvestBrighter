@@ -220,6 +220,7 @@ router.get(
 
       if (userAlreadyMember === false) {
         user[0].companyId = req.params.id;
+        user[0].companyName = shop.name;
         shop.teamMembers.push(user[0]);
       } else {
         res.status(400).json({
@@ -259,6 +260,7 @@ router.get(
 
       user.companyId = "Not Assigned";
       user.companyRole = "Not Assigned";
+      user.companyName = "Not Assigned";
       user.companyInvestment = 0;
 
       const index = shop.teamMembers.findIndex(
@@ -451,7 +453,7 @@ router.post(
     try {
       const company = await Shop.find({ email: req.params.email });
 
-      if (!Shop[0]) {
+      if (!company[0]) {
         return next(new ErrorHandler("User does not exist", 400));
       }
 
@@ -459,13 +461,13 @@ router.post(
 
       try {
         await sendMail({
-          email: Shop[0].email,
+          email: company[0].email,
           subject: "Password Rest",
-          message: `Hello ${Shop[0].name}, please use the following reset code to reset your account password: ${resetCode}`,
+          message: `Hello ${company[0].name}, please use the following reset code to reset your account password: ${resetCode}`,
         });
         res.status(201).json({
           success: true,
-          message: `please check ${Shop[0].email} for reset code`,
+          message: `please check ${company[0].email} for reset code`,
           code: resetCode,
         });
       } catch (error) {
@@ -481,16 +483,46 @@ router.put(
   "/password-reset/:email/:password",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const Shop = await Shop.find({ email: req.params.email });
+      const company = await Shop.findOne({ email: req.params.email });
 
-      if (!Shop[0]) {
+      if (!company) {
         return next(new ErrorHandler("Company does not exist", 400));
       }
-      Shop[0].password = req.params.password;
-      await Shop[0].save();
+      company.password = req.params.password;
+      await company.save();
       res.status(201).json({
         success: true,
         message: `password changed`,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//update company password
+router.put(
+  `/update-company-password`,
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const company = await Shop.findById(req.body.id).select("+password");
+      const isPasswordMatched = await company.comparePassword(
+        req.body.oldPassword
+      );
+      if (!isPasswordMatched) {
+        return next(
+          new ErrorHandler("Please enter the correct current password", 500)
+        );
+      }
+      if (req.body.newPassword !== req.body.confirmPassword) {
+        return next(new ErrorHandler("Passwords do not match", 500));
+      }
+      company.password = req.body.newPassword;
+      await company.save();
+      res.status(200).json({
+        success: true,
+        message: "Password updated successfully",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

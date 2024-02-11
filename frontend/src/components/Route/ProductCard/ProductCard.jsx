@@ -121,11 +121,14 @@ function ProductCard({ data, isEvent }) {
             className="w-full h-[170px] object-contain p-6"
           />
         </Link>
+
         <div className="w-full items-center text-center">
-          <h5 className={`${styles.productDiscountPrice} !text-lg`}>
-            {" "}
-            Valuation: ${data.shop.valuation.toLocaleString()}
-          </h5>
+          {data.shop.valuation !== 0 && (
+            <h5 className={`${styles.productDiscountPrice} !text-lg`}>
+              {" "}
+              Valuation: ${data.shop.valuation.toLocaleString()}
+            </h5>
+          )}
         </div>
         <Link to={`/shop/preview/${data?.shop._id}`}>
           <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
