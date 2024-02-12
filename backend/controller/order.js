@@ -23,6 +23,18 @@ router.post(
       const productObj = await Product.findById(company._id);
       const eventObj = await Event.findById(productObj.eventId);
 
+      if (companyObj.stock < quantity) {
+        res.status(201).json({
+          success: false,
+        });
+        return next(
+          new ErrorHandler(
+            `Only ${companyObj.stock} investments of ${companyObj.name} remaining`,
+            500
+          )
+        );
+      }
+
       //Update OBJ vars
       userObj.accountBalance -= totalPrice;
       companyObj.balance += totalPrice;

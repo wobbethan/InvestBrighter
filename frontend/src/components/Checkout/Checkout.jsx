@@ -39,11 +39,15 @@ const Payment = () => {
           quantity: item.qty,
         };
 
-        const res = await axios.post(
-          `${server}/order/create-order`,
-          order,
-          config
-        );
+        const res = await axios
+          .post(`${server}/order/create-order`, order, config)
+          .then((res) => {
+            if (res.data.status === true) {
+              navigate("/order/success");
+            } else {
+              navigate("/order/fail");
+            }
+          });
         setOpen(false);
 
         localStorage.setItem("cartItems", JSON.stringify([]));
@@ -52,8 +56,8 @@ const Payment = () => {
         console.log(error);
       }
     }
-    navigate("/order/success");
-    window.location.reload();
+    // navigate("/order/success");
+    // window.location.reload();
 
     toast.success("Order successful!");
   };
