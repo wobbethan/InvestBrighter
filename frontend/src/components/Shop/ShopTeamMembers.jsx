@@ -191,7 +191,7 @@ const ShopTeamMembers = () => {
       </div>
       {open && (
         <div className="fixed top-0 left-0 w-full h-full bg-[#00000062] z-[2000] flex items-center justify-center">
-          <div className="w-[90%] 800px:w-[40%] h-[40vh] bg-white rounded-md shadow p-3">
+          <div className="w-[90%] 800px:w-[40%] h-[min] bg-white rounded-md shadow p-3">
             <div className="w-full flex justify-end">
               <RxCross1
                 size={30}

@@ -87,7 +87,7 @@ const ShopProfileData = ({ isOwner }) => {
           </div>
           {events && events.length === 0 && (
             <h5 className="w-full text-center py-5 text-[25px]">
-              No Events have for this shop!
+              No Events for this shop!
             </h5>
           )}
         </div>
@@ -115,7 +115,7 @@ const ShopProfileData = ({ isOwner }) => {
 
 const TeamMemberCard = ({ member }) => {
   return (
-    <div className=" w-[80%] 800px:w-full h-[250px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center">
+    <div className=" w-[80%] 800px:w-full h-[min] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center">
       <div className="justify-center self-center flex">
         <img
           draggable={false}

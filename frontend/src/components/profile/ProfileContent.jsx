@@ -407,7 +407,7 @@ const CompanyInfo = ({ members }) => {
 
 const TeamMemberCard = ({ member }) => {
   return (
-    <div className=" w-[100%] 800px:w-[250px] h-[250px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center m-2">
+    <div className=" w-[100%] 800px:w-[250px] h-[min] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center m-2">
       <div className="justify-center self-center flex">
         <img
           draggable={false}

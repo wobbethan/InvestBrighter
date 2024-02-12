@@ -41,8 +41,11 @@ router.post(
       };
 
       const activationToken = createActivationToken(seller);
-      const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
-
+      const activationBaseURL =
+        process.env.NODE_ENV === "production"
+          ? "https://investbrighter-277b0e7bd228.herokuapp.com"
+          : "http://localhost:3000";
+      const activationUrl = `${activationBaseURL}/seller/activation/${activationToken}`;
       try {
         await sendMail({
           email: seller.email,

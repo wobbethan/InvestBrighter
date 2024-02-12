@@ -140,9 +140,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                       <h3 className={`${styles.shop_name}`}>
                         {data.shop.name}
                       </h3>
-                      <h5 className="pb-3 text-[15px]">
-                        {data?.ratings} Ratings
-                      </h5>
                     </div>
                   </Link>
                 </div>

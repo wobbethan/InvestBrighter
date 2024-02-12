@@ -20,7 +20,8 @@ function HomePage() {
       {isAuthenticated &&
         allEvents?.filter((event) => event.sections.includes(user?.section))
           .length != 0 && <Events />}
-      <FeaturedProduct />
+      {isAuthenticated && <FeaturedProduct />}
+
       {/* <FaqPage></FaqPage> */}
       <Footer />
     </div>
