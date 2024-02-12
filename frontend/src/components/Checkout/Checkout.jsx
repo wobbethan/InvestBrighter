@@ -42,10 +42,12 @@ const Payment = () => {
         const res = await axios
           .post(`${server}/order/create-order`, order, config)
           .then((res) => {
-            if (res.data.status === true) {
+            if (res.data.success == true) {
+              localStorage.setItem("cartItems", JSON.stringify([]));
+              localStorage.setItem("latestOrder", JSON.stringify([]));
               navigate("/order/success");
             } else {
-              navigate("/order/fail");
+              toast.error(res.data.message);
             }
           });
         setOpen(false);
@@ -56,10 +58,6 @@ const Payment = () => {
         console.log(error);
       }
     }
-    // navigate("/order/success");
-    // window.location.reload();
-
-    toast.success("Order successful!");
   };
 
   return (

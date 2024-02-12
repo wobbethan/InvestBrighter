@@ -23,48 +23,49 @@ router.post(
       const productObj = await Product.findById(company._id);
       const eventObj = await Event.findById(productObj.eventId);
 
-      if (companyObj.stock < quantity) {
+      if (productObj.stock < quantity) {
         res.status(201).json({
           success: false,
+          message: `${productObj.stock} investments of ${companyObj.name} remaining`,
         });
         return next(
           new ErrorHandler(
-            `Only ${companyObj.stock} investments of ${companyObj.name} remaining`,
+            `Only ${productObj.stock} investments of ${companyObj.name} remaining`,
             500
           )
         );
+      } else {
+        //Update OBJ vars
+        userObj.accountBalance -= totalPrice;
+        companyObj.balance += totalPrice;
+        companyObj.totalInvestments += quantity;
+        productObj.stock -= quantity;
+        productObj.sold += quantity;
+        eventObj.numInvestments += quantity;
+
+        //Save
+        await userObj.save();
+        await companyObj.save();
+        await productObj.save();
+        await eventObj.save();
+
+        //Create Order
+        const order = await Order.create({
+          company: company,
+          user,
+          totalPrice,
+          quantity,
+          event: {
+            id: eventObj._id,
+            name: eventObj.name,
+          },
+        });
+
+        res.status(201).json({
+          success: true,
+          order,
+        });
       }
-
-      //Update OBJ vars
-      userObj.accountBalance -= totalPrice;
-      companyObj.balance += totalPrice;
-      companyObj.totalInvestments += quantity;
-      productObj.stock -= quantity;
-      productObj.sold += quantity;
-      eventObj.numInvestments += quantity;
-
-      //Save
-      await userObj.save();
-      await companyObj.save();
-      await productObj.save();
-      await eventObj.save();
-
-      //Create Order
-      const order = await Order.create({
-        company: company,
-        user,
-        totalPrice,
-        quantity,
-        event: {
-          id: eventObj._id,
-          name: eventObj.name,
-        },
-      });
-
-      res.status(201).json({
-        success: true,
-        order,
-      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
