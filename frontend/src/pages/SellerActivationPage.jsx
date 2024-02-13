@@ -15,9 +15,7 @@ const SellerActivationPage = () => {
           .post(`${server}/shop/activation`, {
             activation_token,
           })
-          .then((res) => {
-            console.log(res);
-          })
+          .then((res) => {})
           .catch((err) => {
             setError(true);
           });

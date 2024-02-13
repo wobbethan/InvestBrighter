@@ -211,7 +211,6 @@ router.put(
         return next(new ErrorHandler('User not found', 400))
       }
       const newEmail = await User.findOne({ email: email })
-      console.log(newEmail)
       if (newEmail !== user && newEmail !== null) {
         return next(new ErrorHandler('Email already in use', 400))
       }

@@ -45,6 +45,7 @@ import {
   ForgotPasswordPage,
   ShopForgotPasswordPage,
   ShopPasswordPage,
+  OrderFailPage,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -183,6 +184,7 @@ function App() {
         <Route path="/events" Component={EventsPage} />
         <Route path="/faq" Component={FaqPage} />
         <Route path="/order/success/" Component={OrderSuccessPage} />
+        <Route path="/order/fail/" Component={OrderFailPage} />
         <Route
           path="/profile"
           element={

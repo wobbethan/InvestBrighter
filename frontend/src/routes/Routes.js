@@ -8,6 +8,7 @@ import EventsPage from "../pages/EventsPage.jsx";
 import FaqPage from "../pages/FaqPage.jsx";
 import ProductDetailsPage from "../pages/ProductDetailsPage.jsx";
 import OrderSuccessPage from "../pages/OrderSuccessPage.jsx";
+import OrderFailPage from "../pages/OrderFailPage.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
 import CheckoutPage from "../pages/CheckoutPage.jsx";
 import ShopCreatePage from "../pages/Shop/ShopCreatePage.jsx";
@@ -75,4 +76,5 @@ export {
   ForgotPasswordPage,
   ShopForgotPasswordPage,
   ShopPasswordPage,
+  OrderFailPage,
 };

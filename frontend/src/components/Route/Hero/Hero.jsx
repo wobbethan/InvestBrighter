@@ -3,8 +3,12 @@ import bg from "../../../assets/investbg.png";
 import animationData from "../../../assets/animations/transBulb.json";
 import Lottie from "react-lottie";
 import { motion } from "framer-motion";
+import styles from "../../../styles/styles";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Hero() {
+  const { isAuthenticated } = useSelector((state) => state.user);
   const title = "Invest Brighter".split("");
   const defaultOptions = {
     loop: false,
@@ -16,7 +20,7 @@ function Hero() {
   };
   return (
     <div
-      className={`z-[999] flex flex-col h-[100vh] self-center bg-no-repeat bg-fixed bg-cover items-center p-[100px] mb-5 !cursor-default`}
+      className={`z-[999] flex flex-col h-[120vh] self-center bg-no-repeat bg-fixed bg-cover items-center p-[100px] mb-5 !cursor-default`}
       style={{
         backgroundImage: `url(${bg})`,
       }}
@@ -54,6 +58,21 @@ function Hero() {
         >
           Your Investment solution
         </motion.p>
+        {!isAuthenticated && (
+          <motion.div
+            initial={{ opacity: 0, y: "100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut", delay: 2.5 }}
+            className="text-[1.5rem] font-Poppins flex flex-col 800px:flex-row items-center w-full justify-evenly mt-5 mb-5"
+          >
+            <Link to="/login">
+              <div className={`${styles.button} text-white`}>Login</div>
+            </Link>
+            <Link to="/sign-up">
+              <div className={`${styles.button} text-white`}>Sign up</div>
+            </Link>
+          </motion.div>
+        )}
       </div>
     </div>
   );
