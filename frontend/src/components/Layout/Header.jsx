@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { categoriesData, productData } from "../../static/data";
 import {
   AiOutlineHeart,
@@ -35,7 +35,8 @@ function Header({ activeHeading }) {
   const searchInput = React.useRef(null);
   const { allProducts } = useSelector((state) => state.products);
   const [sections, setSections] = useState();
-
+  const [searchParams] = useSearchParams();
+  const linkSection = searchParams.get("section");
   useEffect(() => {
     if (user?.role === "admin") {
       axios.get(`${server}/section/get-sections/${user._id}`).then((res) => {
@@ -66,15 +67,15 @@ function Header({ activeHeading }) {
           {user?.role === "admin" && (
             <div onClick={() => setDropDown(!dropDown)}>
               <div
-                className={`${styles.section} relative ${styles.normalFlex} justify-between`}
+                className={`${styles.section} relative ${styles.normalFlex} `}
               >
-                <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
+                <div className="relative h-[60px] mt-[10px] w-[270px] hidden 800px:block">
                   <BiMenuAltLeft
                     size={30}
                     className="absolute top-3 left-2 cursor-pointer"
                   />
-                  <button className="h-[100%] w-full flex justify-normal items-center pl-10 bg-white font-sans text-lg font[500] select-none rounded-t-md">
-                    All Sections
+                  <button className="h-[100%] w-full flex justify-normal items-center pl-10 bg-white font-sans text-lg font[500] select-none rounded-t-md text-center">
+                    {linkSection === null ? "Select Section" : linkSection}
                   </button>
                   <IoIosArrowDown
                     size={20}

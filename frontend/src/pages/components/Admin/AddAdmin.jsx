@@ -26,9 +26,7 @@ const AddAdmin = () => {
   const addAdmin = async (email) => {
     await axios
       .put(`${server}/user/add-admin/${email}`, { withCredentials: true })
-      .then((res) => {
-        console.log(res.message);
-      });
+      .then((res) => {});
     window.location.reload();
   };
 
@@ -98,9 +96,7 @@ const AdminCard = ({ admin }) => {
   const removeAdmin = async (id) => {
     await axios
       .put(`${server}/user/remove-admin/${id}`, { withCredentials: true })
-      .then((res) => {
-        console.log(res.message);
-      });
+      .then((res) => {});
     window.location.reload();
   };
   return (
