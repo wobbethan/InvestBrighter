@@ -78,7 +78,7 @@ function App() {
           Component={ActivationPage}
         />
         <Route
-          path="/seller/activation/:activation_token"
+          path="/company/activation/:activation_token"
           Component={SellerActivationPage}
         />
         <Route path="/shop/preview/:id" Component={ShopPreviewPage} />
