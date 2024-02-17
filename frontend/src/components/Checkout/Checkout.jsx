@@ -46,6 +46,7 @@ const Payment = () => {
               localStorage.setItem("cartItems", JSON.stringify([]));
               localStorage.setItem("latestOrder", JSON.stringify([]));
               navigate("/order/success");
+              window.location.reload();
             } else {
               toast.error(res.data.message);
             }

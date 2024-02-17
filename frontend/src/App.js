@@ -100,7 +100,7 @@ function App() {
           }
         />
         <Route
-          path="/dashboard-settings"
+          path="/dashboard-info"
           element={
             <SellerProtectedRoute>
               <ShopSettingsPage />
@@ -179,7 +179,6 @@ function App() {
             </SellerProtectedRoute>
           }
         />
-        <Route path="/product/:id" Component={ProductDetailsPage} />
         <Route path="/best-selling" Component={BestSellingPage} />
         <Route path="/events" Component={EventsPage} />
         <Route path="/faq" Component={FaqPage} />

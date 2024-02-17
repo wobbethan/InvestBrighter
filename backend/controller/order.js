@@ -23,6 +23,19 @@ router.post(
       const productObj = await Product.findById(company._id);
       const eventObj = await Event.findById(productObj.eventId);
 
+      let roundEnded,
+        roundStarted = null;
+      const currentDate = new Date();
+      if (
+        productObj.start_Date !== "undefined" &&
+        productObj.finish_Date !== "undefined"
+      ) {
+        const startDate = new Date(productObj.start_Date);
+        const endDate = new Date(productObj.finish_Date);
+        roundStarted = currentDate > startDate;
+        roundEnded = currentDate > endDate;
+      }
+
       if (productObj.stock < quantity) {
         res.status(201).json({
           success: false,
@@ -33,6 +46,26 @@ router.post(
             `Only ${productObj.stock} investments of ${companyObj.name} remaining`,
             500
           )
+        );
+      } else if (eventObj.status === "Locked") {
+        res.status(201).json({
+          success: false,
+          message: `The event is now locked`,
+        });
+        return next(new ErrorHandler(`The event is now locked`, 500));
+      } else if (roundEnded === true) {
+        res.status(201).json({
+          success: false,
+          message: `The event has concluded`,
+        });
+        return next(new ErrorHandler(`The event has concluded`, 500));
+      } else if (roundStarted === false) {
+        res.status(201).json({
+          success: false,
+          message: `Unable to invest until round has started`,
+        });
+        return next(
+          new ErrorHandler(`Unable to invest until round has started`, 500)
         );
       } else {
         //Update OBJ vars

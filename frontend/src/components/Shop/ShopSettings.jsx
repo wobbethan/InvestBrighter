@@ -137,8 +137,8 @@ const ShopSettings = () => {
               <label className="block pb-2">Valuation</label>
             </div>
             <input
-              type="valuation"
-              placeholder={`${seller.valuation.toLocaleString()}`}
+              type="number"
+              placeholder={`${seller.valuation}`}
               value={valuation}
               onChange={(e) => setValuation(e.target.value)}
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -151,7 +151,7 @@ const ShopSettings = () => {
               <label className="block pb-2">Final Acquisition</label>
             </div>
             <input
-              type="name"
+              type="number"
               placeholder={`${seller.finalAcquisition}`}
               value={finalAq}
               onChange={(e) => setFinalAq(e.target.value)}

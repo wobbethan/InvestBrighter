@@ -24,10 +24,22 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   const { isAuthenticated } = useSelector((state) => state.user);
   const { user } = useSelector((state) => state.user);
 
+  const [newShopInfo, setNewShopInfo] = useState();
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getInfo = async () => {
+      await axios
+        .get(`${server}/shop/get-shop-info/${data.shopId}`)
+        .then((res) => {
+          setNewShopInfo(res.data.shop);
+        });
+    };
+    getInfo();
+  }, []);
 
   useEffect(() => {
     if (wishlist && wishlist.find((i) => i._id === data._id)) {
@@ -118,31 +130,31 @@ const ProductDetailsCard = ({ setOpen, data }) => {
           <div className="w-[90%] 800px:w-[60%] h-[90vh] overflow-y-scroll 800px:h-[75vh] bg-white rounded-md shadow-sm relative p-4">
             <RxCross1
               size={30}
-              className="absolute right-3 top-3 z-50"
+              className="absolute right-3 top-3 z-50 cursor-pointer"
               onClick={() => setOpen(false)}
             />
 
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={`${data?.shop?.avatar && data?.shop?.avatar.url}`}
+                  src={`${newShopInfo?.avatar && newShopInfo?.avatar.url}`}
                   alt=""
                   className="p-2"
                 />
+                <h4 className="text-3xl text-bold p-3 text-center">
+                  Valuation: ${newShopInfo?.valuation.toLocaleString()}
+                </h4>
                 <div className="flex mt-2">
                   <Link to={`/shop/preview/${data.shop._id}`} className="flex">
                     <img
-                      src={`${data.shop && data.shop.avatar.url}`}
+                      src={`${newShopInfo && newShopInfo?.avatar.url}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
                     <div>
                       <h3 className={`${styles.shop_name}`}>
-                        {data.shop.name}
+                        {newShopInfo?.name}
                       </h3>
-                      <h5 className="pb-3 text-[15px]">
-                        {data?.ratings} Ratings
-                      </h5>
                     </div>
                   </Link>
                 </div>
@@ -154,9 +166,9 @@ const ProductDetailsCard = ({ setOpen, data }) => {
 
               <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">
                 <h1 className={`${styles.productTitle} text-[20px]`}>
-                  {data.name}
+                  {newShopInfo?.name}
                 </h1>
-                <p>{data.description}</p>
+                <p>{newShopInfo?.description}</p>
 
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>

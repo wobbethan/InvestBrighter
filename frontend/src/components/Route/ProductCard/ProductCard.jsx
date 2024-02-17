@@ -29,6 +29,18 @@ function ProductCard({ data, isEvent }) {
   const [open, setOpen] = useState(false);
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [newShopInfo, setNewShopInfo] = useState();
+
+  useEffect(() => {
+    const getInfo = async () => {
+      await axios
+        .get(`${server}/shop/get-shop-info/${data.shopId}`)
+        .then((res) => {
+          setNewShopInfo(res.data.shop);
+        });
+    };
+    getInfo();
+  }, []);
 
   useEffect(() => {
     if (wishlist && wishlist.find((i) => i._id === data._id)) {
@@ -106,59 +118,46 @@ function ProductCard({ data, isEvent }) {
 
   return (
     <>
-      <div className="w-full h-[400px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
+      <div className="w-full h-[400px] bg-white rounded-lg shadow-sm p-3 relative">
         <div className="flex justify-end"></div>
-        <Link
-          to={`${
-            isEvent === true
-              ? `/product/${data._id}?isEvent=true`
-              : `/product/${data._id}`
-          }`}
-        >
-          <img
-            src={`${data?.shop?.avatar && data?.shop?.avatar.url}`}
-            alt=""
-            className="w-full h-[170px] object-contain p-6"
-          />
-        </Link>
+
+        <img
+          src={`${newShopInfo?.avatar && newShopInfo?.avatar?.url}`}
+          alt=""
+          className="w-full h-[170px] object-contain p-6"
+        />
 
         <div className="w-full items-center text-center">
-          {data.shop.valuation !== 0 && (
+          {newShopInfo?.valuation !== 0 && (
             <h5 className={`${styles.productDiscountPrice} !text-lg`}>
               {" "}
-              Valuation: ${data.shop.valuation.toLocaleString()}
+              Valuation: ${newShopInfo?.valuation.toLocaleString()}
             </h5>
           )}
         </div>
         <Link to={`/shop/preview/${data?.shop._id}`}>
-          <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
+          <h5 className={`${styles.shop_name}`}>{newShopInfo?.name}</h5>
         </Link>
 
-        <Link
-          to={`${
-            isEvent === true
-              ? `/product/${data._id}?isEvent=true`
-              : `/product/${data._id}`
-          }`}
-        >
-          <h4 className="pb-3 font-[500]">
-            {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
-          </h4>
-          <h5 className="text-[16px] text-[red] justify-end">
-            {data.stock} remaining
-          </h5>
+        <h4 className="pb-3 font-[500]">
+          {newShopInfo?.name?.length > 40
+            ? newShopInfo?.name.slice(0, 40) + "..."
+            : newShopInfo?.name}
+        </h4>
+        <h5 className="text-[16px] text-[red] justify-end">
+          {data.stock} remaining
+        </h5>
 
-          <div className="py-2 flex items-center justify-between mt-3">
-            <div className="flex">
-              <h5 className={`${styles.productDiscountPrice} !text-2xl`}>
-                ${data.price.toLocaleString()}
-              </h5>
-            </div>
-            <span className="font-[400] text-[17px] text-[#6AD284]">
-              {data.sold} Investments
-            </span>
+        <div className="py-2 flex items-center justify-between mt-3">
+          <div className="flex">
+            <h5 className={`${styles.productDiscountPrice} !text-2xl`}>
+              ${data.price.toLocaleString()}
+            </h5>
           </div>
-        </Link>
+          <span className="font-[400] text-[17px] text-[#6AD284]">
+            {data.sold} Investments
+          </span>
+        </div>
 
         {/* Side options */}
 
