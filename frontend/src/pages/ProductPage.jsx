@@ -44,7 +44,7 @@ function ProductPage() {
       {isLoading ? (
         <Loader></Loader>
       ) : (
-        <div>
+        <div className="mt-10">
           <Header activeHeading={3} />
           <br />
           <br />
