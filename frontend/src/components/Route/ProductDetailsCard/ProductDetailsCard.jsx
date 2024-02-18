@@ -55,7 +55,16 @@ const ProductDetailsCard = ({ setOpen, data }) => {
     }
   };
   const incrementCount = () => {
-    setCount(count + 1);
+    let maxCount = user.accountBalance / data?.price;
+
+    maxCount = maxCount > data.stock ? data.stock : maxCount;
+    if (count < maxCount) {
+      setCount(count + 1);
+    } else if (maxCount === data.stock) {
+      toast.error("Stock limited");
+    } else {
+      toast.error("Max quantity with available funds");
+    }
   };
 
   const addToCartHandler = async (id) => {
@@ -94,12 +103,14 @@ const ProductDetailsCard = ({ setOpen, data }) => {
       } else {
         const isItemExists = cart && cart.find((i) => i._id === id);
         if (isItemExists) {
-          toast.error("Item already in cart");
+          const cartData = { ...data, qty: count };
+          dispatch(addToCart(cartData));
+          toast.success("Cart quantity updated");
         } else {
           if (data.stock < 1) {
             toast.error("Product stock limited");
           } else {
-            const cartData = { ...data, qty: 1 };
+            const cartData = { ...data, qty: count };
             dispatch(addToCart(cartData));
             toast.success("Item added to cart");
           }
@@ -175,10 +186,10 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                     ${data.price?.toLocaleString()}
                   </h4>
                 </div>
-                <div className="flex items-center mt-12 justify-between pr-3">
-                  <div>
+                <div className="flex items-center mt-12 justify-between pr-3 ">
+                  <div className="flex flex-row items-center">
                     <button
-                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-[11px] shadow-lg hover:opacity-75 transition duration-300 ease-in-out text-center"
                       onClick={decrementCount}
                     >
                       -
@@ -187,7 +198,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                       {count}
                     </span>
                     <button
-                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-r px-4 py-[11px] shadow-lg hover:opacity-75 transition duration-300 ease-in-out text-center"
                       onClick={incrementCount}
                     >
                       +
