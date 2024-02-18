@@ -13,6 +13,16 @@ const AllOrders = () => {
 
   const dispatch = useDispatch();
 
+  let options = {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: true,
+    minute: "numeric",
+    hour: "numeric",
+  };
+
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
   }, [dispatch]);
@@ -45,7 +55,7 @@ const AllOrders = () => {
     {
       field: "createdAt",
       headerName: "Order Date",
-      type: "number",
+      type: "date",
       minWidth: 130,
       flex: 0.8,
     },
@@ -60,7 +70,7 @@ const AllOrders = () => {
         investor: item.user.name,
         itemsQty: item.quantity,
         total: "$" + item.totalPrice.toLocaleString(),
-        createdAt: item?.createdAt.slice(0, 10),
+        createdAt: new Date(item?.createdAt).toLocaleString("en-US", options),
       });
     });
 

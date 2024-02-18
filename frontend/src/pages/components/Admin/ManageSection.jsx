@@ -18,7 +18,15 @@ const ManageSection = () => {
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
-
+  let options = {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: true,
+    minute: "numeric",
+    hour: "numeric",
+  };
   const { adminSections } = useSelector((state) => state.sections);
   const { user } = useSelector((state) => state.user);
 
@@ -126,7 +134,7 @@ const ManageSection = () => {
         admin: item?.admin?.name,
         section: item?.name,
         numStudents: item?.numStudents,
-        createdAt: item?.createdAt.slice(0, 10),
+        createdAt: new Date(item?.createdAt).toLocaleString("en-US", options),
       });
     });
 

@@ -13,6 +13,16 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfAdmin } from "../../redux/actions/order";
 
+let options = {
+  timeZone: "America/New_York",
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+  hour12: true,
+  minute: "numeric",
+  hour: "numeric",
+};
+
 const AdminAllOrdersPage = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -82,7 +92,7 @@ const AdminAllOrdersPage = () => {
     {
       field: "createdAt",
       headerName: "Order Date",
-      type: "number",
+      type: "date",
       minWidth: 130,
       flex: 0.8,
     },
@@ -99,7 +109,7 @@ const AdminAllOrdersPage = () => {
         company: item.company.shop.name,
         itemsQty: item.quantity,
         total: "$" + item.totalPrice.toLocaleString(),
-        createdAt: item?.createdAt.slice(0, 10),
+        createdAt: new Date(item?.createdAt).toLocaleString("en-US", options),
       });
     });
   return (

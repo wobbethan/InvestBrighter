@@ -13,7 +13,15 @@ const AllEvents = () => {
   const { seller } = useSelector((state) => state.seller);
 
   const dispatch = useDispatch();
-
+  let options = {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: true,
+    minute: "numeric",
+    hour: "numeric",
+  };
   const handleDelete = (id) => {
     dispatch(deleteEvent(id));
     window.location.reload();
