@@ -10,16 +10,18 @@ import { Button, TextField } from "@material-ui/core";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
+import Loader from "../Layout/Loader";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault("America/New_York");
 
 const CreateEvents = () => {
   const { user } = useSelector((state) => state.user);
-  const { success, error } = useSelector((state) => state.events);
+  const { success, error, isLoading } = useSelector((state) => state.events);
   const { adminSections } = useSelector((state) => state.sections);
 
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ const CreateEvents = () => {
   const [endDate, setEndDate] = useState(null);
   const [investCompany, setInvestCompany] = useState(32);
   const [investRound, setInvestRound] = useState(20);
-
+  const [loading, setLoading] = useState(false);
   // const handleStartDateChange = (e) => {
   //   const startDate = new Date(e.target.value);
   //   const minEndDate = new Date(startDate.getTime() + 1 * 24 * 60 * 60 * 1000);
@@ -54,8 +56,10 @@ const CreateEvents = () => {
   useEffect(() => {
     if (error) {
       toast.error(error);
+      setLoading(false);
     }
     if (success) {
+      setLoading(false);
       toast.success("Event created successfully!");
     }
   }, [dispatch, error, success]);
@@ -92,6 +96,8 @@ const CreateEvents = () => {
   const today = new Date();
 
   const handleSubmit = (e) => {
+    setLoading(true);
+
     e.preventDefault();
     if (sections.length !== 0) {
       const newForm = new FormData();
@@ -118,171 +124,181 @@ const CreateEvents = () => {
   };
   return (
     <>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div className="800px:w-[50%] w-[90%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
-          <h5 className="text-[30px] font-Poppins text-center">Create Round</h5>
-          {/* Form */}
-          <form onSubmit={handleSubmit}>
-            <br />
-            <div>
-              <label className="pb-2">Name</label>
-              <input
-                type="text"
-                required
-                name="name"
-                value={name}
-                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter investment round name..."
-              />
-            </div>
-            <br />
-            <div>
-              <label className="pb-2">Description</label>
-              <textarea
-                cols="30"
-                rows="8"
-                type="text"
-                required
-                name="description"
-                value={description}
-                className="mt-2 appearance-none block w-full pt-3 px-3  border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Enter description..."
-              />
-            </div>
-            <br />
-            <div>
-              <label className="pb-2">Applied Sections:</label>
-              <div className="flex flex-col items-center">
-                {adminSections &&
-                  adminSections.map((i, index) => (
-                    <Button
-                      key={index}
-                      className="w-[50%]"
-                      type="button"
-                      onClick={() => handleButtonClick(i.name)}
-                      style={{
-                        color: sections.includes(i.name)
-                          ? "#FF0000"
-                          : "#000000",
-                      }}
-                    >
-                      {i.name}
-                    </Button>
-                  ))}
-              </div>
-            </div>
-            <br />
-            <div>
-              <label className="pb-2">Number of checks</label>
-              <input
-                required
-                type="number"
-                name="numChecks"
-                value={numChecks}
-                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                onChange={(e) => setNumChecks(e.target.value)}
-                placeholder="Number of checks..."
-                min={0}
-              />
-            </div>
-            <br />
-            <div>
-              <label className="pb-2">Check Amount</label>
-              <input
-                required
-                type="number"
-                name="priceCheck"
-                value={priceCheck}
-                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                onChange={(e) => setPriceCheck(e.target.value)}
-                placeholder="Check amount..."
-                min={0}
-              />
-            </div>
-            <br />
-            <div>
-              <label className="pb-2">Max Investments</label>
-              <input
-                required
-                type="number"
-                name="investRound"
-                value={investRound}
-                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                onChange={(e) => setInvestRound(e.target.value)}
-                placeholder="Enter max..."
-              />
-            </div>
-            <br />
-            <div>
-              <label className="pb-2">Max Investments per Company</label>
-              <input
-                required
-                type="number"
-                name="investCompany"
-                value={investCompany}
-                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                onChange={(e) => setInvestCompany(e.target.value)}
-                placeholder="Enter max..."
-              />
-            </div>
-            <br />
-            <div className="flex-col flex">
-              <label className="pb-2">Round Start Date/Time</label>
-              <MobileDateTimePicker
-                value={startDate}
-                onChange={(e) => setStartDate(e)}
-              />
-            </div>
-            <br />
-            <div className="flex-col flex">
-              <label className="pb-2">Round End Date/Time</label>
-              <MobileDateTimePicker
-                value={endDate}
-                onChange={(e) => setEndDate(e)}
-              />
-            </div>
-            <br />
-            <div>
-              <label className="pb-2">Upload Images</label>
-              <input
-                type="file"
-                name=""
-                id="upload"
-                className="hidden"
-                multiple
-                required
-                onChange={handleImageChange}
-              />
-              <label htmlFor="upload">
-                <AiOutlinePlusCircle size={30} className="mt-3" color="#555" />
-              </label>
-              <div className="w-full flex items-center flex-wrap">
-                {" "}
-                {images &&
-                  images.map((i) => (
-                    <img
-                      className="h-[120px] w-[120px] m-2 object-cover"
-                      src={i}
-                      key={i}
-                    ></img>
-                  ))}
+      {loading ? (
+        <Loader></Loader>
+      ) : (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <div className="800px:w-[50%] w-[90%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
+            <h5 className="text-[30px] font-Poppins text-center">
+              Create Round
+            </h5>
+            {/* Form */}
+            <form onSubmit={handleSubmit}>
+              <br />
+              <div>
+                <label className="pb-2">Name</label>
+                <input
+                  type="text"
+                  required
+                  name="name"
+                  value={name}
+                  className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter investment round name..."
+                />
               </div>
               <br />
               <div>
-                <input
-                  type="submit"
-                  name=""
-                  id=""
-                  value="Create"
-                  className="mt-2 cursor-pointer appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                <label className="pb-2">Description</label>
+                <textarea
+                  cols="30"
+                  rows="8"
+                  type="text"
+                  required
+                  name="description"
+                  value={description}
+                  className="mt-2 appearance-none block w-full pt-3 px-3  border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Enter description..."
                 />
               </div>
-            </div>
-          </form>
-        </div>
-      </LocalizationProvider>
+              <br />
+              <div>
+                <label className="pb-2">Applied Sections:</label>
+                <div className="flex flex-col items-center">
+                  {adminSections &&
+                    adminSections.map((i, index) => (
+                      <Button
+                        key={index}
+                        className="w-[50%]"
+                        type="button"
+                        onClick={() => handleButtonClick(i.name)}
+                        style={{
+                          color: sections.includes(i.name)
+                            ? "#FF0000"
+                            : "#000000",
+                        }}
+                      >
+                        {i.name}
+                      </Button>
+                    ))}
+                </div>
+              </div>
+              <br />
+              <div>
+                <label className="pb-2">Number of checks</label>
+                <input
+                  required
+                  type="number"
+                  name="numChecks"
+                  value={numChecks}
+                  className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setNumChecks(e.target.value)}
+                  placeholder="Number of checks..."
+                  min={0}
+                />
+              </div>
+              <br />
+              <div>
+                <label className="pb-2">Check Amount</label>
+                <input
+                  required
+                  type="number"
+                  name="priceCheck"
+                  value={priceCheck}
+                  className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setPriceCheck(e.target.value)}
+                  placeholder="Check amount..."
+                  min={0}
+                />
+              </div>
+              <br />
+              <div>
+                <label className="pb-2">Max Investments</label>
+                <input
+                  required
+                  type="number"
+                  name="investRound"
+                  value={investRound}
+                  className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setInvestRound(e.target.value)}
+                  placeholder="Enter max..."
+                />
+              </div>
+              <br />
+              <div>
+                <label className="pb-2">Max Investments per Company</label>
+                <input
+                  required
+                  type="number"
+                  name="investCompany"
+                  value={investCompany}
+                  className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setInvestCompany(e.target.value)}
+                  placeholder="Enter max..."
+                />
+              </div>
+              <br />
+              <div className="flex-col flex">
+                <label className="pb-2">Round Start Date/Time</label>
+                <MobileDateTimePicker
+                  value={startDate}
+                  onChange={(e) => setStartDate(e)}
+                />
+              </div>
+              <br />
+              <div className="flex-col flex">
+                <label className="pb-2">Round End Date/Time</label>
+                <MobileDateTimePicker
+                  value={endDate}
+                  onChange={(e) => setEndDate(e)}
+                />
+              </div>
+              <br />
+              <div>
+                <label className="pb-2">Upload Images</label>
+                <input
+                  type="file"
+                  name=""
+                  id="upload"
+                  className="hidden"
+                  multiple
+                  required
+                  onChange={handleImageChange}
+                />
+                <label htmlFor="upload">
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="mt-3"
+                    color="#555"
+                  />
+                </label>
+                <div className="w-full flex items-center flex-wrap">
+                  {" "}
+                  {images &&
+                    images.map((i) => (
+                      <img
+                        className="h-[120px] w-[120px] m-2 object-cover"
+                        src={i}
+                        key={i}
+                      ></img>
+                    ))}
+                </div>
+                <br />
+                <div>
+                  <input
+                    type="submit"
+                    name=""
+                    id=""
+                    value="Create"
+                    className="mt-2 cursor-pointer appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+        </LocalizationProvider>
+      )}
     </>
   );
 };

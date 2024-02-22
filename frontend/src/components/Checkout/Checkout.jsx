@@ -7,12 +7,13 @@ import axios from "axios";
 import { server } from "../../Server";
 import { toast } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
-
+import Loader from "../Layout/Loader";
 const Payment = () => {
   const [orderData, setOrderData] = useState([]);
   const [open, setOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const Payment = () => {
   const totalPrice = cart.reduce((acc, item) => acc + item.qty * item.price, 0);
 
   const cashOnDeliveryHandler = async (e) => {
+    setLoading(true);
     e.preventDefault();
     for (const item of cart) {
       try {
@@ -62,23 +64,29 @@ const Payment = () => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center py-8 mt-[10vh]">
-      <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
-        <div className="w-full 800px:w-[65%]">
-          <PaymentInfo
-            user={user}
-            open={open}
-            setOpen={setOpen}
-            cashOnDeliveryHandler={cashOnDeliveryHandler}
-            orderData={orderData}
-            totalPrice={totalPrice}
-          />
+    <>
+      {loading ? (
+        <Loader></Loader>
+      ) : (
+        <div className="w-full flex flex-col items-center py-8 mt-[10vh]">
+          <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
+            <div className="w-full 800px:w-[65%]">
+              <PaymentInfo
+                user={user}
+                open={open}
+                setOpen={setOpen}
+                cashOnDeliveryHandler={cashOnDeliveryHandler}
+                orderData={orderData}
+                totalPrice={totalPrice}
+              />
+            </div>
+            <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
+              <CartData orderData={orderData} totalPrice={totalPrice} />
+            </div>
+          </div>
         </div>
-        <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
-          <CartData orderData={orderData} totalPrice={totalPrice} />
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
