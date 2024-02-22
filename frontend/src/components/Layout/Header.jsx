@@ -55,13 +55,8 @@ function Header({ activeHeading }) {
 
   return (
     <>
-      {/* ${
-          user?.role === "admin" ? "justify-between" : "justify-end"
-        } */}
       <div
-        className={`${
-          active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
-        } transition hidden 800px:flex items-center justify-between w-full h-[70px] bg-[#3321c8]`}
+        className={`shadow-sm fixed top-0 left-0 z-10 transition hidden 800px:flex items-center justify-between w-full h-[70px] bg-[#3321c8]`}
       >
         <div className="flex">
           {user?.role === "admin" && (
@@ -185,9 +180,7 @@ function Header({ activeHeading }) {
 
       {/* Mobile Header */}
       <div
-        className={`${
-          active === true ? "shadow-sm  top-0 left-0 z-10" : null
-        }w-full h-[60px] bg-white z-50 top-0 left-0 shadow-sm 800px:hidden`}
+        className={` fixed  top-0 left-0  w-full h-[60px] bg-white z-50 shadow-sm 800px:hidden`}
       >
         <div className="w-full flex items-center justify-between">
           <div>

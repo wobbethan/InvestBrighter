@@ -25,6 +25,7 @@ const ProductDetails = ({ data, id }) => {
   const { cart } = useSelector((state) => state.cart);
   const { products } = useSelector((state) => state.products);
   const { user, isAuthenticated } = useSelector((state) => state.user);
+  const [newShopInfo, setNewShopInfo] = useState();
 
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
@@ -41,6 +42,17 @@ const ProductDetails = ({ data, id }) => {
       setClick(false);
     }
   }, [wishlist, data]);
+
+  useEffect(() => {
+    const getInfo = async () => {
+      await axios
+        .get(`${server}/shop/get-shop-info/${data?.shopId}`)
+        .then((res) => {
+          setNewShopInfo(res.data.shop);
+        });
+    };
+    getInfo();
+  }, []);
 
   const decrementCount = () => {
     if (count > 1) {
@@ -127,14 +139,16 @@ const ProductDetails = ({ data, id }) => {
               <div className="w-full 800px:w-[50%]">
                 {" "}
                 <img
-                  src={`${data.shop?.avatar?.url}`}
+                  src={`${newShopInfo?.avatar?.url}`}
                   alt=""
                   className="w-[80%]"
                 />
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
-                <h1 className={`${styles.productTitle}`}>{data?.name}</h1>
-                <p>{data.description}</p>
+                <h1 className={`${styles.productTitle}`}>
+                  {newShopInfo?.name}
+                </h1>
+                <p>{newShopInfo?.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
                     ${data?.price.toLocaleString()}

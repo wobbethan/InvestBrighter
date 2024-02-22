@@ -46,17 +46,10 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setEmail(email.toLowerCase());
     if (confirmPassword !== password) {
       toast.error("Passwords do not match");
     } else {
-      const config = { headers: { "Content-Type": "multipart/form-data" } };
-      const newForm = new FormData();
-      newForm.append("file", avatar);
-      newForm.append("name", name);
-      newForm.append("email", email);
-      newForm.append("password", password);
-      newForm.append("section", selectedSection);
-
       await axios
         .post(`${server}/user/create-user`, {
           name,
@@ -130,7 +123,7 @@ function Signup() {
                       autoComplete="email"
                       required
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value.toLowerCase())}
                       className="block w-full appearance-none px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm "
                     />
                   </div>

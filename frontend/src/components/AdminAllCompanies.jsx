@@ -17,7 +17,15 @@ const AdminAllCompanies = () => {
   const { sellers } = useSelector((state) => state.seller);
   const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState("");
-
+  let options = {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: true,
+    minute: "numeric",
+    hour: "numeric",
+  };
   useEffect(() => {
     dispatch(getAllSellers(user._id));
   }, [dispatch]);
@@ -56,7 +64,7 @@ const AdminAllCompanies = () => {
     {
       field: "joinedAt",
       headerName: "Created",
-      type: "text",
+      type: "date",
       minWidth: 130,
       flex: 0.8,
     },
@@ -117,7 +125,7 @@ const AdminAllCompanies = () => {
           item?.teamMembers && item?.teamMembers.length > 0
             ? item?.teamMembers.length
             : 0,
-        joinedAt: item.createdAt.slice(0, 10),
+        joinedAt: new Date(item.createdAt).toLocaleString("en-US", options),
       });
     });
 

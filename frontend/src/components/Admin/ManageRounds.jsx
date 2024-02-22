@@ -16,6 +16,15 @@ const ManageRounds = () => {
   const [id, setId] = useState(null);
   const { allEventsAdmin } = useSelector((state) => state.events);
   const { user } = useSelector((state) => state.user);
+  let options = {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: true,
+    minute: "numeric",
+    hour: "numeric",
+  };
   const dispatch = useDispatch();
 
   const removeEvent = async (id) => {
@@ -69,14 +78,14 @@ const ManageRounds = () => {
     {
       field: "start",
       headerName: "Start Date",
-      type: "text",
+      type: "date",
       minWidth: 70,
       flex: 0.7,
     },
     {
       field: "end",
       headerName: "End Date",
-      type: "text",
+      type: "date",
       minWidth: 70,
       flex: 0.7,
     },
@@ -147,11 +156,11 @@ const ManageRounds = () => {
         start:
           item?.start_Date === "undefined"
             ? "N/A"
-            : item?.start_Date.slice(0, 10),
+            : new Date(item?.start_Date).toLocaleString("en-US", options),
         end:
           item?.finish_Date === "undefined"
             ? "N/A"
-            : item?.finish_Date.slice(0, 10),
+            : new Date(item?.finish_Date).toLocaleString("en-US", options),
         numInvestments: item.numInvestments,
       });
     });

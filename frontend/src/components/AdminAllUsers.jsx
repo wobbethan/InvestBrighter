@@ -17,6 +17,16 @@ const AdminAllUsers = () => {
   const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState("");
 
+  let options = {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: true,
+    minute: "numeric",
+    hour: "numeric",
+  };
+
   useEffect(() => {
     dispatch(getAllUsers(user._id));
   }, [dispatch]);
@@ -55,7 +65,7 @@ const AdminAllUsers = () => {
     {
       field: "joinedAt",
       headerName: "Created on",
-      type: "text",
+      type: "date",
       minWidth: 130,
       flex: 0.8,
     },
@@ -94,7 +104,7 @@ const AdminAllUsers = () => {
         id: item?._id,
         name: item?.name,
         email: item?.email,
-        joinedAt: item?.createdAt.slice(0, 10),
+        joinedAt: new Date(item?.createdAt).toLocaleString("en-US", options),
         team: item.companyName,
       });
     });

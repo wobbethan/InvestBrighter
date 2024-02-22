@@ -31,7 +31,7 @@ router.post(
 
       const seller = {
         name: req.body.name,
-        email: email,
+        email: email.toLowerCase(),
         password: req.body.password,
         avatar: {
           public_id: myCloud.public_id,

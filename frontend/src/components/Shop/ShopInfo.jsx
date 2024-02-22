@@ -13,7 +13,15 @@ const ShopInfo = ({ isOwner }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
-
+  let options = {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: true,
+    minute: "numeric",
+    hour: "numeric",
+  };
   useEffect(() => {
     dispatch(getAllProductsShop(id));
     setIsLoading(true);
@@ -79,7 +87,7 @@ const ShopInfo = ({ isOwner }) => {
           <div className="p-3">
             <h5 className="font-[600]">Joined On</h5>
             <h4 className="text-[#000000b0]">
-              {data?.createdAt?.slice(0, 10)}
+              {new Date(data?.createdAt).toLocaleString("en-US", options)}
             </h4>
           </div>
           {isOwner && (
