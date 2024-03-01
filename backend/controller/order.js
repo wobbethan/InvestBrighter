@@ -107,6 +107,44 @@ router.post(
   })
 );
 
+// admin transfer orders
+router.delete(
+  "/admin-delete-orders/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const order = await Order.findById(req.params.id);
+      const user = await User.findById(order.user._id);
+      const company = await Shop.findById(order.company.shopId);
+      const productObj = await Product.findById(order.company._id);
+      const eventObj = await Event.findById(order.event.id);
+
+      console.log({ productObj, eventObj });
+
+      //Update OBJ vars
+      user.accountBalance += order.totalPrice;
+      company.balance -= order.totalPrice;
+      company.totalInvestments -= order.quantity;
+      product.stock += order.quantity;
+      product.sold -= order.quantity;
+      event.numInvestments -= order.quantity;
+
+      //Save
+      await user.save();
+      await company.save();
+      await product.save();
+      await event.save();
+
+      const deleteOrder = await Order.findByIdAndRemove(req.params.id);
+
+      res.status(200).json({
+        success: true,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 // get all orders of user
 router.get(
   "/get-all-orders/:userId",
@@ -171,7 +209,7 @@ router.get(
   })
 );
 
-// admin all orders
+// admin transfer orders
 router.put(
   "/admin-transfer-orders/:id/:email",
   catchAsyncErrors(async (req, res, next) => {

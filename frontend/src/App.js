@@ -232,7 +232,7 @@ function App() {
           path="/admin/admin-orders"
           element={
             <ProtectedAdminRoute>
-              <AdminAllOrdersPage></AdminAllOrdersPage>
+              <AdminMyOrders></AdminMyOrders>
             </ProtectedAdminRoute>
           }
         />
