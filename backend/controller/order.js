@@ -47,26 +47,28 @@ router.post(
             500
           )
         );
-      } else if (eventObj.status === "Locked") {
-        res.status(201).json({
-          success: false,
-          message: `The event is now locked`,
-        });
-        return next(new ErrorHandler(`The event is now locked`, 500));
-      } else if (roundEnded === true) {
-        res.status(201).json({
-          success: false,
-          message: `The event has concluded`,
-        });
-        return next(new ErrorHandler(`The event has concluded`, 500));
-      } else if (roundStarted === false) {
-        res.status(201).json({
-          success: false,
-          message: `Unable to invest until round has started`,
-        });
-        return next(
-          new ErrorHandler(`Unable to invest until round has started`, 500)
-        );
+      } else if (user.role !== "admin") {
+        if (eventObj.status === "Locked") {
+          res.status(201).json({
+            success: false,
+            message: `The event is now locked`,
+          });
+          return next(new ErrorHandler(`The event is now locked`, 500));
+        } else if (roundEnded === true) {
+          res.status(201).json({
+            success: false,
+            message: `The event has concluded`,
+          });
+          return next(new ErrorHandler(`The event has concluded`, 500));
+        } else if (roundStarted === false) {
+          res.status(201).json({
+            success: false,
+            message: `Unable to invest until round has started`,
+          });
+          return next(
+            new ErrorHandler(`Unable to invest until round has started`, 500)
+          );
+        }
       } else {
         //Update OBJ vars
         userObj.accountBalance -= totalPrice;
@@ -162,6 +164,24 @@ router.get(
       res.status(201).json({
         success: true,
         orders,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// admin all orders
+router.put(
+  "/admin-transfer-orders/:id/:email",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findOne({ email: req.params.email });
+      const order = await Order.findById(req.params.id);
+      order.user = user;
+      await order.save();
+      res.status(200).json({
+        success: true,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

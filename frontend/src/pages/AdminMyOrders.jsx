@@ -45,16 +45,24 @@ const AdminAllOrdersPage = () => {
   );
 
   const transferOrder = async () => {
-    const id = toast.loading("Transferring Order");
+    const transfer = toast.loading("Transferring Order");
     await axios
       .put(`${server}/order/admin-transfer-orders/${orderID}/${transferUser}`)
-      .then(res);
-
-    toast.update(id, {
-      render: "Order transferred",
-      type: "success",
-      isLoading: false,
-    });
+      .then((res) => {
+        if (res.data.success == true) {
+          toast.update(transfer, {
+            render: "Order transferred",
+            type: "success",
+            isLoading: false,
+          });
+        } else {
+          toast.update(transfer, {
+            render: "Order transfer failed",
+            type: "error",
+            isLoading: false,
+          });
+        }
+      });
 
     dispatch(getAllOrdersOfAdmin(user._id));
     const d = adminOrders?.filter((order) => order.user._id.includes(user._id));
