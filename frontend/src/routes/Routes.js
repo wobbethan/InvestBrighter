@@ -37,6 +37,7 @@ import NotFound from "../pages/NotFound.jsx";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage.jsx";
 import ShopForgotPasswordPage from "../pages/ShopForgotPasswordPage.jsx";
 import ShopPasswordPage from "../pages/ShopPasswordPage.jsx";
+import AdminMyOrders from "../pages/AdminMyOrders.jsx";
 export {
   LoginPage,
   SignupPage,
@@ -75,6 +76,7 @@ export {
   NotFound,
   ForgotPasswordPage,
   ShopForgotPasswordPage,
-  ShopPasswordPage,
+  AdminMyOrders,
   OrderFailPage,
+  ShopPasswordPage,
 };

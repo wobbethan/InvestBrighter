@@ -47,26 +47,28 @@ router.post(
             500
           )
         );
-      } else if (eventObj.status === "Locked") {
-        res.status(201).json({
-          success: false,
-          message: `The event is now locked`,
-        });
-        return next(new ErrorHandler(`The event is now locked`, 500));
-      } else if (roundEnded === true) {
-        res.status(201).json({
-          success: false,
-          message: `The event has concluded`,
-        });
-        return next(new ErrorHandler(`The event has concluded`, 500));
-      } else if (roundStarted === false) {
-        res.status(201).json({
-          success: false,
-          message: `Unable to invest until round has started`,
-        });
-        return next(
-          new ErrorHandler(`Unable to invest until round has started`, 500)
-        );
+      } else if (user.role !== "admin") {
+        if (eventObj.status === "Locked") {
+          res.status(201).json({
+            success: false,
+            message: `The event is now locked`,
+          });
+          return next(new ErrorHandler(`The event is now locked`, 500));
+        } else if (roundEnded === true) {
+          res.status(201).json({
+            success: false,
+            message: `The event has concluded`,
+          });
+          return next(new ErrorHandler(`The event has concluded`, 500));
+        } else if (roundStarted === false) {
+          res.status(201).json({
+            success: false,
+            message: `Unable to invest until round has started`,
+          });
+          return next(
+            new ErrorHandler(`Unable to invest until round has started`, 500)
+          );
+        }
       } else {
         //Update OBJ vars
         userObj.accountBalance -= totalPrice;
@@ -99,6 +101,45 @@ router.post(
           order,
         });
       }
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// admin transfer orders
+router.delete(
+  "/admin-delete-orders/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const order = await Order.findById(req.params.id);
+      const user = await User.findById(order.user._id);
+      const company = await Shop.findById(order.company.shopId);
+      const productObj = await Product.findById(order.event.id);
+      const eventObj = await Event.findOne({ name: order.event.name });
+      console.log("event", order.event.name, "product", order.company._id);
+
+      console.log({ productObj, eventObj });
+
+      //Update OBJ vars
+      user.accountBalance += order.totalPrice;
+      company.balance -= order.totalPrice;
+      company.totalInvestments -= order.quantity;
+      productObj.stock += order.quantity;
+      productObj.sold -= order.quantity;
+      eventObj.numInvestments -= order.quantity;
+
+      //Save
+      await user.save();
+      await company.save();
+      await productObj.save();
+      await eventObj.save();
+
+      const deleteOrder = await Order.findByIdAndRemove(req.params.id);
+
+      res.status(200).json({
+        success: true,
+      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
@@ -162,6 +203,24 @@ router.get(
       res.status(201).json({
         success: true,
         orders,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// admin transfer orders
+router.put(
+  "/admin-transfer-orders/:id/:email",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findOne({ email: req.params.email });
+      const order = await Order.findById(req.params.id);
+      order.user = user;
+      await order.save();
+      res.status(200).json({
+        success: true,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

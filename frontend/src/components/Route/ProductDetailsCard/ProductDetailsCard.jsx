@@ -92,13 +92,13 @@ const ProductDetailsCard = ({ setOpen, data }) => {
           status = res.data.data;
         });
 
-      if (user.companyId === product.shopId) {
+      if (user.companyId === product.shopId && user.role !== "admin") {
         toast.error("Cannot Invest in your own company");
-      } else if (roundEnded === true) {
+      } else if (roundEnded === true && user.role !== "admin") {
         toast.error("The round has concluded");
-      } else if (roundStarted === false) {
+      } else if (roundStarted === false && user.role !== "admin") {
         toast.error("Unable to invest until round has started");
-      } else if (status == "Locked") {
+      } else if (status == "Locked" && user.role !== "admin") {
         toast.error("The investment round has been locked");
       } else {
         const isItemExists = cart && cart.find((i) => i._id === id);

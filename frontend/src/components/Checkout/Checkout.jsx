@@ -24,6 +24,7 @@ const Payment = () => {
   const totalPrice = cart.reduce((acc, item) => acc + item.qty * item.price, 0);
 
   const cashOnDeliveryHandler = async (e) => {
+    let error = false;
     setLoading(true);
     e.preventDefault();
     for (const item of cart) {
@@ -47,10 +48,10 @@ const Payment = () => {
             if (res.data.success == true) {
               localStorage.setItem("cartItems", JSON.stringify([]));
               localStorage.setItem("latestOrder", JSON.stringify([]));
-              navigate("/order/success");
-              window.location.reload();
             } else {
               toast.error(res.data.message);
+              error = true;
+              navigate("/");
             }
           });
         setOpen(false);
@@ -60,6 +61,12 @@ const Payment = () => {
       } catch (error) {
         console.log(error);
       }
+    }
+    if (error === false) {
+      localStorage.setItem("cartItems", JSON.stringify([]));
+      localStorage.setItem("latestOrder", JSON.stringify([]));
+      navigate("/order/success");
+      navigate(0);
     }
   };
 

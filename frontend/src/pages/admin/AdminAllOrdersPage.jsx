@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AdminHeader from "../components/Layout/AdminHeader";
 import AdminSideBar from "../components/Admin/Layout/AdminSideBar";
 import {
@@ -25,6 +25,7 @@ let options = {
 
 const AdminAllOrdersPage = () => {
   const dispatch = useDispatch();
+  const [data, setData] = useState([]);
   const { user } = useSelector((state) => state.user);
   const { adminOrders, adminOrderLoading } = useSelector(
     (state) => state.order
@@ -91,7 +92,7 @@ const AdminAllOrdersPage = () => {
     },
     {
       field: "createdAt",
-      headerName: "Order Date",
+      headerName: "Investment Date",
       type: "date",
       minWidth: 130,
       flex: 0.8,
