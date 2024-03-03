@@ -185,27 +185,27 @@ const AdminMyOrdersPage = () => {
         );
       },
     },
-    {
-      field: "delete",
-      flex: 1,
-      minWidth: 75,
-      headerName: "Delete Investment",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Button
-              onClick={() =>
-                setConfirmOpen(true) || setOrderDelete(params.row.id)
-              }
-            >
-              <AiOutlineDelete size={20} />
-            </Button>
-          </>
-        );
-      },
-    },
+    // {
+    //   field: "delete",
+    //   flex: 1,
+    //   minWidth: 75,
+    //   headerName: "Delete Investment",
+    //   type: "number",
+    //   sortable: false,
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         <Button
+    //           onClick={() =>
+    //             setConfirmOpen(true) || setOrderDelete(params.row.id)
+    //           }
+    //         >
+    //           <AiOutlineDelete size={20} />
+    //         </Button>
+    //       </>
+    //     );
+    //   },
+    // },
   ];
 
   const row = [];

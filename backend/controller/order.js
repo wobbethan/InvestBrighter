@@ -115,8 +115,9 @@ router.delete(
       const order = await Order.findById(req.params.id);
       const user = await User.findById(order.user._id);
       const company = await Shop.findById(order.company.shopId);
-      const productObj = await Product.findById(order.company._id);
-      const eventObj = await Event.findById(order.event.id);
+      const productObj = await Product.findById(order.event.id);
+      const eventObj = await Event.findOne({ name: order.event.name });
+      console.log("event", order.event.name, "product", order.company._id);
 
       console.log({ productObj, eventObj });
 
@@ -124,15 +125,15 @@ router.delete(
       user.accountBalance += order.totalPrice;
       company.balance -= order.totalPrice;
       company.totalInvestments -= order.quantity;
-      product.stock += order.quantity;
-      product.sold -= order.quantity;
-      event.numInvestments -= order.quantity;
+      productObj.stock += order.quantity;
+      productObj.sold -= order.quantity;
+      eventObj.numInvestments -= order.quantity;
 
       //Save
       await user.save();
       await company.save();
-      await product.save();
-      await event.save();
+      await productObj.save();
+      await eventObj.save();
 
       const deleteOrder = await Order.findByIdAndRemove(req.params.id);
 
