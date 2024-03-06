@@ -69,7 +69,7 @@ router.post(
             new ErrorHandler(`Unable to invest until round has started`, 500)
           );
         }
-      } else {
+      }
         //Update OBJ vars
         userObj.accountBalance -= totalPrice;
         companyObj.balance += totalPrice;
@@ -100,7 +100,6 @@ router.post(
           success: true,
           order,
         });
-      }
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
