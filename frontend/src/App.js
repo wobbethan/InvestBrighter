@@ -47,6 +47,7 @@ import {
   ShopPasswordPage,
   OrderFailPage,
   AdminMyOrders,
+  AdminChangePassword,
 } from "./routes/Routes.js";
 import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -241,6 +242,14 @@ function App() {
           element={
             <ProtectedAdminRoute>
               <AdminMyOrders></AdminMyOrders>
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/change-password/:id"
+          element={
+            <ProtectedAdminRoute>
+              <AdminChangePassword></AdminChangePassword>
             </ProtectedAdminRoute>
           }
         />

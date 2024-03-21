@@ -157,6 +157,20 @@ router.get(
   })
 );
 
+router.get(
+  "/all-companies-section/:section",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const sellers = await Shop.find({ section: req.params.section });
+      res.status(200).json({
+        sellers,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 //Logout
 router.get(
   "/logout",

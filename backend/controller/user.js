@@ -177,6 +177,24 @@ router.get(
   })
 );
 
+router.get(
+  "/get-user-info/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return next(new ErrorHandler("User doesn't exist", 400));
+      }
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 //Logout
 router.get(
   "/logout",
@@ -461,6 +479,27 @@ router.put(
       }
       user[0].password = req.params.password;
       await user[0].save();
+      res.status(201).json({
+        success: true,
+        message: `password changed`,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+router.put(
+  "/admin-password-reset/:id/:password",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+
+      if (!user) {
+        return next(new ErrorHandler("User does not exist", 400));
+      }
+      user.password = req.params.password;
+      await user.save();
       res.status(201).json({
         success: true,
         message: `password changed`,
