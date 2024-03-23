@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@material-ui/data-grid";
 import { AiOutlineDelete } from "react-icons/ai";
 import { Button } from "@material-ui/core";
@@ -21,6 +21,7 @@ const AdminAllUsers = () => {
   const [name, setName] = useState();
   const [userId, setUserId] = useState("");
   const [email, setEmail] = useState();
+  const [avatar, setAvatar] = useState();
   const [balance, setBalance] = useState();
   const [company, setCompany] = useState();
   const [sections, setSections] = useState([]);
@@ -28,6 +29,8 @@ const AdminAllUsers = () => {
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState();
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   let options = {
     timeZone: "America/New_York",
@@ -44,18 +47,25 @@ const AdminAllUsers = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    setLoading(true);
+    async function getInfo() {
+      setLoading(true);
 
-    if (userId !== "") {
-      console.log("getting info");
-      axios.get(`${server}/section/get-sections/${user._id}`).then((res) => {
-        setSections(res.data.sections);
-      });
-      axios.get(`${server}/user/get-user-info/${userId}`).then((res) => {
-        setBalance(res.data.user.accountBalance);
-      });
+      if (userId !== "") {
+        await axios
+          .get(`${server}/section/get-sections/${user._id}`)
+          .then((res) => {
+            setSections(res.data.sections);
+          });
+        await axios
+          .get(`${server}/user/get-user-info/${userId}`)
+          .then((res) => {
+            setBalance(res.data.user.accountBalance);
+            setAvatar(res.data.user.avatar.url);
+          });
+      }
+      setLoading(false);
     }
-    setLoading(false);
+    getInfo();
   }, [userId]);
 
   useEffect(() => {
@@ -79,7 +89,23 @@ const AdminAllUsers = () => {
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    console.log("submit");
+    await axios
+      .put(`${server}/user/admin-update-user`, {
+        userId,
+        name,
+        email,
+        selectedSection,
+        balance,
+        selectedCompany,
+      })
+      .then((res) => {
+        // dispatch(getAllUsers());
+        toast.success(res.data.message);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
+    setLoading(false);
   };
 
   const columns = [
@@ -91,7 +117,7 @@ const AdminAllUsers = () => {
     },
     {
       field: "name",
-      headerName: "name",
+      headerName: "Name",
       minWidth: 130,
       flex: 0.7,
     },
@@ -201,6 +227,7 @@ const AdminAllUsers = () => {
                 disableSelectionOnClick
                 autoHeight
                 components={{ Toolbar: GridToolbar }}
+                throttleRowsMs={1000}
               />
             </div>
             {open && (
@@ -230,12 +257,17 @@ const AdminAllUsers = () => {
               </div>
             )}
             {openEdit && (
-              <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
+              <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen overflow-scroll">
                 <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">
                   <div className="w-full flex justify-end cursor-pointer">
                     <RxCross1 size={25} onClick={() => setOpenEdit(false)} />
                   </div>
-                  <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb]">
+                  <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb] flex items-center flex-col justify-center">
+                    <img
+                      src={avatar}
+                      alt=""
+                      className="w-[125px] h-[125px] rounded-full mb-2 object-cover"
+                    />
                     User information
                   </h3>
                   <form onSubmit={handleSubmit} aria-required={true}>
@@ -313,13 +345,17 @@ const AdminAllUsers = () => {
                       </select>
                     </div>
                     <br />
-                    <div className="w-full flex items-center justify-center">
-                      <a
-                        className="text-center hover:text-cyan-700"
-                        href={`change-password/${userId}`}
+                    <div className="w-full flex items-center justify-center ">
+                      <h1
+                        className="text-center hover:text-cyan-700 cursor-pointer"
+                        onClick={() =>
+                          navigate(`/admin/change-password/${userId}`, {
+                            id: userId,
+                          })
+                        }
                       >
                         Change Password
-                      </a>
+                      </h1>
                     </div>
                     <br />
                     <div>
