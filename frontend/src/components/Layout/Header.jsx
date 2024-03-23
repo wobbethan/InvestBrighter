@@ -156,7 +156,7 @@ function Header({ activeHeading }) {
                   <img
                     src={`${user?.avatar?.url}`}
                     alt=""
-                    className="w-[35px] h-[35px] rounded-full"
+                    className="w-[35px] h-[35px] rounded-full object-cover"
                   />
                 </Link>
               ) : (

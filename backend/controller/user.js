@@ -13,6 +13,7 @@ const { isAuthenticated } = require("../middleware/auth");
 const Section = require("../model/section");
 const Event = require("../model/event");
 const cloudinary = require("cloudinary");
+const Shop = require("../model/shop");
 
 router.post(
   "/create-user",
@@ -90,6 +91,62 @@ const createActivationToken = (user) => {
   });
 };
 
+//Update user
+router.put(
+  "/admin-update-user",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { userId, name, email, selectedSection, balance, selectedCompany } =
+        req.body;
+
+      const user = await User.findOne({ _id: userId });
+
+      if (user.companyId !== "Not Assigned") {
+        const oldCompany = await Shop.findById(user.companyId);
+
+        if (oldCompany !== "Not Assigned" && oldCompany !== null) {
+          const index = oldCompany.teamMembers.findIndex(
+            (member) => member._id === user._id
+          );
+          oldCompany.teamMembers.splice(index, 1);
+        }
+        await oldCompany.save();
+      }
+
+      user.companyId = "Not Assigned";
+      if (selectedCompany !== "Not Assigned") {
+        const company = await Shop.findOne({ name: selectedCompany });
+        user.companyId = company._id.toString();
+        if (
+          selectedCompany !== "Not Assigned" &&
+          selectedCompany !== user.companyName
+        ) {
+          company.teamMembers.push(user);
+        }
+        await company.save();
+      }
+
+      user.name = name;
+      user.email = email;
+      user.section = selectedSection;
+      user.accountBalance = balance;
+      user.companyRole = "Not Assigned";
+      user.companyName = selectedCompany;
+
+      //Removing user from old company and adding to new company
+
+      await user.save();
+
+      res.status(201).json({
+        success: true,
+        message: `Account information updated for ${name}`,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message), 400);
+    }
+  })
+);
+
 //activate user
 router.post(
   "/activation",
@@ -164,6 +221,24 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const user = await User.findById(req.user.id);
+      if (!user) {
+        return next(new ErrorHandler("User doesn't exist", 400));
+      }
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+router.get(
+  "/get-user-info/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
       if (!user) {
         return next(new ErrorHandler("User doesn't exist", 400));
       }
@@ -461,6 +536,27 @@ router.put(
       }
       user[0].password = req.params.password;
       await user[0].save();
+      res.status(201).json({
+        success: true,
+        message: `The password for ${user.name} has been changed`,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+router.put(
+  "/admin-password-reset/:id/:password",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+
+      if (!user) {
+        return next(new ErrorHandler("User does not exist", 400));
+      }
+      user.password = req.params.password;
+      await user.save();
       res.status(201).json({
         success: true,
         message: `password changed`,

@@ -43,14 +43,6 @@ const AdminAllOrdersPage = () => {
       minWidth: 130,
       flex: 0.7,
     },
-
-    {
-      field: "section",
-      headerName: "Section",
-      type: "string",
-      minWidth: 130,
-      flex: 0.7,
-    },
     {
       field: "event",
       headerName: "Round",
