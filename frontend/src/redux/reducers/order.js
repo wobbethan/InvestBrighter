@@ -44,6 +44,18 @@ export const orderReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
+  //filter orders
+  adminFilterAllOrdersRequest: (state) => {
+    state.adminOrderLoading = true;
+  },
+  adminFilterAllOrdersSuccess: (state, action) => {
+    state.adminOrderLoading = false;
+    state.adminOrders = action.payload;
+  },
+  adminFilterAllOrdersFailed: (state, action) => {
+    state.adminOrderLoading = false;
+    state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },
