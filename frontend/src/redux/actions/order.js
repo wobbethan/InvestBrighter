@@ -68,3 +68,29 @@ export const getAllOrdersOfAdmin = (id) => async (dispatch) => {
     });
   }
 };
+
+export const filterAllOrdersOfAdmin = (section, id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "adminFilterAllOrdersRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/admin-all-orders/${id}`, {
+      withCredentials: true,
+    });
+
+    const filteredOrders = data.orders.filter(
+      (order) => order.user.section === section
+    );
+
+    dispatch({
+      type: "adminFilterAllOrdersSuccess",
+      payload: filteredOrders,
+    });
+  } catch (error) {
+    dispatch({
+      type: "adminFilterAllOrdersFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
