@@ -70,36 +70,36 @@ router.post(
           );
         }
       }
-        //Update OBJ vars
-        userObj.accountBalance -= totalPrice;
-        companyObj.balance += totalPrice;
-        companyObj.totalInvestments += quantity;
-        productObj.stock -= quantity;
-        productObj.sold += quantity;
-        eventObj.numInvestments += quantity;
+      //Update OBJ vars
+      userObj.accountBalance -= totalPrice;
+      companyObj.balance += totalPrice;
+      companyObj.totalInvestments += quantity;
+      productObj.stock -= quantity;
+      productObj.sold += quantity;
+      eventObj.numInvestments += quantity;
 
-        //Save
-        await userObj.save();
-        await companyObj.save();
-        await productObj.save();
-        await eventObj.save();
+      //Save
+      await userObj.save();
+      await companyObj.save();
+      await productObj.save();
+      await eventObj.save();
 
-        //Create Order
-        const order = await Order.create({
-          company: company,
-          user,
-          totalPrice,
-          quantity,
-          event: {
-            id: eventObj._id,
-            name: eventObj.name,
-          },
-        });
+      //Create Order
+      const order = await Order.create({
+        company: company,
+        user,
+        totalPrice,
+        quantity,
+        event: {
+          id: eventObj._id,
+          name: eventObj.name,
+        },
+      });
 
-        res.status(201).json({
-          success: true,
-          order,
-        });
+      res.status(201).json({
+        success: true,
+        order,
+      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
@@ -114,25 +114,26 @@ router.delete(
       const order = await Order.findById(req.params.id);
       const user = await User.findById(order.user._id);
       const company = await Shop.findById(order.company.shopId);
-      const productObj = await Product.findById(order.event.id);
-      const eventObj = await Event.findOne({ name: order.event.name });
-      console.log("event", order.event.name, "product", order.company._id);
+      const productObj = await Product.findOne({ _id: order.company._id });
+      const eventObj = await Event.findOne({ _id: order.event.id });
+      console.log("event", order.event.id, "product", order.company._id);
 
-      console.log({ productObj, eventObj });
+      console.log({ eventObj, productObj });
 
-      //Update OBJ vars
-      user.accountBalance += order.totalPrice;
-      company.balance -= order.totalPrice;
-      company.totalInvestments -= order.quantity;
-      productObj.stock += order.quantity;
-      productObj.sold -= order.quantity;
-      eventObj.numInvestments -= order.quantity;
-
-      //Save
-      await user.save();
-      await company.save();
-      await productObj.save();
-      await eventObj.save();
+      //Update OBJ vars if round is active
+      if (eventObj) {
+        user.accountBalance += order.totalPrice;
+        company.balance -= order.totalPrice;
+        company.totalInvestments -= order.quantity;
+        productObj.stock += order.quantity;
+        productObj.sold -= order.quantity;
+        eventObj.numInvestments -= order.quantity;
+        //Save
+        await user.save();
+        await company.save();
+        await productObj.save();
+        await eventObj.save();
+      }
 
       const deleteOrder = await Order.findByIdAndRemove(req.params.id);
 
