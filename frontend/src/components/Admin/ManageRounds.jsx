@@ -37,6 +37,7 @@ const ManageRounds = () => {
       });
     window.location.reload();
   };
+
   const lockEvent = async (id) => {
     axios
       .put(`${server}/event/lock-shop-event/${id}`, {
@@ -44,6 +45,7 @@ const ManageRounds = () => {
       })
       .then(() => {
         toast.success("Round Locked");
+        dispatch(getAllEventsAdmin(user._id));
       });
   };
   const unlockEvent = async (id) => {
@@ -53,6 +55,7 @@ const ManageRounds = () => {
       })
       .then(() => {
         toast.success("Round Unlocked");
+        dispatch(getAllEventsAdmin(user._id));
       });
   };
 
@@ -93,36 +96,32 @@ const ManageRounds = () => {
       field: " ",
       flex: 0.7,
       minWidth: 50,
-      headerName: "Lock Event",
+      headerName: "Event Status",
       type: "number",
       sortable: false,
       renderCell: (params) => {
         return (
           <>
-            <Button onClick={() => lockEvent(params.row.id)}>
-              <FaLock size={20} />
-            </Button>
+            {params.row.status === "Running" ? (
+              <Button
+                className="flex flex-row items-center justify-center"
+                onClick={() => lockEvent(params.row.id)}
+              >
+                Unlocked <FaUnlock className="mb-[7px] ml-[5px]" size={20} />
+              </Button>
+            ) : (
+              <Button
+                className="flex flex-row items-center justify-center"
+                onClick={() => unlockEvent(params.row.id)}
+              >
+                LOCKED <FaLock className="mb-[7px] ml-[5px]" size={20} />
+              </Button>
+            )}
           </>
         );
       },
     },
-    {
-      field: " s",
-      flex: 0.7,
-      minWidth: 50,
-      headerName: "Unlock Event",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Button onClick={() => unlockEvent(params.row.id)}>
-              <FaUnlock size={20} />
-            </Button>
-          </>
-        );
-      },
-    },
+
     {
       field: " d",
       flex: 0.7,
@@ -162,6 +161,7 @@ const ManageRounds = () => {
             ? "N/A"
             : new Date(item?.finish_Date).toLocaleString("en-US", options),
         numInvestments: item.numInvestments,
+        status: item.status,
       });
     });
 

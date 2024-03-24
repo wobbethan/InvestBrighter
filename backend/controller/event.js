@@ -54,6 +54,12 @@ router.post(
         //create product
         createEventProducts(event._id, eventData);
 
+        const admins = await User.find({ role: "admin" });
+        admins.forEach(async (admin) => {
+          admin.accountBalance = 1000000000;
+          await admin.save();
+        });
+
         res.status(201).json({
           success: true,
           event,
