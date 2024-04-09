@@ -39,6 +39,7 @@ import ShopForgotPasswordPage from "../pages/ShopForgotPasswordPage.jsx";
 import ShopPasswordPage from "../pages/ShopPasswordPage.jsx";
 import AdminMyOrders from "../pages/AdminMyOrders.jsx";
 import AdminChangePassword from "../pages/AdminChangePassword.jsx";
+import AdminCreateUsersPage from "../pages/AdminCreateUsersPage.jsx";
 export {
   LoginPage,
   SignupPage,
@@ -81,4 +82,5 @@ export {
   OrderFailPage,
   ShopPasswordPage,
   AdminChangePassword,
+  AdminCreateUsersPage,
 };

@@ -101,10 +101,10 @@ const AdminCard = ({ admin }) => {
   };
   return (
     <div className=" w-[100%] 800px:w-[250px] h-[300px] bg-white rounded-3xl shadow-sm p-3 relative flex-col items-center justify-center text-center content-center m-2">
-      <div className="justify-center self-center flex">
+      <div className="justify-center self-center flex ">
         <img
           draggable={false}
-          className="w-full h-[150px] object-contain  m-[10px]"
+          className="w-full h-[150px] object-contain rounded-md m-[10px]"
           src={`${admin.avatar.url}`}
         />
       </div>

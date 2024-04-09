@@ -43,10 +43,6 @@ const AdminAllUsers = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllUsers(user._id));
-  }, [dispatch]);
-
-  useEffect(() => {
     async function getInfo() {
       setLoading(true);
 
@@ -83,7 +79,7 @@ const AdminAllUsers = () => {
         toast.success(res.data.message);
       });
 
-    dispatch(getAllUsers());
+    dispatch(getAllUsers(user._id));
   };
 
   const handleSubmit = async (e) => {
@@ -99,7 +95,7 @@ const AdminAllUsers = () => {
         selectedCompany,
       })
       .then((res) => {
-        // dispatch(getAllUsers());
+        dispatch(getAllUsers(user._id));
         toast.success(res.data.message);
       })
       .catch((err) => {
