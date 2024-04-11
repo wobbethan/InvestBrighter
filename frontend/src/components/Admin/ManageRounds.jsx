@@ -10,8 +10,35 @@ import { toast } from "react-toastify";
 import { getAllEventsAdmin } from "../../redux/actions/event";
 import { FaLock, FaUnlock } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
+import { FaEdit } from "react-icons/fa";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
+
 import styles from "../../styles/styles";
+
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("America/New_York");
+
 const ManageRounds = () => {
+  const [avatar, setAvatar] = useState();
+  const [openEdit, setOpenEdit] = useState(false);
+  const [name, setName] = useState();
+  const [sections, setSections] = useState(["forceArray"]);
+  const [priceCheck, setPriceCheck] = useState();
+  const [numChecks, setNumChecks] = useState();
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [investCompany, setInvestCompany] = useState();
+  const [investRound, setInvestRound] = useState();
+  const [loading, setLoading] = useState(false);
+  const [description, setDescription] = useState("");
+  const { adminSections } = useSelector((state) => state.sections);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(null);
   const { allEventsAdmin } = useSelector((state) => state.events);
@@ -62,6 +89,63 @@ const ManageRounds = () => {
   useEffect(() => {
     dispatch(getAllEventsAdmin(user._id));
   }, []);
+
+  const getRoundInfo = async (id) => {
+    await axios.get(`${server}/event/get-event/${id}`).then((res) => {
+      const event = res.data.data;
+      setAvatar(event.images[0].url);
+      setName(event.name);
+      setDescription(event.description);
+      setNumChecks(event.numChecks);
+      setPriceCheck(event.checkPrice);
+      setInvestCompany(event.maxInvestmentsCompany);
+      setInvestRound(event.maxInvestmentsRound);
+    });
+  };
+  useEffect(() => {
+    if (id) {
+      getRoundInfo(id);
+    }
+  }, [id]);
+
+  const handleButtonClick = (option) => {
+    if (sections.includes(option)) {
+      // If option is already selected, remove it
+      setSections(
+        sections.filter((selectedOption) => selectedOption !== option)
+      );
+    } else {
+      // If option is not selected, add it
+      setSections((sections) => [...sections, option]);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const updating = toast.loading("Updating event");
+
+    const newForm = new FormData();
+
+    newForm.append("name", name);
+    newForm.append("description", description);
+    newForm.append("maxInvestmentsCompany", investCompany);
+    newForm.append("maxInvestmentsRound", investRound);
+    newForm.append("numChecks", numChecks);
+    newForm.append("checkPrice", priceCheck);
+    newForm.append("start_Date", startDate?.toISOString());
+    newForm.append("finish_Date", endDate?.toISOString());
+
+    await axios.put(`${server}/event/update-event/${id}`, newForm).then(() => {
+      toast.update(updating, {
+        render: "Event Updated",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
+      setOpenEdit(false);
+      dispatch(getAllEventsAdmin(user._id));
+    });
+  };
 
   const columns = [
     {
@@ -117,6 +201,29 @@ const ManageRounds = () => {
                 LOCKED <FaLock className="mb-[7px] ml-[5px]" size={20} />
               </Button>
             )}
+          </>
+        );
+      },
+    },
+    {
+      field: " edit",
+      flex: 1,
+      minWidth: 150,
+      headerName: "Edit Round",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button
+              onClick={() =>
+                setOpenEdit(true) ||
+                setId(params.row.id) ||
+                setName(params.row.name)
+              }
+            >
+              <FaEdit size={20} />
+            </Button>
           </>
         );
       },
@@ -200,6 +307,132 @@ const ManageRounds = () => {
                 confirm
               </div>
             </div>
+          </div>
+        </div>
+      )}
+      {openEdit && (
+        <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen overflow-scroll">
+          <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5 mt-[15%]">
+            <div className="w-full flex justify-end cursor-pointer">
+              <RxCross1 size={25} onClick={() => setOpenEdit(false)} />
+            </div>
+            <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb] flex items-center flex-col justify-center">
+              <img
+                src={avatar}
+                alt=""
+                className="w-[125px] h-[125px] rounded-full mb-2 object-cover"
+              />
+              Round information
+            </h3>
+            <form aria-required={true} onSubmit={handleSubmit}>
+              <br />
+              <div>
+                <label className="pb-2">Name</label>
+                <input
+                  type="text"
+                  required
+                  name="name"
+                  value={name}
+                  className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter student name..."
+                />
+              </div>
+              <br />
+              <br />
+              <div>
+                <label className="pb-2">Description</label>
+                <textarea
+                  cols="30"
+                  rows="8"
+                  type="text"
+                  required
+                  name="description"
+                  value={description}
+                  className="mt-2 appearance-none block w-full pt-3 px-3  border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Enter description..."
+                />
+              </div>
+              <br />
+              <div>
+                <label className="pb-2">Number of checks</label>
+                <input
+                  required
+                  type="number"
+                  name="numChecks"
+                  value={numChecks}
+                  className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setNumChecks(e.target.value)}
+                  placeholder="Number of checks..."
+                  min={0}
+                />
+              </div>
+              <br />
+              <div>
+                <label className="pb-2">Check Amount</label>
+                <input
+                  required
+                  type="number"
+                  name="priceCheck"
+                  value={priceCheck}
+                  className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setPriceCheck(e.target.value)}
+                  placeholder="Check amount..."
+                  min={0}
+                />
+              </div>
+              <br />
+              <div>
+                <label className="pb-2">Max Investments</label>
+                <input
+                  required
+                  type="number"
+                  name="investRound"
+                  value={investRound}
+                  className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setInvestRound(e.target.value)}
+                  placeholder="Enter max..."
+                />
+              </div>
+              <br />
+              <div>
+                <label className="pb-2">Max Investments per Company</label>
+                <input
+                  required
+                  type="number"
+                  name="investCompany"
+                  value={investCompany}
+                  className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={(e) => setInvestCompany(e.target.value)}
+                  placeholder="Enter max..."
+                />
+              </div>
+              {/* <br />
+              <div className="flex-col flex">
+                <label className="pb-2">Round Start Date/Time</label>
+                <MobileDateTimePicker
+                  value={startDate}
+                  onChange={(e) => setStartDate(e)}
+                />
+              </div>
+              <br />
+              <div className="flex-col flex">
+                <label className="pb-2">Round End Date/Time</label>
+                <MobileDateTimePicker
+                  value={endDate}
+                  onChange={(e) => setEndDate(e)}
+                />
+              </div> */}
+              <br />
+              <div>
+                <input
+                  type="submit"
+                  value="Save"
+                  className="mt-2 cursor-pointer appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </form>
           </div>
         </div>
       )}

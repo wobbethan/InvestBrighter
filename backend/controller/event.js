@@ -289,4 +289,54 @@ router.get(
   })
 );
 
+router.get(
+  "/get-event/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const event = await Event.findById(req.params.id);
+      res.status(201).json({
+        success: true,
+        data: event,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+router.put(
+  "/update-event/:id",
+  upload.none(),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const event = await Event.findById(req.params.id);
+      const oldBalance = event.numChecks * event.checkPrice;
+      const newBalance = req.body.numChecks * req.body.checkPrice;
+      const difference = newBalance - oldBalance;
+
+      event.name = req.body.name;
+      event.description = req.body.description;
+      event.numChecks = req.body.numChecks;
+      event.checkPrice = req.body.checkPrice;
+      event.maxInvestmentsCompany = req.body.maxInvestmentsCompany;
+      event.maxInvestmentsRound = req.body.maxInvestmentsRound;
+
+      updateUserBalance;
+
+      await event.save();
+
+      res.status(201).json({
+        success: true,
+        data: event,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+const updateUserBalance = async (id, difference, section) => {
+  console.log(id);
+};
+
 module.exports = router;
