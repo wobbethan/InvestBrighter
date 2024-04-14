@@ -100,8 +100,21 @@ const ManageRounds = () => {
       setPriceCheck(event.checkPrice);
       setInvestCompany(event.maxInvestmentsCompany);
       setInvestRound(event.maxInvestmentsRound);
+      if (
+        event.start_Date !== "undefined" &&
+        event.finish_Date !== "undefined"
+      ) {
+        const tempStartDate = new Date(Date.now);
+        const tempEndDate = new Date(Date.now);
+        setStartDate(tempStartDate);
+        setEndDate(tempEndDate);
+      } else {
+        setStartDate(null);
+        setEndDate(null);
+      }
     });
   };
+
   useEffect(() => {
     if (id) {
       getRoundInfo(id);
@@ -146,6 +159,8 @@ const ManageRounds = () => {
       dispatch(getAllEventsAdmin(user._id));
     });
   };
+
+  const today = new Date();
 
   const columns = [
     {
@@ -273,7 +288,7 @@ const ManageRounds = () => {
     });
 
   return (
-    <>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className="w-full mx-8 pt-1 mt-10 bg-white">
         <DataGrid
           rows={row}
@@ -408,10 +423,11 @@ const ManageRounds = () => {
                   placeholder="Enter max..."
                 />
               </div>
-              {/* <br />
+              <br />
               <div className="flex-col flex">
                 <label className="pb-2">Round Start Date/Time</label>
                 <MobileDateTimePicker
+                  localeText={"Ass"}
                   value={startDate}
                   onChange={(e) => setStartDate(e)}
                 />
@@ -423,7 +439,7 @@ const ManageRounds = () => {
                   value={endDate}
                   onChange={(e) => setEndDate(e)}
                 />
-              </div> */}
+              </div>
               <br />
               <div>
                 <input
@@ -436,7 +452,7 @@ const ManageRounds = () => {
           </div>
         </div>
       )}
-    </>
+    </LocalizationProvider>
   );
 };
 

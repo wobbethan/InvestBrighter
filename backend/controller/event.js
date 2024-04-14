@@ -321,6 +321,14 @@ router.put(
       event.maxInvestmentsCompany = req.body.maxInvestmentsCompany;
       event.maxInvestmentsRound = req.body.maxInvestmentsRound;
 
+      if (req.body.start_Date == null) {
+        event.start_Date = "undefined";
+        event.finish_Date = "undefined";
+      } else {
+        event.start_Date = req.body.start_Date;
+        event.finish_Date = req.body.finish_Date;
+      }
+
       updateUserBalance;
 
       await event.save();

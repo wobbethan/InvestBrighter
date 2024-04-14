@@ -38,17 +38,18 @@ const CreateEvents = () => {
   const [investCompany, setInvestCompany] = useState(32);
   const [investRound, setInvestRound] = useState(20);
   const [loading, setLoading] = useState(false);
-  // const handleStartDateChange = (e) => {
-  //   const startDate = new Date(e.target.value);
-  //   const minEndDate = new Date(startDate.getTime() + 1 * 24 * 60 * 60 * 1000);
-  //   setStartDate(startDate);
-  //   setEndDate(null);
-  // };
 
-  // const handleEndDateChange = (e) => {
-  //   const endDate = new Date(e.target.value);
-  //   setEndDate(endDate);
-  // };
+  const handleStartDateChange = (e) => {
+    const startDate = new Date(e.target.value);
+    const minEndDate = new Date(startDate.getTime() + 1 * 24 * 60 * 60 * 1000);
+    setStartDate(startDate);
+    setEndDate(null);
+  };
+
+  const handleEndDateChange = (e) => {
+    const endDate = new Date(e.target.value);
+    setEndDate(endDate);
+  };
   useEffect(() => {
     dispatch(getAllSectionsOfAdmin(user._id));
   }, []);
