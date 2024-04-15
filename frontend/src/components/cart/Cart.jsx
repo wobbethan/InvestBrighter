@@ -10,7 +10,7 @@ import { addToCart, removeFromCart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
 
 const Cart = ({ setOpenCart }) => {
-  const { user } = useSelector((state) => state.user);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
