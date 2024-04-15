@@ -80,7 +80,7 @@ export const filterAllOrdersOfAdmin = (section, id) => async (dispatch) => {
     });
 
     const filteredOrders = data.orders.filter(
-      (order) => order.user.section === section || order.user._id === id
+      (order) => order.user.section === section
     );
 
     dispatch({

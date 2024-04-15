@@ -111,7 +111,9 @@ const AdminAllOrdersPage = () => {
 
   const getOrders = () => {
     if (selectedSection !== "All Sections") {
-      dispatch(filterAllOrdersOfAdmin(selectedSection, user._id));
+      if (selectedSection === "My Investments") {
+      }
+      dispatch(filterAllOrdersOfAdmin("Admin", user._id));
     } else {
       dispatch(getAllOrdersOfAdmin(user._id));
     }
@@ -275,12 +277,16 @@ const AdminAllOrdersPage = () => {
                     <option value={"All Sections"} key={"All Sections"}>
                       {"All Sections"}
                     </option>
+
                     {sections &&
                       sections.map((i, index) => (
                         <option value={i.name} key={index}>
                           {i.name}
                         </option>
                       ))}
+                    <option value={"My Investments"} key={"My Investments"}>
+                      {"My Investments"}
+                    </option>
                   </select>
                 </div>
                 <div className="w-[100%] flex justify-center bg-white">

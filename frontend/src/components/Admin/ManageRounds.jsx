@@ -104,8 +104,8 @@ const ManageRounds = () => {
         event.start_Date !== "undefined" &&
         event.finish_Date !== "undefined"
       ) {
-        const tempStartDate = new Date(Date.now);
-        const tempEndDate = new Date(Date.now);
+        const tempStartDate = dayjs.utc(event.start_Date);
+        const tempEndDate = dayjs.utc(event.finish_Date);
         setStartDate(tempStartDate);
         setEndDate(tempEndDate);
       } else {
