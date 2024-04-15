@@ -327,7 +327,7 @@ const ManageRounds = () => {
       )}
       {openEdit && (
         <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen overflow-scroll">
-          <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5 mt-[15%]">
+          <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5 mt-[25%]">
             <div className="w-full flex justify-end cursor-pointer">
               <RxCross1 size={25} onClick={() => setOpenEdit(false)} />
             </div>
@@ -439,6 +439,16 @@ const ManageRounds = () => {
                   value={endDate}
                   onChange={(e) => setEndDate(e)}
                 />
+              </div>
+              <br />
+              <div className="flex-col flex">
+                <label
+                  className="pb-2 cursor-pointer w-[20%]"
+                  onClick={() => setStartDate(null) || setEndDate(null)}
+                  type=""
+                >
+                  Reset Dates
+                </label>
               </div>
               <br />
               <div>
