@@ -567,4 +567,57 @@ router.put(
   })
 );
 
+//activate user
+router.post(
+  "/admin-create-user",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { name, email, password, selectedSection, avatar } = req.body;
+
+      const userEmail = await User.findOne({ email });
+
+      if (userEmail) {
+        return next(new ErrorHandler("User already exists", 400));
+      }
+
+      let accountBalance = 0;
+      const events = await Event.find({
+        sections: { $in: [selectedSection] },
+      });
+      if (events.length > 0) {
+        events.forEach((event) => {
+          accountBalance += event.numChecks * event.checkPrice;
+        });
+      }
+
+      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+        folder: "avatars",
+      });
+
+      const userSection = await Section.findOne({ name: selectedSection });
+      userSection.numStudents += 1;
+      await userSection.save();
+
+      user = await User.create({
+        name,
+        email,
+        avatar: {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        },
+        password,
+        section: selectedSection,
+        accountBalance,
+      });
+
+      res.status(201).json({
+        success: true,
+        message: `Account created`,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;

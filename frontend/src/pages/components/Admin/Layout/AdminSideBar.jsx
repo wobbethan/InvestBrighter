@@ -11,6 +11,7 @@ import { AiOutlineSetting } from "react-icons/ai";
 import { GrUserAdmin, GrGroup } from "react-icons/gr";
 import { FaCalendarPlus, FaChartBar } from "react-icons/fa";
 import { BiTransferAlt } from "react-icons/bi";
+import { FaUserPlus } from "react-icons/fa";
 
 const AdminSideBar = ({ active }) => {
   return (
@@ -65,6 +66,21 @@ const AdminSideBar = ({ active }) => {
         </Link>
       </div>
 
+      <div className="w-full flex items-center p-4">
+        <Link to="/admin/create-user" className="w-full flex items-center">
+          <FaUserPlus
+            size={30}
+            color={`${active === 15 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 15 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Create User
+          </h5>
+        </Link>
+      </div>
       <div className="w-full flex items-center p-4">
         <Link
           to="/admin/investment-rounds"

@@ -3,12 +3,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
-import { server } from "../../Server";
 import { toast } from "react-toastify";
 import axios from "axios";
-import Loader from "../Layout/Loader";
+import { server } from "../Server";
+import Loader from "./Layout/Loader";
 
-function Signup() {
+function AdminCreateUser() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -51,7 +51,7 @@ function Signup() {
       toast.error("Passwords do not match");
     } else {
       await axios
-        .post(`${server}/user/create-user`, {
+        .post(`${server}/user/admin-create-user`, {
           name,
           email,
           password,
@@ -65,7 +65,6 @@ function Signup() {
           setPassword("");
           setConfirmPassword("");
           setAvatar();
-          navigate("/login");
         })
         .catch((err) => {
           console.log(err.response.data.message);
@@ -79,10 +78,10 @@ function Signup() {
       {loading ? (
         <Loader />
       ) : (
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-5 sm:px-6 lg:px-8 w-full">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Create your account
+              Create account
             </h2>
           </div>
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -236,6 +235,7 @@ function Signup() {
                         accept=".jpg,.jpeg,.png"
                         onChange={handleFileInputChange}
                         className="sr-only cursor-pointer"
+                        required
                       />
                     </label>
                   </div>
@@ -248,13 +248,6 @@ function Signup() {
                     Submit
                   </button>
                 </div>
-
-                <div className="flex items-center w-full">
-                  <h4>Have an account?</h4>
-                  <Link to="/login" className="text-blue-600 pl-2">
-                    Login
-                  </Link>
-                </div>
               </form>
             </div>
           </div>
@@ -264,4 +257,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default AdminCreateUser;

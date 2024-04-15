@@ -194,10 +194,11 @@ router.get(
     try {
       const adminSections = await Section.find({ "admin.id": req.params.id });
       const sectionNames = adminSections.map((section) => section.name);
+      const user = await User.findById(req.params.id);
       const orders = await Order.find({
         $or: [
           { "user.section": { $in: sectionNames } },
-          { "user._id": req.params.id },
+          { "user.name": user.name },
         ],
       });
       res.status(201).json({

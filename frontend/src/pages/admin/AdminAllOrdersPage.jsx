@@ -24,6 +24,8 @@ import Loader from "../../components/Layout/Loader";
 import { Button } from "@material-ui/core";
 import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/styles";
+import { BiTransferAlt } from "react-icons/bi";
+import { getAllUsers } from "../../redux/actions/user";
 
 let options = {
   timeZone: "America/New_York",
@@ -42,7 +44,12 @@ const AdminAllOrdersPage = () => {
   const [loading, setLoading] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState();
   const [orderDelete, setOrderDelete] = useState();
-  const { user } = useSelector((state) => state.user);
+  const [open, setOpen] = useState(false);
+
+  const [transferUser, setTransferUser] = useState();
+  const [orderID, setOrderID] = useState();
+
+  const { user, users } = useSelector((state) => state.user);
   const { adminOrders, adminOrderLoading } = useSelector(
     (state) => state.order
   );
@@ -75,9 +82,38 @@ const AdminAllOrdersPage = () => {
     setConfirmOpen(false);
   };
 
+  const transferOrder = async () => {
+    const transfer = toast.loading("Transferring Order");
+    await axios
+      .put(`${server}/order/admin-transfer-orders/${orderID}/${transferUser}`)
+      .then((res) => {
+        if (res.data.success == true) {
+          toast.update(transfer, {
+            render: "Order transferred",
+            type: "success",
+            isLoading: false,
+            autoClose: 3000,
+          });
+        } else {
+          toast.update(transfer, {
+            render: "Order transfer failed",
+            type: "error",
+            isLoading: false,
+            autoClose: 3000,
+          });
+        }
+      });
+
+    getOrders();
+
+    setOpen(false);
+  };
+
   const getOrders = () => {
     if (selectedSection !== "All Sections") {
-      dispatch(filterAllOrdersOfAdmin(selectedSection, user._id));
+      if (selectedSection === "My Investments") {
+      }
+      dispatch(filterAllOrdersOfAdmin("Admin", user._id));
     } else {
       dispatch(getAllOrdersOfAdmin(user._id));
     }
@@ -92,6 +128,7 @@ const AdminAllOrdersPage = () => {
   useEffect(() => {
     setLoading(true);
     dispatch(getAllOrdersOfAdmin(user._id));
+    dispatch(getAllUsers(user._id));
     setProductData(adminOrders);
 
     async function getInfo() {
@@ -161,6 +198,23 @@ const AdminAllOrdersPage = () => {
       flex: 0.8,
     },
     {
+      field: " ",
+      flex: 1,
+      minWidth: 75,
+      headerName: "Transfer Investment",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button onClick={() => setOpen(true) || setOrderID(params.row.id)}>
+              <BiTransferAlt size={20} />
+            </Button>
+          </>
+        );
+      },
+    },
+    {
       field: "delete",
       flex: 1,
       minWidth: 75,
@@ -223,12 +277,16 @@ const AdminAllOrdersPage = () => {
                     <option value={"All Sections"} key={"All Sections"}>
                       {"All Sections"}
                     </option>
+
                     {sections &&
                       sections.map((i, index) => (
                         <option value={i.name} key={index}>
                           {i.name}
                         </option>
                       ))}
+                    <option value={"My Investments"} key={"My Investments"}>
+                      {"My Investments"}
+                    </option>
                   </select>
                 </div>
                 <div className="w-[100%] flex justify-center bg-white">
@@ -246,6 +304,46 @@ const AdminAllOrdersPage = () => {
           </>
         </div>
       </div>
+      {open && (
+        <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
+          <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5 flex flex-col items-center">
+            <div className="w-full flex justify-end cursor-pointer">
+              <RxCross1 size={25} onClick={() => setOpen(false)} />
+            </div>
+            <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb]">
+              Please select a user to transfer to
+            </h3>
+            <div className="flex items-center justify-center w-[45%] m-2  ">
+              <input
+                className="justify-center mt-2 text-center appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                list="data"
+                placeholder="Search"
+                onChange={(e) => setTransferUser(e.target.value)}
+              />
+              <datalist id="data" className="justify-center">
+                <option value={user.email}>{user.name}</option>
+                {users.map((user) => (
+                  <option value={user.email}>{user.name}</option>
+                ))}
+              </datalist>
+            </div>
+            <div className="w-full flex items-center justify-center">
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] mr-4`}
+                onClick={() => setOpen(false)}
+              >
+                cancel
+              </div>
+              <div
+                className={`${styles.button} text-white text-[18px] !h-[42px] ml-4`}
+                onClick={() => transferOrder()}
+              >
+                confirm
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {confirmOpen && (
         <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
           <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">

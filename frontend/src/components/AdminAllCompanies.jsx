@@ -49,7 +49,7 @@ const AdminAllCompanies = () => {
     },
     {
       field: "name",
-      headerName: "name",
+      headerName: "Name",
       minWidth: 130,
       flex: 0.7,
     },
@@ -79,7 +79,7 @@ const AdminAllCompanies = () => {
       field: "  ",
       flex: 1,
       minWidth: 150,
-      headerName: "Preview Shop",
+      headerName: "View Company",
       type: "number",
       sortable: false,
       renderCell: (params) => {

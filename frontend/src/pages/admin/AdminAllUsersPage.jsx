@@ -11,7 +11,7 @@ const AdminAllUsersPage = () => {
           <div className="w-[80px] 800px:w-[330px]">
             <AdminSideBar active={4} />
           </div>
-          <div className="flex items-center justify-center w-full">
+          <div className="flex items-center justify-center w-full flex-col">
             <AdminAllUsers />
           </div>
         </div>

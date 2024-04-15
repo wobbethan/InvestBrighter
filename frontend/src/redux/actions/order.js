@@ -90,7 +90,6 @@ export const filterAllOrdersOfAdmin = (section, id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "adminFilterAllOrdersFailed",
-      payload: error.response.data.message,
     });
   }
 };

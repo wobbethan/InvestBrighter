@@ -38,17 +38,18 @@ const CreateEvents = () => {
   const [investCompany, setInvestCompany] = useState(32);
   const [investRound, setInvestRound] = useState(20);
   const [loading, setLoading] = useState(false);
-  // const handleStartDateChange = (e) => {
-  //   const startDate = new Date(e.target.value);
-  //   const minEndDate = new Date(startDate.getTime() + 1 * 24 * 60 * 60 * 1000);
-  //   setStartDate(startDate);
-  //   setEndDate(null);
-  // };
 
-  // const handleEndDateChange = (e) => {
-  //   const endDate = new Date(e.target.value);
-  //   setEndDate(endDate);
-  // };
+  const handleStartDateChange = (e) => {
+    const startDate = new Date(e.target.value);
+    const minEndDate = new Date(startDate.getTime() + 1 * 24 * 60 * 60 * 1000);
+    setStartDate(startDate);
+    setEndDate(null);
+  };
+
+  const handleEndDateChange = (e) => {
+    const endDate = new Date(e.target.value);
+    setEndDate(endDate);
+  };
   useEffect(() => {
     dispatch(getAllSectionsOfAdmin(user._id));
   }, []);
@@ -256,23 +257,14 @@ const CreateEvents = () => {
               </div>
               <br />
               <div>
-                <label className="pb-2">Upload Images</label>
                 <input
                   type="file"
-                  name=""
+                  name="file upload"
                   id="upload"
-                  className="hidden"
                   multiple
                   required
                   onChange={handleImageChange}
                 />
-                <label htmlFor="upload">
-                  <AiOutlinePlusCircle
-                    size={30}
-                    className="mt-3"
-                    color="#555"
-                  />
-                </label>
                 <div className="w-full flex items-center flex-wrap">
                   {" "}
                   {images &&
@@ -288,8 +280,7 @@ const CreateEvents = () => {
                 <div>
                   <input
                     type="submit"
-                    name=""
-                    id=""
+                    name="submission"
                     value="Create"
                     className="mt-2 cursor-pointer appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   />
