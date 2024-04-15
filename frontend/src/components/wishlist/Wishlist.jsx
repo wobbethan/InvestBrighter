@@ -64,7 +64,19 @@ const Wishlist = ({ setOpenWishlist }) => {
                 onClick={() => setOpenWishlist(false)}
               ></RxCross1>
             </div>
-            <h5>Wishlist is Empty!</h5>
+            <h5>Wishlist is Empty!
+            <br></br>
+              <button
+              classname = "group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+               <Link
+                      to={"/login"}
+                      className=" group relative w-full h-[40px] float-right flex justify-right py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                    >
+                      Login{" "}
+                    </Link>
+              </button>
+            </h5>
+
           </div>
         ) : (
           <>
