@@ -3,7 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/styles";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { BsCartPlus } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishlist } from "../../redux/actions/wishlist.js";
@@ -14,7 +14,7 @@ import axios from "axios";
 
 const Wishlist = ({ setOpenWishlist }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
-  const { user } = useSelector((state) => state.user);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -64,7 +64,25 @@ const Wishlist = ({ setOpenWishlist }) => {
                 onClick={() => setOpenWishlist(false)}
               ></RxCross1>
             </div>
-            <h5>Wishlist is Empty!</h5>
+            {isAuthenticated && (
+              <h5 className="text-[25px] font-bold mb-2 text-center">
+                Wishlist is Empty!
+              </h5>
+            )}
+            {!isAuthenticated && (
+              <div className="flex flex-col justify-center items-center">
+                <h5 className="800px:text-[25px] text-[20px] font-bold mb-4 text-center">
+                  Please sign in to add to your wishlist
+                </h5>
+
+                <button
+                  className="group relative w-[90%] h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                  // onClick={() => Navigate("/login")}
+                >
+                  Login
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <>
