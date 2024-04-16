@@ -70,7 +70,7 @@ router.post(
         };
       }
 
-      activationToken = createActivationToken(user);
+      const activationToken = createActivationToken(user);
 
       // FIXME: should not be hardcoded domain thing, this is crazy
       const activationBaseURL =
