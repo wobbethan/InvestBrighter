@@ -33,10 +33,12 @@ const shopSchema = new mongoose.Schema({
     public_id: {
       type: String,
       required: true,
+      default: "Not Assigned",
     },
     url: {
       type: String,
       required: true,
+      default: "default-avatar-business.png",
     },
   },
   createdAt: {
