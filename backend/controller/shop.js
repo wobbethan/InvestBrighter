@@ -347,7 +347,6 @@ router.put(
 // update seller info
 router.put(
   "/update-seller-info",
-  isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { name, description, valuation, finalAq } = req.body;
