@@ -3,7 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/styles";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { BsCartPlus } from "react-icons/bs";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishlist } from "../../redux/actions/wishlist.js";
@@ -17,6 +17,7 @@ const Wishlist = ({ setOpenWishlist }) => {
   const { user, isAuthenticated } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const removeFromWishlistHandler = (data) => {
     dispatch(removeFromWishlist(data));
@@ -52,6 +53,11 @@ const Wishlist = ({ setOpenWishlist }) => {
       toast.success("Added to cart");
     }
   };
+
+  const navigateLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
       <div className="fixed top-0 right-0 h-full w-[80%] 800px:w-[38%] 1000px:w-[30%] overflow-y-scroll  bg-white flex flex-col justify-between shadow-sm">
@@ -77,7 +83,7 @@ const Wishlist = ({ setOpenWishlist }) => {
 
                 <button
                   className="group relative w-[90%] h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-                  // onClick={() => Navigate("/login")}
+                  onClick={navigateLogin}
                 >
                   Login
                 </button>

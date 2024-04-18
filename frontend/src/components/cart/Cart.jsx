@@ -3,7 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/styles";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { HiOutlineMinus, HiPlus } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { backend_url } from "../../Server";
 import { addToCart, removeFromCart } from "../../redux/actions/cart";
@@ -13,6 +13,7 @@ const Cart = ({ setOpenCart }) => {
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const removeFromCartHandler = (data) => {
     dispatch(removeFromCart(data));
@@ -22,6 +23,10 @@ const Cart = ({ setOpenCart }) => {
 
   const quantityChangeHandler = (data) => {
     dispatch(addToCart(data));
+  };
+
+  const navigateLogin = () => {
+    navigate("/login");
   };
 
   return (
@@ -49,7 +54,7 @@ const Cart = ({ setOpenCart }) => {
 
                 <button
                   className="group relative w-[90%] h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-                  // onClick={() => Navigate("/login")}
+                  onClick={navigateLogin}
                 >
                   Login
                 </button>

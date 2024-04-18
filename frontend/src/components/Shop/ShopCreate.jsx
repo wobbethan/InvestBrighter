@@ -233,7 +233,6 @@ function ShopCreate() {
                     accept=".jpg,.jpeg,.png"
                     onChange={handleFileInputChange}
                     className="sr-only cursor-pointer"
-                    required
                   />
                 </label>
               </div>

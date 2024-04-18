@@ -18,27 +18,37 @@ router.post(
   "/create-shop",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { email } = req.body;
+      const { email, avatar } = req.body;
       const sellerEmail = await Shop.findOne({ email });
 
       if (sellerEmail) {
         return next(new ErrorHandler("User already exists", 400));
       }
 
-      const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-        folder: "avatars",
-      });
+      let seller = null;
+      if (avatar) {
+        const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+          folder: "avatars",
+        });
 
-      const seller = {
-        name: req.body.name,
-        email: email.toLowerCase(),
-        password: req.body.password,
-        avatar: {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
-        },
-        section: req.body.selectedSection,
-      };
+        seller = {
+          name: req.body.name,
+          email: email.toLowerCase(),
+          password: req.body.password,
+          avatar: {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          },
+          section: req.body.selectedSection,
+        };
+      } else {
+        seller = {
+          name: req.body.name,
+          email: email.toLowerCase(),
+          password: req.body.password,
+          section: req.body.selectedSection,
+        };
+      }
 
       const activationToken = createActivationToken(seller);
       const activationBaseURL =
@@ -373,9 +383,10 @@ router.put(
     try {
       let existsSeller = await Shop.findById(req.seller._id);
 
-      const imageId = existsSeller.avatar.public_id;
-
-      await cloudinary.v2.uploader.destroy(imageId);
+      if (existsSeller.avatar.public_id !== "Not assigned") {
+        const imageId = existsSeller.avatar.public_id;
+        await cloudinary.v2.uploader.destroy(imageId);
+      }
 
       const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
         folder: "avatars",

@@ -42,23 +42,36 @@ router.post(
         return next(new ErrorHandler("User already exists", 400));
       }
 
-      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-        folder: "avatars",
-      });
+      let user = null;
 
-      const user = {
-        name: name,
-        email: email.toLowerCase(),
-        password: password,
-        section: selectedSection,
-        accountBalance: accountBalance,
-        avatar: {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
-        },
-      };
+      if (avatar) {
+        const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+          folder: "avatars",
+        });
+
+        user = {
+          name: name,
+          email: email.toLowerCase(),
+          password: password,
+          section: selectedSection,
+          accountBalance: accountBalance,
+          avatar: {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          },
+        };
+      } else {
+        user = {
+          name: name,
+          email: email.toLowerCase(),
+          password: password,
+          section: selectedSection,
+          accountBalance: accountBalance,
+        };
+      }
 
       const activationToken = createActivationToken(user);
+
       // FIXME: should not be hardcoded domain thing, this is crazy
       const activationBaseURL =
         process.env.NODE_ENV === "production"
@@ -319,9 +332,10 @@ router.put(
     try {
       let existsUser = await User.findById(req.user.id);
       if (req.body.avatar !== "") {
-        const imageId = existsUser.avatar.public_id;
-
-        await cloudinary.v2.uploader.destroy(imageId);
+        if (existsUser.avatar.public_id !== "Not assigned") {
+          const imageId = existsUser.avatar.public_id;
+          await cloudinary.v2.uploader.destroy(imageId);
+        }
 
         const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
           folder: "avatars",
@@ -572,7 +586,7 @@ router.post(
   "/admin-create-user",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { name, email, password, selectedSection, avatar } = req.body;
+      const { name, email, password, selectedSection } = req.body;
 
       const userEmail = await User.findOne({ email });
 
@@ -590,10 +604,6 @@ router.post(
         });
       }
 
-      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-        folder: "avatars",
-      });
-
       const userSection = await Section.findOne({ name: selectedSection });
       userSection.numStudents += 1;
       await userSection.save();
@@ -601,10 +611,6 @@ router.post(
       user = await User.create({
         name,
         email,
-        avatar: {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
-        },
         password,
         section: selectedSection,
         accountBalance,

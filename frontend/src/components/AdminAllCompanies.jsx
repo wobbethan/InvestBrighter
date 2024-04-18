@@ -37,7 +37,7 @@ const AdminAllCompanies = () => {
         toast.success(res.data.message);
       });
 
-    dispatch(getAllSellers());
+    dispatch(getAllSellers(user._id));
   };
 
   const columns = [
