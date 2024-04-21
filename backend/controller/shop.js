@@ -559,4 +559,34 @@ router.put(
   })
 );
 
+// update seller info
+router.put(
+  "/admin-update-seller-info/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { name, description, valuation, finalAq } = req.body;
+
+      const shop = await Shop.findById(req.params.id);
+
+      if (!shop) {
+        return next(new ErrorHandler("User not found", 400));
+      }
+
+      shop.name = name;
+      shop.description = description;
+      shop.valuation = valuation;
+      shop.finalAcquisition = finalAq;
+
+      await shop.save();
+
+      res.status(201).json({
+        success: true,
+        shop,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;

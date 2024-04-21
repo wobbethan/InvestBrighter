@@ -10,12 +10,21 @@ import { server } from "../Server";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { getAllSellers } from "../redux/actions/seller";
+import { FaEdit } from "react-icons/fa";
 
 const AdminAllCompanies = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { sellers } = useSelector((state) => state.seller);
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+
+  const [name, setName] = useState();
+  const [description, setDescription] = useState();
+  const [valuation, setValuation] = useState();
+  const [finalAq, setFinalAq] = useState();
+  const [avatar, setAvatar] = useState();
+
   const [userId, setUserId] = useState("");
   let options = {
     timeZone: "America/New_York",
@@ -39,6 +48,58 @@ const AdminAllCompanies = () => {
 
     dispatch(getAllSellers(user._id));
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const updating = toast.loading("Updating information");
+
+    await axios
+      .put(`${server}/shop/admin-update-seller-info/${userId}`, {
+        name,
+        description,
+        valuation,
+        finalAq,
+      })
+      .then(() => {
+        toast.update(updating, {
+          render: "Event Updated",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.update(updating, {
+          render: err.response.data.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      });
+    dispatch(getAllSellers(user._id));
+  };
+
+  useEffect(() => {
+    setName();
+    setAvatar();
+    setDescription();
+    setFinalAq();
+    setValuation();
+    async function getInfo() {
+      if (userId !== "") {
+        await axios
+          .get(`${server}/shop/get-shop-info/${userId}`)
+          .then((res) => {
+            setName(res.data.shop.name);
+            setAvatar(res.data.shop.avatar.url);
+            setDescription(res.data.shop.description);
+            setFinalAq(res.data.shop.finalAcquisition);
+            setValuation(res.data.shop.valuation);
+          });
+      }
+    }
+    getInfo();
+  }, [userId]);
 
   const columns = [
     {
@@ -74,6 +135,23 @@ const AdminAllCompanies = () => {
       type: "number",
       minWidth: 130,
       flex: 0.8,
+    },
+    {
+      field: " edit",
+      flex: 1,
+      minWidth: 150,
+      headerName: "Edit Company",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button onClick={() => setUserId(params.id) || setOpenEdit(true)}>
+              <FaEdit size={20} />
+            </Button>
+          </>
+        );
+      },
     },
     {
       field: "  ",
@@ -166,6 +244,84 @@ const AdminAllCompanies = () => {
                   confirm
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+        {openEdit && (
+          <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
+            <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">
+              <div className="w-full flex justify-end cursor-pointer">
+                <RxCross1 size={25} onClick={() => setOpenEdit(false)} />
+              </div>
+              <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb] flex items-center flex-col justify-center">
+                <img
+                  src={avatar}
+                  alt=""
+                  className="w-[125px] h-[125px] rounded-full mb-2 object-cover"
+                />
+                Company information
+              </h3>
+              <form onSubmit={handleSubmit} aria-required={true}>
+                <br />
+                <div>
+                  <label className="pb-2">Name</label>
+                  <input
+                    type="text"
+                    required
+                    name="name"
+                    value={name}
+                    className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter shop name..."
+                  />
+                </div>
+                <br />
+                <div>
+                  <label className="pb-2">Description</label>
+                  <textarea
+                    cols="30"
+                    rows="8"
+                    type="text"
+                    required
+                    name="description"
+                    value={description}
+                    className="mt-2 appearance-none block w-full pt-3 px-3  border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter description..."
+                  />
+                </div>
+
+                <div>
+                  <label className="pb-2">Valuation</label>
+                  <input
+                    type="number"
+                    value={valuation}
+                    onChange={(e) => setValuation(e.target.value)}
+                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="pb-2">Final Acquisition</label>
+                  <input
+                    type="number"
+                    value={finalAq}
+                    onChange={(e) => setFinalAq(e.target.value)}
+                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+                    required
+                  />
+                </div>
+
+                <br />
+                <div>
+                  <input
+                    type="submit"
+                    value="Save"
+                    className="mt-2 cursor-pointer appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </div>
+              </form>
             </div>
           </div>
         )}

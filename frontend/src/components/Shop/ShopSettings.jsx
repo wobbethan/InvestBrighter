@@ -160,11 +160,11 @@ const ShopSettings = () => {
             />
           </div>
 
-          <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
+          <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5 ">
             <input
               type="submit"
               value="Update Shop"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+              className={`${styles.input} !w-[95%] mb-4 800px:mb-0 cursor-pointer`}
               required
               readOnly
             />
