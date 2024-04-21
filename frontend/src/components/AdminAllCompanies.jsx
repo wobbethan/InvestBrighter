@@ -19,10 +19,10 @@ const AdminAllCompanies = () => {
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
 
-  const [shopName, setShopName] = useState();
+  const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [valuation, setValuation] = useState();
-  const [finalAc, setFinalAc] = useState();
+  const [finalAq, setFinalAq] = useState();
   const [avatar, setAvatar] = useState();
 
   const [userId, setUserId] = useState("");
@@ -49,23 +49,51 @@ const AdminAllCompanies = () => {
     dispatch(getAllSellers(user._id));
   };
 
-  const handleSubmit = async (e) => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const updating = toast.loading("Updating information");
+
+    await axios
+      .put(`${server}/shop/admin-update-seller-info/${userId}`, {
+        name,
+        description,
+        valuation,
+        finalAq,
+      })
+      .then(() => {
+        toast.update(updating, {
+          render: "Event Updated",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.update(updating, {
+          render: err.response.data.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      });
+    dispatch(getAllSellers(user._id));
+  };
 
   useEffect(() => {
-    setShopName();
+    setName();
     setAvatar();
     setDescription();
-    setFinalAc();
+    setFinalAq();
     setValuation();
     async function getInfo() {
       if (userId !== "") {
         await axios
           .get(`${server}/shop/get-shop-info/${userId}`)
           .then((res) => {
-            setShopName(res.data.shop.name);
+            setName(res.data.shop.name);
             setAvatar(res.data.shop.avatar.url);
             setDescription(res.data.shop.description);
-            setFinalAc(res.data.shop.finalAcquisition);
+            setFinalAq(res.data.shop.finalAcquisition);
             setValuation(res.data.shop.valuation);
           });
       }
@@ -241,9 +269,9 @@ const AdminAllCompanies = () => {
                     type="text"
                     required
                     name="name"
-                    value={shopName}
+                    value={name}
                     className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    onChange={(e) => setShopName(e.target.value)}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="Enter shop name..."
                   />
                 </div>
@@ -278,8 +306,8 @@ const AdminAllCompanies = () => {
                   <label className="pb-2">Final Acquisition</label>
                   <input
                     type="number"
-                    value={finalAc}
-                    onChange={(e) => setFinalAc(e.target.value)}
+                    value={finalAq}
+                    onChange={(e) => setFinalAq(e.target.value)}
                     className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
                   />
