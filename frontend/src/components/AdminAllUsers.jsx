@@ -253,7 +253,7 @@ const AdminAllUsers = () => {
               </div>
             )}
             {openEdit && (
-              <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen overflow-scroll">
+              <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen overflow-scroll 800px:pt-[10vh] pt-[25vh]">
                 <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">
                   <div className="w-full flex justify-end cursor-pointer">
                     <RxCross1 size={25} onClick={() => setOpenEdit(false)} />
