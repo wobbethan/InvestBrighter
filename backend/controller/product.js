@@ -6,6 +6,7 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Shop = require("../model/shop.js");
 const Section = require("../model/section.js");
+const Event = require("../model/event.js");
 const User = require("../model/user.js");
 const cloudinary = require("cloudinary");
 const { isSeller } = require("../middleware/auth");
@@ -114,12 +115,38 @@ router.get(
   })
 );
 
-// get all products
+// get all products section
 router.get(
   "/get-all-products-section/:section",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const products = await Product.find({ section: req.params.section });
+
+      res.status(201).json({
+        success: true,
+        products,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// get all products event
+router.get(
+  "/get-all-products-event/:section",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      console.log(req.params.section);
+
+      const events = await Event.find({
+        sections: { $in: [req.params.section] },
+      });
+      console.log(events);
+
+      const eventIds = events.map((event) => event._id);
+
+      const products = await Product.find({ eventId: { $in: eventIds } });
 
       res.status(201).json({
         success: true,

@@ -564,7 +564,7 @@ router.put(
   "/admin-update-seller-info/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { name, description, valuation, finalAq } = req.body;
+      const { name, description, valuation, finalAq, section } = req.body;
 
       const shop = await Shop.findById(req.params.id);
 
@@ -576,6 +576,7 @@ router.put(
       shop.description = description;
       shop.valuation = valuation;
       shop.finalAcquisition = finalAq;
+      shop.section = section;
 
       await shop.save();
 

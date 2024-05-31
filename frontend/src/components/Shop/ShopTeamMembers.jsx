@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { backend_url, server } from "../../Server";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { RxCross1 } from "react-icons/rx";
-import { getAllMembersShop } from "../../redux/actions/seller";
-import { DataGrid, GridToolbar } from "@material-ui/data-grid";
 import { Button } from "@material-ui/core";
+import { DataGrid, GridToolbar } from "@material-ui/data-grid";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
+import { RxCross1 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { getAllMembersShop } from "../../redux/actions/seller";
+import { server } from "../../Server";
 import styles from "../../styles/styles";
 
 const ShopTeamMembers = () => {

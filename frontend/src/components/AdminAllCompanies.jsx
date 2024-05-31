@@ -24,6 +24,8 @@ const AdminAllCompanies = () => {
   const [valuation, setValuation] = useState();
   const [finalAq, setFinalAq] = useState();
   const [avatar, setAvatar] = useState();
+  const [section, setSection] = useState();
+  const [sections, setSections] = useState();
 
   const [userId, setUserId] = useState("");
   let options = {
@@ -38,6 +40,17 @@ const AdminAllCompanies = () => {
   useEffect(() => {
     dispatch(getAllSellers(user._id));
   }, [dispatch]);
+
+  useEffect(() => {
+    async function getSections() {
+      await axios
+        .get(`${server}/section/get-sections/${user._id}`)
+        .then((res) => {
+          setSections(res.data.sections);
+        });
+    }
+    getSections();
+  }, []);
 
   const handleDelete = async (id) => {
     await axios
@@ -59,10 +72,11 @@ const AdminAllCompanies = () => {
         description,
         valuation,
         finalAq,
+        section,
       })
       .then(() => {
         toast.update(updating, {
-          render: "Event Updated",
+          render: "Company Updated",
           type: "success",
           isLoading: false,
           autoClose: 3000,
@@ -85,6 +99,7 @@ const AdminAllCompanies = () => {
     setDescription();
     setFinalAq();
     setValuation();
+    setSection();
     async function getInfo() {
       if (userId !== "") {
         await axios
@@ -95,6 +110,7 @@ const AdminAllCompanies = () => {
             setDescription(res.data.shop.description);
             setFinalAq(res.data.shop.finalAcquisition);
             setValuation(res.data.shop.valuation);
+            setSection(res.data.shop.section);
           });
       }
     }
@@ -289,6 +305,22 @@ const AdminAllCompanies = () => {
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Enter description..."
                   />
+                </div>
+
+                <div className="pb-2">
+                  <label>Section</label>
+                  <select
+                    value={section}
+                    onChange={(e) => setSection(e.target.value)}
+                    className="w-full mt-2 border h-[35px] rounded-[5px]"
+                  >
+                    {sections &&
+                      sections.map((i, index) => (
+                        <option value={i.name} key={index}>
+                          {i.name}
+                        </option>
+                      ))}
+                  </select>
                 </div>
 
                 <div>

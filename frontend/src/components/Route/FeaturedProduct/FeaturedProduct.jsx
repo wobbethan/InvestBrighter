@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from "react";
-import styles from "../../../styles/styles";
-import { productData } from "../../../static/data";
-import ProductCard from "../ProductCard/ProductCard";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllProductsAdmin,
-  getAllProductsSection,
+  getAllProductsEvent,
 } from "../../../redux/actions/product";
+import styles from "../../../styles/styles";
+import ProductCard from "../ProductCard/ProductCard";
 
 const FeaturedProduct = () => {
-  const { allProducts, allProductsAdmin, allProductsSection } = useSelector(
+  const { allProducts, allProductsAdmin, allProductsEvent } = useSelector(
     (state) => state.products
   );
   const { user, isAuthenticated } = useSelector((state) => state.user);
-  const [data, setData] = useState();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,7 +19,7 @@ const FeaturedProduct = () => {
       if (user?.role === "admin") {
         dispatch(getAllProductsAdmin(user?._id));
       } else {
-        dispatch(getAllProductsSection(user?.section));
+        dispatch(getAllProductsEvent(user?.section));
       }
     }
   }, [isAuthenticated]);
@@ -72,16 +70,16 @@ const FeaturedProduct = () => {
       {user?.role === "user" && (
         <div>
           <div className={`${styles.section}`}>
-            {allProductsSection && allProductsSection.length !== 0 && (
+            {allProductsEvent && allProductsEvent.length !== 0 && (
               <div className={`${styles.heading}`}>
                 <h1>Available Companies</h1>
               </div>
             )}
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[10px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl-gap-[30px] mb-12 border-0">
-              {allProductsSection && allProductsSection.length !== 0 && (
+              {allProductsEvent && allProductsEvent.length !== 0 && (
                 <>
-                  {allProductsSection &&
-                    allProductsSection.map((i, index) => (
+                  {allProductsEvent &&
+                    allProductsEvent.map((i, index) => (
                       <ProductCard data={i} key={index} />
                     ))}
                 </>

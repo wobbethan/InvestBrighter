@@ -1,10 +1,10 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { backend_url, server } from "../../Server";
-import styles from "../../styles/styles";
-import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getAllProductsShop } from "../../redux/actions/product";
+import { server } from "../../Server";
+import styles from "../../styles/styles";
 import Loader from "../Layout/Loader";
 
 const ShopInfo = ({ isOwner }) => {

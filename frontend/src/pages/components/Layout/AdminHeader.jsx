@@ -1,12 +1,7 @@
 import React from "react";
-import { AiOutlineGift } from "react-icons/ai";
-import { BiMessageSquareDetail } from "react-icons/bi";
-import { FiPackage, FiShoppingBag } from "react-icons/fi";
-import { MdOutlineLocalOffer } from "react-icons/md";
+import { IoHomeOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { backend_url } from "../../../Server";
-import { IoHomeOutline } from "react-icons/io5";
 const AdminHeader = () => {
   const { user } = useSelector((state) => state.user);
 
