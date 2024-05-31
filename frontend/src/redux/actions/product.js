@@ -136,3 +136,25 @@ export const getAllProductsSection = (section) => async (dispatch) => {
     });
   }
 };
+
+// get all products of event
+export const getAllProductsEvent = (section) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllProductsEventRequest",
+    });
+
+    const { data } = await axios.get(
+      `${server}/product/get-all-products-event/${section}`
+    );
+    dispatch({
+      type: "getAllProductsEventSuccess",
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllProductsEventFailed",
+      payload: error.response.data.message,
+    });
+  }
+};

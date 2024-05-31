@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { productData } from "../../static/data";
-import ProductCard from "../Route/ProductCard/ProductCard";
-import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import styles from "../../styles/styles";
+import { Link, useParams } from "react-router-dom";
 import { getAllEventsShop } from "../../redux/actions/event";
 import { getAllProductsShop } from "../../redux/actions/product";
-import Ratings from "../products/Ratings.jsx";
-import { backend_url, server } from "../../Server.js";
 import { getAllMembersShop } from "../../redux/actions/seller.js";
-import axios from "axios";
+import styles from "../../styles/styles";
+import ProductCard from "../Route/ProductCard/ProductCard";
 
 const ShopProfileData = ({ isOwner }) => {
   const { seller, members } = useSelector((state) => state.seller);

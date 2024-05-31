@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { categoriesData } from "../../static/data";
-import { AiOutlinePlusCircle } from "react-icons/ai";
-import { toast } from "react-toastify";
-import { createEvent } from "../../redux/actions/event";
-import { getAllSectionsOfAdmin } from "../../redux/actions/section";
-import { Button, TextField } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
-import Loader from "../Layout/Loader";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { createEvent } from "../../redux/actions/event";
+import { getAllSectionsOfAdmin } from "../../redux/actions/section";
+import Loader from "../Layout/Loader";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

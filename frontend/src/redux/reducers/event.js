@@ -45,7 +45,7 @@ export const eventReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
-  // get all events
+  // get all events section
   getAllEventsRequest: (state) => {
     state.isLoading = true;
   },
@@ -58,7 +58,7 @@ export const eventReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
-  // get all section
+  // get all admin
   getAllEventsAdminRequest: (state) => {
     state.isLoading = true;
   },

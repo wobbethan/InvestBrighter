@@ -67,7 +67,7 @@ function ProductPage() {
             </div>
             {data && data.length === 0 ? (
               <h1 className="text-center w-full pb-[100px] text-[20px]">
-                No products found!
+                No rounds exist for this section!
               </h1>
             ) : null}
           </div>

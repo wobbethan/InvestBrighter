@@ -1,26 +1,22 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import styles from "../../../styles/styles";
-import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard.jsx";
-import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {
-  AiFillStar,
-  AiOutlineStar,
   AiFillHeart,
-  AiOutlineHeart,
   AiOutlineEye,
+  AiOutlineHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import Ratings from "../../products/Ratings.jsx";
-import { backend_url, server } from "../../../Server.js";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { server } from "../../../Server.js";
+import { addToCart } from "../../../redux/actions/cart.js";
 import {
   addToWishlist,
   removeFromWishlist,
 } from "../../../redux/actions/wishlist.js";
-import { addToCart } from "../../../redux/actions/cart.js";
-import { toast } from "react-toastify";
-import axios from "axios";
+import styles from "../../../styles/styles";
+import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard.jsx";
 
 function ProductCard({ data, isEvent }) {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -126,7 +122,6 @@ function ProductCard({ data, isEvent }) {
           alt=""
           className="w-full h-[170px] object-contain p-6"
         />
-
         <div className="w-full items-center text-center">
           {newShopInfo?.valuation !== 0 && (
             <h5 className={`${styles.productDiscountPrice} !text-lg`}>
@@ -135,6 +130,16 @@ function ProductCard({ data, isEvent }) {
             </h5>
           )}
         </div>
+        <div className="w-full items-center text-center">
+          {newShopInfo?.valuation !== 0 && (
+            <h5
+              className={`${styles.productDiscountPrice} !text-xs !font-normal`}
+            >
+              {data.eventName}
+            </h5>
+          )}
+        </div>
+
         <Link to={`/shop/preview/${data?.shop._id}`}>
           <h5 className={`${styles.shop_name}`}>{newShopInfo?.name}</h5>
         </Link>
@@ -142,7 +147,8 @@ function ProductCard({ data, isEvent }) {
         <h4 className="pb-3 font-[500]">
           {newShopInfo?.name?.length > 40
             ? newShopInfo?.name.slice(0, 40) + "..."
-            : newShopInfo?.name}
+            : newShopInfo?.name}{" "}
+          | {newShopInfo?.section} class
         </h4>
         <h5 className="text-[16px] text-[red] justify-end">
           {data.stock} remaining
