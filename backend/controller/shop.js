@@ -53,7 +53,7 @@ router.post(
       const activationToken = createActivationToken(seller);
       const activationBaseURL =
         process.env.NODE_ENV === "production"
-          ? "https://investbrighter-277b0e7bd228.herokuapp.com"
+          ? "https://investbrighter-81a8e5a796c9.herokuapp.com"
           : "http://localhost:3000";
       const activationUrl = `${activationBaseURL}/company/activation/${activationToken}`;
 
