@@ -195,15 +195,21 @@ const AdminAllUsers = () => {
 
   const row = [];
   users &&
+    Array.isArray(users) &&
     users.forEach((item) => {
       row.push({
-        section: item?.section,
-        id: item?._id,
-        name: item?.name,
-        email: item?.email,
-        joinedAt: new Date(item?.createdAt).toLocaleString("en-US", options),
-        balance: "$" + item?.accountBalance.toLocaleString(),
-        team: item.companyName,
+        section: item?.section ?? "N/A",
+        id: item?._id ?? "N/A",
+        name: item?.name ?? "N/A",
+        email: item?.email ?? "N/A",
+        joinedAt: item?.createdAt
+          ? new Date(item.createdAt).toLocaleString("en-US", options)
+          : "N/A", // Fallback to 'N/A' if createdAt is null/undefined
+        balance:
+          item?.accountBalance != null && !isNaN(item.accountBalance)
+            ? "$" + item.accountBalance.toLocaleString()
+            : "N/A", // Fallback to 'N/A' if accountBalance is null/undefined
+        team: item?.companyName ?? "N/A",
       });
     });
 

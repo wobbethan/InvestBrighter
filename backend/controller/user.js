@@ -467,7 +467,7 @@ router.get(
       const sectionNames = adminSections.map((section) => section.name);
 
       const users = await User.find({ section: { $in: sectionNames } });
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         users,
       });
